@@ -1,0 +1,102 @@
+.features-section {
+    padding: 4rem 2rem;
+    position: relative;
+    background: url('https://d2csxpduxe849s.cloudfront.net/media/E32629C6-9347-4F84-81FEAEF7BFA342B3/1968EA5E-28A1-49D1-A27CC556F7B8DF3C/C3E67292-300A-4B3F-AF06F349CDFBB918/WebsiteJpg_XL-FSURG_Main%20Visual_Cyan_Website.jpg') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .features-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 123, 255, 0.35); 
+  }
+  
+  .features-section > * {
+    position: relative;
+    z-index: 2; 
+  }
+  
+  
+  .features-section > .section-title {
+    font-size: 2.8rem;
+    color: white;
+    margin-bottom: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .features-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  
+  .feature-card {
+    background-color: var(--white);
+    padding: 2.5rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    cursor: pointer;
+    color: var(--textColor); 
+    border:2px solid var(--primary);
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    background-color: var(--primary); 
+    color: white; 
+    border: 2px solid var(--primary); 
+  }
+  
+  .feature-icon {
+    background-color: var(--accent);
+    color: white;
+    padding: 1rem;
+    border-radius: 50%;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+  
+  .feature-title {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+  
+  .feature-card p {
+    font-size: 1rem;
+    color: var(--textColor); 
+    line-height: 1.6;
+  }
+  
+  .feature-card:hover p ,.feature-card:hover .feature-title{
+    color: white; 
+  }
+  
+  @media (max-width: 768px) {
+    .features-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  

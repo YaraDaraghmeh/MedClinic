@@ -1,0 +1,124 @@
+.contact-section {
+    padding: 5rem 3rem;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+    color: #f8fafc;
+    font-weight: 700;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #dbeafe;
+    margin-bottom: 3rem;
+  }
+  
+  .contact-flex {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    flex-wrap: wrap;
+  }
+  
+  .map-container {
+    flex: 1;
+    height: 500px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .contact-info-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 500px;
+    padding: 2rem;
+    background-color: #1f2937;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-info {
+    margin-bottom: 2rem;
+    color: #dbeafe;
+    font-size: 1.1rem;
+  }
+  
+  .contact-info p {
+    margin-bottom: 1rem;
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #93c5fd;
+    background-color: var(--primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+  }
+  
+  .contact-form button {
+    background: #3b82f6;
+    color: white;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+  
+  .contact-form button:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+  }
+  
+  .contact-form button:active {
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 768px) {
+    .contact-flex {
+      flex-direction: column;
+      gap: 3rem;
+    }
+  
+    .map-container {
+      height: 400px;
+    }
+  
+    .contact-info-form {
+      max-width: 100%;
+      padding: 1rem;
+    }
+  }
+  

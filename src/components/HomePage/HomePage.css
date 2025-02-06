@@ -1,0 +1,203 @@
+/* Color Variables */
+:root {
+    --primary: #1e3a8a; /* Tailwind: text-blue-800 */
+    --lightBlue: #93c5fd; /* Tailwind: text-blue-300 */
+    --darkBlue: #1e293b; /* Tailwind: bg-gray-900 */
+    --textColor: #334155; /* Tailwind: text-gray-700 */
+    --lightGray: #e2e8f0; /* Tailwind: text-gray-300 */
+    --accent: #2563eb; /* Tailwind: bg-blue-600 */
+    --accentHover: #60a5fa; /* Tailwind: hover:bg-blue-400 */
+  }
+  
+
+  .homepage-container {
+  margin-top: 4rem;
+    min-height: 100%;
+   min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+  }
+  
+  /* Content Wrapper */
+  .homepage-content {
+    display: flex;
+    
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 1200px;
+    width: 100%;
+  }
+  
+  @media (min-width: 768px) {
+    .homepage-content {
+      flex-direction: row;
+      text-align: left;
+      justify-content: space-between;
+    }
+  }
+  
+  /* Text Section */
+  .homepage-text {
+    flex: 1;
+    max-width: 500px;
+  }
+  
+  .homepage-text h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary);
+  }
+  
+  .homepage-text h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent);
+    margin-top: 0.5rem;
+  }
+  
+  .homepage-text p {
+    font-size: 1.2rem;
+    color: var(--textColor);
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+  
+  .highlight {
+    color: var(--primary);
+    font-weight: bold;
+  }
+  
+  /* CTA Button */
+  .cta-button {
+    background-color: var(--accent);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cta-button:hover {
+    background-color: var(--accentHover);
+    transform: scale(1.05);
+  }
+  
+  /* Image Section */
+  .homepage-images {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-container {
+    position: relative;
+    padding: 30px;
+    background: radial-gradient(var(--accentHover) 5%, transparent 20%);
+    background-size: 12px 12px;
+    background-position: 0 0;
+    border-radius: 12px;
+  }
+  
+  /* Images */
+  .image {
+    width: 250px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+  }
+  
+  /* Doctor Image */
+  .doctor {
+    position: absolute;
+    left: -40px;
+    top: 20px;
+    z-index: 2;
+    transform: rotate(-3deg);
+  }
+  
+  /* Hospital Image */
+  .hospital {
+    position: relative;
+    right: -50px;
+    transform: rotate(5deg);
+    
+  }
+  .hospital:hover{
+    z-index: 2;
+  }
+  .get-started-btn {
+    position: relative;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--primary); 
+    background-color: transparent;
+    border: 2px solid var(--primary); 
+    border-radius: 1.5rem; 
+    cursor: pointer;
+    overflow: hidden;
+    margin: 1.5rem 0rem;
+    transition: color 0.4s ease, background-color 0.4s ease;
+  }
+  
+  .get-started-btn .arrow {
+    margin-left: 8px;
+    
+    transition: margin-left 0.3s ease;
+  }
+  
+  .get-started-btn:hover {
+    color: white;
+    background-color: var(--primary);
+  }
+  
+  .get-started-btn:hover .arrow {
+    margin-left: 12px;
+  }
+  
+  .get-started-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    background-color: var(--primary); /* Fill color */
+    transition: left 0.3s ease;
+  }
+  
+  .get-started-btn:hover::after {
+    left: 0;
+  }
+  
+ 
+  .image:hover {
+    box-shadow: 0px 0px 15px var(--lightBlue);
+    transform: scale(1.05);
+  }
+  
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .homepage-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+   
+    .image-container {
+        margin-top: 2rem;
+      padding: 50px;
+    }
+  }
+  
