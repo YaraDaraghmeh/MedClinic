@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './login.css';  // Import the CSS
 
 const SignInComponent = () => {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
 
   const handleClick = () => {
     setActive(!active);
