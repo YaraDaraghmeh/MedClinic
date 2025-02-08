@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import HomePage from '../HomePage/HomePage';
 import ContactPage from '../ContactPage/ContactPage';
 import Footer from '../Footer/Footer';
+import SignInComponent from '../LoginSignUp/login';
 
 const Home: React.FC = () => {
   return <HomePage />;
@@ -35,7 +36,7 @@ const Main: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
-        
+          <Route path="/login" element={<SignInComponent/>}/>
         </Routes>
       </div>
 

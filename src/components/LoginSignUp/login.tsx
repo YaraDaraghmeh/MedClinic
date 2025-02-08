@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '/src/style/login.css';  // Import the CSS
+import './login.css';  // Import the CSS
 
 const SignInComponent = () => {
   const [active, setActive] = useState(false);
@@ -12,15 +12,15 @@ const SignInComponent = () => {
     <div className={`container ${active ? 'active' : ''}`} onClick={handleClick}>
       <div className="top"></div>
       <div className="bottom"></div>
-      <div className="center">
-        <h2>Please Sign In</h2>
+      {/* Prevent event bubbling */}
+      <div className="center" onClick={(e) => e.stopPropagation()}>
+        <h2 className='!text-black'>Please Sign In</h2>
         <input type="email" placeholder="email" />
         <input type="password" placeholder="password" />
         <div className="button-group">
           <button className="btn login">Login</button>
           <button className="btn signup">Sign Up</button>
         </div>
-        <h2>&nbsp;</h2>
       </div>
     </div>
   );
