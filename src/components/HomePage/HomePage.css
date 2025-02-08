@@ -200,4 +200,42 @@
       padding: 50px;
     }
   }
+.TypingContainer{
+  position: relative;
+}
+  
+.type-writer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #dedede;
+  font-size: 26px;
+  font-family: 'Anonymous Pro', monospace;
+  border-right: 1px solid #dedede;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typewriter 8s steps(50) 0.5s 1 normal both,
+    cursorblink 0.5s infinite;
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  
+  to {
+    width: 28.5em;
+  }
+}
+
+@keyframes cursorblink {
+  from {
+    border-right: 1px solid #dedede;
+  }
+  
+  to {
+    border-right: 1px solid #666;
+  }
+}
   
