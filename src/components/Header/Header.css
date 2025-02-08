@@ -1,0 +1,58 @@
+/* Color Variables */
+:root {
+  --primary: #1e3a8a; /* Tailwind: text-blue-800 */
+  --lightBlue: #93c5fd; /* Tailwind: text-blue-300 */
+  --darkBlue: #1e293b; /* Tailwind: bg-gray-900 */
+  --textColor: #334155; /* Tailwind: text-gray-700 */
+  --lightGray: #e2e8f0; /* Tailwind: text-gray-300 */
+  --accent: #2563eb; /* Tailwind: bg-blue-600 */
+  --accentHover: #60a5fa; /* Tailwind: hover:bg-blue-400 */
+}
+
+/* Navbar Link Styles */
+.navbar-link {
+  position: relative;
+  display: inline-block;
+  color: var(--textColor);
+  transition: color 0.3s ease;
+}
+
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.navbar-link:hover::after,
+.navbar-link.active::after {
+  width: 100%;
+}
+
+.navbar-link.active {
+  color: var(--accent);
+}
+
+
+/* Login Button */
+.login-btn {
+  background-color: var(--accent);
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem; 
+  padding: 0.5rem 1.25rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.login-btn:hover {
+  background-color: var(--accentHover);
+  border-color: transparent;
+  color: black;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
