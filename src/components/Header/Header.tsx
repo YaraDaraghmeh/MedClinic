@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./Header.css";
 
 const Header: React.FC = () => {
@@ -63,11 +63,11 @@ const Header: React.FC = () => {
 
           {/* Login Button (Visible in Mobile Menu) */}
 
-          <button className="block md:hidden login-btn mt-4">Log in</button>
+          <button className="block md:hidden login-btn mt-4"><Link to="/login">Log in</Link></button>
         </div>
 
         {/* Desktop Login Button */}
-        <button className="hidden md:block login-btn">Log in</button>
+        <button className="hidden md:block login-btn"><Link to="/login">Log in</Link></button>
       </div>
     </nav>
   );
