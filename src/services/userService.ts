@@ -22,13 +22,12 @@ export const getUsers = async () => {
       id: doc.name.split("/").pop(),
       ...doc.fields,
     }));
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error fetching users: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Get all doctors
+// Get all doctors
 export const getDoctors = async () => {
   try {
     const users = await getUsers();
@@ -36,13 +35,12 @@ export const getDoctors = async () => {
       (user: User) => user.role?.stringValue === "doctor"
     );
     return doctors;
-  } catch (error) {
-    console.error("Error fetching doctors:", error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error fetching doctors: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Get all patients
+// Get all patients
 export const getPatients = async () => {
   try {
     const users = await getUsers();
@@ -50,13 +48,12 @@ export const getPatients = async () => {
       (user: User) => user.role?.stringValue === "patient"
     );
     return patients;
-  } catch (error) {
-    console.error("Error fetching patients:", error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error fetching patients: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Add a new user (Firestore generates ID)
+// Add a new user (Firestore generates ID)
 export const addUser = async (userData: {
   email: string;
   name: string;
@@ -68,44 +65,36 @@ export const addUser = async (userData: {
   specialization?: string;
 }) => {
   try {
-    // Check if the email is already taken
     const emailTaken = await isEmailTaken(userData.email);
     if (emailTaken) {
       throw new Error(`Email ${userData.email} is already taken`);
     }
 
-    // Hash the password before saving it
     const hashedPassword = await hashPassword(userData.password);
-
-    // Set default imageUrl if not provided
     const imageUrl = userData.imageUrl || DEFAULT_IMAGE_URL;
 
-    const docId = encodeURIComponent(userData.email); // Encode email to avoid special character issues
+    const docId = encodeURIComponent(userData.email);
     const fields: any = {
       name: { stringValue: userData.name },
       email: { stringValue: userData.email },
       dateOfBirth: { stringValue: userData.dateOfBirth },
-      password: { stringValue: hashedPassword }, // Save hashed password
+      password: { stringValue: hashedPassword },
       role: { stringValue: userData.role },
       gender: { stringValue: userData.gender },
-      imageUrl: { stringValue: imageUrl }, // Add imageUrl
-
-      // Add specialization if the role is doctor
-      ...(userData.role === "doctor" &&
-        userData.specialization && {
-          specialization: { stringValue: userData.specialization },
-        }),
+      imageUrl: { stringValue: imageUrl },
+      ...(userData.role === "doctor" && userData.specialization && {
+        specialization: { stringValue: userData.specialization },
+      }),
     };
 
     const response = await axiosInstance.patch(`/users/${docId}`, { fields });
     return response.data;
-  } catch (error) {
-    console.error("Error adding user:", error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error adding user: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Update a user by email
+// Update a user by email
 export const updateUser = async (
   email: string,
   updatedData: Partial<{
@@ -119,114 +108,103 @@ export const updateUser = async (
   }>
 ) => {
   try {
-    // Step 1: Fetch the current user data by email
     const existingUserData = await getUserByEmail(email);
+    if (!existingUserData) {
+      throw new Error(`User with email ${email} not found.`);
+    }
 
-    // Step 2: Merge the existing data with the updated data
     const updatedUser = {
-      ...existingUserData, // Existing data from the server
-      ...updatedData, // Updated fields, overwriting the ones that change
+      ...existingUserData,
+      ...updatedData,
     };
 
-    // Step 3: If password is updated, hash it before sending
     if (updatedUser.password) {
       updatedUser.password = await hashPassword(updatedUser.password);
     }
 
-    // Step 4: Send the full updated data to the server
     const encodedEmail = encodeURIComponent(email);
     const response = await axiosInstance.patch(
       `/users/${encodedEmail}`,
       updatedUser
     );
     return response.data;
-  } catch (error) {
-    console.error(`Error updating user with email ${email}:`, error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error updating user with email ${email}: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Check if the email is already taken
+// Check if the email is already taken
 export const isEmailTaken = async (email: string): Promise<boolean> => {
   try {
     const user = await getUserByEmail(email);
-    // If the user exists, return true; otherwise, return false
-    return user ? true : false;
-  } catch (error) {
-    // If there was an error (e.g., user not found), return false
-    console.error(`Error checking if email ${email} is taken:`, error);
-    return false;
+    return user ? true : false; // Return true if the user exists, else false
+  } catch (error: unknown) {
+    throw new Error(`Error checking if email ${email} is taken: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Delete a user by email
+// Delete a user by email
 export const deleteUser = async (email: string) => {
   try {
     const encodedEmail = encodeURIComponent(email);
     await axiosInstance.delete(`/users/${encodedEmail}`);
     return { success: true, message: `User ${email} deleted successfully` };
-  } catch (error) {
-    console.error(`Error deleting user with email ${email}:`, error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error deleting user with email ${email}: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
+
+// Authenticate a user by email and password
 export const authenticateUser = async (email: string, password: string) => {
   try {
-    // Get the user by email
     const user = await getUserByEmail(email);
 
-    // If user is not found, throw an error
-    if (!user) {
-      throw new Error("User not found");
+    if (!user || !user.password) {
+      throw new Error('User not found');
     }
 
-    // Compare the entered password with the hashed password in the database
-    const isMatch = await bcrypt.compare(password, user.password);
+    const storedPassword = user.password?.stringValue || user.password;
 
-    // If password doesn't match, throw an error
+    // Compare the input password with the stored password
+    const isMatch = await bcrypt.compare(password, storedPassword);
+
     if (!isMatch) {
-      throw new Error("Invalid credentials");
+      throw new Error('Invalid password');
     }
-    const userProfile = getUserProfile(email);
-    // Return the user profile
-    return userProfile;
+
+    return user;
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(`Authentication failed: ${error.message}`);
-      throw error;
-    } else {
-      console.error("An unknown error occurred during authentication");
-      throw new Error("An unknown error occurred");
-    }
+    throw new Error(`Authentication Error: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
+// Get user profile by email
 export const getUserProfile = async (email: string) => {
   try {
     const user = await getUserByEmail(email);
     return user;
-  } catch (error) {
-    console.error(
-      `Error fetching profile for user with email ${email}:`,
-      error
-    );
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error fetching user profile: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Get users by email (unique)
+// Get user by email (unique)
 export const getUserByEmail = async (email: string) => {
   try {
     const encodedEmail = encodeURIComponent(email);
     const response = await axiosInstance.get(`/users/${encodedEmail}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching user with email ${email}:`, error);
-    throw error;
+
+    if (!response.data || !response.data.fields) {
+      throw new Error('User not found');
+    }
+
+    return response.data.fields;
+  } catch (error: unknown) {
+    throw new Error(`Error fetching user with email ${email}: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
 
-// ✅ Get users by role, and filter by name, email, or age
+// Get users by role and filter by criteria
 export const getUsersByCriteria = async (
   role: "doctor" | "patient",
   searchCriteria: { name?: string; email?: string; age?: number }
@@ -251,12 +229,12 @@ export const getUsersByCriteria = async (
       return matchesRole && matchesName && matchesEmail && matchesAge;
     });
     return filteredUsers;
-  } catch (error) {
-    console.error("Error fetching users by criteria:", error);
-    throw error;
+  } catch (error: unknown) {
+    throw new Error(`Error fetching users by criteria: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
   }
 };
-// ✅ Get all doctors by criteria (name, email, or age)
+
+// Get doctors by criteria
 export const getDoctorsByCriteria = async (searchCriteria: {
   name?: string;
   email?: string;
@@ -264,30 +242,12 @@ export const getDoctorsByCriteria = async (searchCriteria: {
 }) => {
   return await getUsersByCriteria("doctor", searchCriteria);
 };
-// ✅ Get all patients by criteria (name, email, or age)
+
+// Get patients by criteria
 export const getPatientsByCriteria = async (searchCriteria: {
   name?: string;
   email?: string;
   age?: number;
 }) => {
   return await getUsersByCriteria("patient", searchCriteria);
-};
-
-// ✅ Get all doctors by specialization
-export const getDoctorsBySpecialization = async (specialization: string) => {
-  try {
-    const users = await getUsers();
-    const doctors = users.filter(
-      (user: User) =>
-        user.role?.stringValue === "doctor" &&
-        user.specialization?.stringValue === specialization
-    );
-    return doctors;
-  } catch (error) {
-    console.error(
-      `Error fetching doctors by specialization ${specialization}:`,
-      error
-    );
-    throw error;
-  }
 };

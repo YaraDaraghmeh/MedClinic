@@ -116,11 +116,38 @@ select{
   margin-top: 15px;
 }
 
+.image-circle-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border: 2px solid transparent;
+  transition: border 0.3s ease;
+}
+
+.image-circle-container:hover {
+  border: 2px solid #007bff;
+}
+
+.user-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
 .btn {
   flex: 1;
   padding: 14px;
-  margin: 0 5px;
+  
   border: none;
+  width: 100%;
+
   border-radius: 5px;
   font-size: 16px;
   font-weight: bold;

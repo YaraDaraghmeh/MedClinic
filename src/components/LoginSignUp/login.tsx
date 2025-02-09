@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import './login.css'; // Import the CSS
+import './login.css';
+import { authenticateUser, addUser } from '../../services/userService';
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const SignInComponent = () => {
   const [active, setActive] = useState(true);
-  const [isSignUp, setIsSignUp] = useState(false); // Track if it's in sign-up mode
+  const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,11 +17,15 @@ const SignInComponent = () => {
   });
 
   const handleClick = () => {
-    setActive(!active);
+    setActive(prev => !prev);
   };
 
   const handleToggleMode = () => {
-    setIsSignUp(!isSignUp); // Toggle between Sign In and Sign Up
+    handleClick();
+    setTimeout(() => {
+      setIsSignUp(prev => !prev);
+      handleClick(); 
+    }, 1000); 
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -29,30 +36,108 @@ const SignInComponent = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    toast.dismiss(); // Clear previous errors
+  
+    if (!formData.email || !formData.password) {
+      toast.error('Email and password are required');
+      return;
+    }
+  
     if (isSignUp) {
-      console.log('Sign Up Data:', formData);
-      // Handle sign-up logic (e.g., send to Firebase or an API)
-    } else {
-      console.log('Sign In Data:', formData);
-      // Handle sign-in logic (e.g., send to Firebase or an API)
+      if (!formData.name) {
+        toast.error('Name is required');
+        return;
+      }
+      if (!formData.dateOfBirth) {
+        toast.error('Date of Birth is required');
+        return;
+      }
+      if (!formData.gender) {
+        toast.error('Gender is required');
+        return;
+      }
+    }
+  
+    try {
+      if (isSignUp) {
+        // Sign-up logic
+        const userData = {
+          email: formData.email,
+          name: formData.name,
+          dateOfBirth: formData.dateOfBirth,
+          password: formData.password,
+          role: 'patient',
+          gender: formData.gender,
+          imageUrl: formData.imageUrl || undefined,
+        };
+  
+        await addUser(userData);
+        toast.success('User signed up successfully');
+        handleToggleMode();
+  
+        // Clear form fields after successful signup
+        setFormData({
+          email: '',
+          password: '',
+          name: '',
+          dateOfBirth: '',
+          gender: '',
+          imageUrl: '',
+        });
+  
+      } else {
+        // Sign-in logic
+        const userProfile = await authenticateUser(formData.email, formData.password);
+  
+        if (!userProfile) {
+          throw new Error('Invalid email or password');
+        }
+  
+        sessionStorage.setItem('user', JSON.stringify(userProfile)); // Store user data in session
+        toast.success('User logged in successfully');
+  
+        // Clear form fields after successful login
+        setFormData({
+          email: '',
+          password: '',
+          name: '',
+          dateOfBirth: '',
+          gender: '',
+          imageUrl: '',
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
+  
+
+  const defaultImage = 'https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg';
 
   return (
-    <div className={`container ${active ? 'active' : ''}`} onClick={handleClick}>
+    <div className={`container ${active ? 'active' : ''}`} >
       <div className="top"></div>
       <div className="bottom"></div>
       <div className={`center ${isSignUp ? 'signup' : 'signin'}`} onClick={(e) => e.stopPropagation()}>
         <h2 className='!text-black'>{isSignUp ? 'Please Sign Up' : 'Please Sign In'}</h2>
+       
         <form onSubmit={handleSubmit}>
+         {isSignUp && <div className="image-circle-container">
+            <img 
+              src={formData.imageUrl || defaultImage} 
+              alt="User Avatar" 
+              className="user-image" 
+            />
+          </div>}
           <input
             type="email"
             placeholder="Email"
             name="email"
             value={formData.email}
             onChange={handleChange}
+            required
           />
           <input
             type="password"
@@ -60,6 +145,7 @@ const SignInComponent = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            required
           />
           {isSignUp && (
             <>
@@ -69,6 +155,7 @@ const SignInComponent = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                required
               />
               <input
                 type="date"
@@ -76,18 +163,18 @@ const SignInComponent = () => {
                 name="dateOfBirth"
                 value={formData.dateOfBirth}
                 onChange={handleChange}
+                required
               />
-             <select
-  name="gender"
-  value={formData.gender}
-  onChange={handleChange}
->
-  <option value="">Select Gender</option>
-  <option value="male">Male</option>
-  <option value="female">Female</option>
-  <option value="" className='bg-blue-100'>No other options, deal with it 😡</option>
-</select>
-
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
               <input
                 type="url"
                 placeholder="Image URL (Optional)"
@@ -107,6 +194,7 @@ const SignInComponent = () => {
           </p>
         </form>
       </div>
+      <ToastContainer position='bottom-left'/> {/* Toast container to display the toasts */}
     </div>
   );
 };
