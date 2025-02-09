@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-md dark:bg-darkBlue fixed top-0 left-0 w-full z-50">
+    <nav className="bg-white shadow-md dark:bg-darkBlue fixed top-0 left-0 w-full   z-50">
       <div className="max-w-screen-3xl flex justify-between items-center mx-auto p-4">
         <a
           href="/"
