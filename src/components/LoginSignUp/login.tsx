@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './login.css';
 import { authenticateUser, addUser } from '../../services/userService';
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
+import { useNavigate } from 'react-router-dom';  // For redirecting
 
 const SignInComponent = () => {
   const [active, setActive] = useState(true);
@@ -15,6 +16,15 @@ const SignInComponent = () => {
     gender: '',
     imageUrl: '',
   });
+  const navigate = useNavigate();  // For redirecting
+ 
+  useEffect(() => {
+    const user = sessionStorage.getItem('user');
+    if (user) {
+     
+      navigate('/error');  
+    }
+  }, [navigate]);
 
   const handleClick = () => {
     setActive(prev => !prev);
@@ -68,7 +78,7 @@ const SignInComponent = () => {
           name: formData.name,
           dateOfBirth: formData.dateOfBirth,
           password: formData.password,
-          role: 'patient',
+          role: 'patient', // Default role for new users
           gender: formData.gender,
           imageUrl: formData.imageUrl || undefined,
         };
@@ -86,7 +96,6 @@ const SignInComponent = () => {
           gender: '',
           imageUrl: '',
         });
-  
       } else {
         // Sign-in logic
         const userProfile = await authenticateUser(formData.email, formData.password);
@@ -95,7 +104,8 @@ const SignInComponent = () => {
           throw new Error('Invalid email or password');
         }
   
-        sessionStorage.setItem('user', JSON.stringify(userProfile)); // Store user data in session
+        // Store user data in session
+        sessionStorage.setItem('user', JSON.stringify(userProfile));
         toast.success('User logged in successfully');
   
         // Clear form fields after successful login
@@ -107,6 +117,18 @@ const SignInComponent = () => {
           gender: '',
           imageUrl: '',
         });
+  
+        // Navigate based on user role
+        const role = userProfile.role;
+        if (role === 'doctor') {
+          navigate('/doctor-dashboard');
+        } else if (role === 'manager') {
+          navigate('/manager-dashboard');
+        } else if (role === 'patient') {
+          navigate('/patient-dashboard');
+        } else {
+          navigate('/error'); // Navigate to an error page if the role doesn't match
+        }
       }
     } catch (error: any) {
       toast.error(error.message);

@@ -1,0 +1,221 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background-color: #f4f6ff;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  text-align: center;
+  padding: 0 5%;
+}
+
+.cog-wheel1,
+.cog-wheel2 {
+  transform: scale(0.7);
+  margin: 0 auto;
+}
+
+.cog1,
+.cog2 {
+  width: 40vmin;
+  height: 40vmin;
+  border-radius: 50%;
+  border: 6vmin solid #f3c623;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.cog2 {
+  border: 6vmin solid #4f8a8b;
+}
+
+.top,
+.down,
+.left,
+.right,
+.left-top,
+.left-down,
+.right-top,
+.right-down {
+  width: 10vmin;
+  height: 10vmin;
+  background-color: #f3c623;
+  position: absolute;
+}
+
+.cog2 .top,
+.cog2 .down,
+.cog2 .left,
+.cog2 .right,
+.cog2 .left-top,
+.cog2 .left-down,
+.cog2 .right-top,
+.cog2 .right-down {
+  background-color: #4f8a8b;
+}
+
+.top {
+  top: -14vmin;
+  left: 9vmin;
+}
+
+.down {
+  bottom: -14vmin;
+  left: 9vmin;
+}
+
+.left {
+  left: -14vmin;
+  top: 9vmin;
+}
+
+.right {
+  right: -14vmin;
+  top: 9vmin;
+}
+
+.left-top {
+  transform: rotateZ(-45deg);
+  left: -8vmin;
+  top: -8vmin;
+}
+
+.left-down {
+  transform: rotateZ(45deg);
+  left: -8vmin;
+  top: 25vmin;
+}
+
+.right-top {
+  transform: rotateZ(45deg);
+  right: -8vmin;
+  top: -8vmin;
+}
+
+.right-down {
+  transform: rotateZ(-45deg);
+  right: -8vmin;
+  top: 25vmin;
+}
+
+.cog2 {
+  position: relative;
+  left: -10.2vmin;
+  bottom: 10vmin;
+}
+
+h1 {
+  color: #142833;
+}
+
+.first-four {
+  position: relative;
+  left: 6vmin;
+  font-size: 40vmin;
+}
+
+.second-four {
+  position: relative;
+  right: 18vmin;
+  z-index: -1;
+  font-size: 40vmin;
+}
+
+.wrong-para {
+  font-family: "Montserrat", sans-serif;
+  position: absolute;
+  bottom: 15vmin;
+  padding: 3vmin 12vmin 3vmin 3vmin;
+  font-weight: 600;
+  color: #092532;
+  opacity: 0;
+  font-size: 2rem;
+  word-wrap: break-word;
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10%;
+  }
+
+  .first-four,
+  .second-four {
+    font-size: 30vmin;
+  }
+
+  .cog1,
+  .cog2 {
+    width: 30vmin;
+    height: 30vmin;
+    border-width: 5vmin;
+  }
+
+  .wrong-para {
+    font-size: 1.5rem;
+    bottom: 10vmin;
+  }
+
+  .top,
+  .down,
+  .left,
+  .right,
+  .left-top,
+  .left-down,
+  .right-top,
+  .right-down {
+    width: 8vmin;
+    height: 8vmin;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 5%;
+  }
+
+  .first-four,
+  .second-four {
+    font-size: 25vmin;
+  }
+
+  .cog1,
+  .cog2 {
+    width: 25vmin;
+    height: 25vmin;
+    border-width: 4vmin;
+  }
+
+  .wrong-para {
+    font-size: 1.2rem;
+    bottom: 5vmin;
+  }
+
+  .top,
+  .down,
+  .left,
+  .right,
+  .left-top,
+  .left-down,
+  .right-top,
+  .right-down {
+    width: 6vmin;
+    height: 6vmin;
+  }
+}
