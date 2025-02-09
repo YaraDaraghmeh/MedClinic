@@ -6,6 +6,7 @@ import HomePage from '../HomePage/HomePage';
 import ContactPage from '../ContactPage/ContactPage';
 import Footer from '../Footer/Footer';
 import { About } from '../AboutPage/about';
+import Appointment from '../../screens/Patient.screen';
 import SignInComponent from '../LoginSignUp/login';
 
 const Home: React.FC = () => {
@@ -34,6 +35,7 @@ const Main: React.FC = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<SignInComponent/>}/>
+          <Route path="/appointment" element={<Appointment />} /> 
         </Routes>
       </div>
 
