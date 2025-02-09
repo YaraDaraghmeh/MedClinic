@@ -207,7 +207,7 @@ export const getUserByEmail = async (email: string) => {
 // Get users by role and filter by criteria
 export const getUsersByCriteria = async (
   role: "doctor" | "patient",
-  searchCriteria: { name?: string; email?: string; age?: number }
+  searchCriteria: { name?: string; email?: string;  }
 ) => {
   try {
     const users = await getUsers();
@@ -223,10 +223,8 @@ export const getUsersByCriteria = async (
             .toLowerCase()
             .includes(searchCriteria.email.toLowerCase())
         : true;
-      const matchesAge = searchCriteria.age
-        ? user.age?.integerValue === searchCriteria.age
-        : true;
-      return matchesRole && matchesName && matchesEmail && matchesAge;
+     
+      return matchesRole && matchesName && matchesEmail ;
     });
     return filteredUsers;
   } catch (error: unknown) {

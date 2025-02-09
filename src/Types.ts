@@ -1,11 +1,14 @@
 export interface User {
-    specialization: any;
-    id: string; name: { stringValue: string };
-    email: { stringValue: string };
-    age: { integerValue: number };
-    password: { stringValue: string };
-    role: { stringValue: string };
-  }
+  email: { stringValue: string };
+  name: { stringValue: string };
+  dateOfBirth: { stringValue: string };
+  password: { stringValue: string };
+  role: { stringValue: string };
+  gender: { stringValue: string };
+  imageUrl?: { stringValue: string };
+  specialization?: { stringValue: string };
+}
+
   export interface Appointment {
     id: string;
     doctorEmail: { stringValue: string };
