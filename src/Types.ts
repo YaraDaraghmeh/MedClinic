@@ -9,13 +9,15 @@ export interface User {
   specialization?: { stringValue: string };
 }
 
-  export interface Appointment {
-    id: string;
-    doctorEmail: { stringValue: string };
-    patientEmail: { stringValue: string };
-    appointmentDate: { stringValue: string };
-    appointmentTime: { stringValue: string };
-    reason: { stringValue: string };
-    status: { stringValue: "pending" | "confirmed" | "completed" | "canceled" };
-  }
-  
+export interface Appointment {
+  id: string;
+  patientEmail: { stringValue: string };
+  appointmentDate: { stringValue: string };
+  appointmentTime: { stringValue: string };
+  status: { stringValue: string };
+  notes?: { stringValue: string };
+}
+export interface ChartData {
+  day: string;
+  appointments: number;
+}
