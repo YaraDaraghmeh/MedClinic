@@ -1,0 +1,64 @@
+/* Default styles for sidebar */
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    z-index: -1;
+  }
+  
+  .sidebar h2 {
+
+    color: white;
+    text-align: center;
+  }
+  
+  .sidebar-links {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+  
+  .sidebar a:hover {
+    background-color: #555;
+    color: white;
+  }
+  
+  /* Content area shifts for large screens */
+  .content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+  }
+  
+  /* Medium Screens (max-width: 700px) */
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+  
+    .sidebar-links {
+      flex-direction: row; /* Links show in a horizontal row */
+      justify-content: center; /* Center the links */
+    }
+  
+    .sidebar a {
+      padding: 12px 20px;
+    }
+  
+    .content {
+      margin-left: 0;
+    }
+  }
+  
