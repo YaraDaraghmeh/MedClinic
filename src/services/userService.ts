@@ -67,7 +67,8 @@ export const addUser = async (userData: {
   try {
     const emailTaken = await isEmailTaken(userData.email);
     if (emailTaken) {
-      throw new Error(`Email ${userData.email} is already taken`);
+      //throw new Error(`Email ${userData.email} is already taken`);
+      return;
     }
 
     const hashedPassword = await hashPassword(userData.password);
@@ -139,7 +140,7 @@ export const isEmailTaken = async (email: string): Promise<boolean> => {
     const user = await getUserByEmail(email);
     return user ? true : false; // Return true if the user exists, else false
   } catch (error: unknown) {
-    throw new Error(`Error checking if email ${email} is taken: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    return false; // Return false if there is an error
   }
 };
 
