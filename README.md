@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏥 MediCare
+#  MediCare
 
 ### Your Modern Medical Clinic Management Solution
 
