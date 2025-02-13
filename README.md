@@ -87,16 +87,31 @@ npm run dev
 ```
 medicare/
 ├── src/
-│   ├── components/      # Reusable UI components
-│   ├── pages/          # Main application pages
-│   ├── services/       # Firebase & API services
-│   ├── contexts/       # React context providers
-│   ├── hooks/          # Custom React hooks
-│   ├── utils/          # Helper functions
-│   └── App.tsx         # Main application component
-├── public/             # Static assets
-└── package.json        # Project dependencies
-```
+│   ├── assets/              # Static assets and resources
+│   ├── components/          # Reusable UI components
+│   ├── database/           # Firebase database configurations
+│   ├── hooks/              # Custom React hooks
+│   ├── services/           # API and service integrations
+│   ├── types/              # TypeScript type definitions
+│   ├── pages/              # Main application pages
+│   │   ├── AboutPage/      # About page component
+│   │   ├── ContactPage/    # Contact page component
+│   │   ├── ErrorPage/      # Error handling page
+│   │   ├── HomePage/       # Main landing page
+│   │   ├── LoginSignUp/    # Authentication pages
+│   │   └── ServicesPage/   # Services information page
+│   ├── layout/
+│   │   ├── Footer/         # Footer component
+│   │   ├── Header/         # Header component
+│   │   └── SideBar/        # Sidebar navigation
+│   ├── App.tsx             # Main application component
+│   ├── App.css             # Main application styles
+│   ├── index.css           # Global styles
+│   ├── main.tsx            # Application entry point
+│   ├── functions.ts        # Utility functions
+│   └── Types.ts            # Global type definitions
+├── public/                 # Public assets
+└── vite-env.d.ts          # Vite environment definitions
 
 ## 📊 Core Features
 
