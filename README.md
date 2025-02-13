@@ -112,7 +112,7 @@ medicare/
 │   └── Types.ts            # Global type definitions
 ├── public/                 # Public assets
 └── vite-env.d.ts          # Vite environment definitions
-
+```
 ## 📊 Core Features
 
 ### Appointment System
