@@ -45,7 +45,7 @@ const LoggedInPage: React.FC = () => {
       <Header isCollapsed={isCollapsed} user={user} />
 
       {/* Content Section */}
-      <Content isCollapsed={isCollapsed} />
+      <Content isCollapsed={isCollapsed} user={user} />
     </Box>
   );
 };

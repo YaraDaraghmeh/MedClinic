@@ -30,7 +30,6 @@ export const getUsers = async () => {
     );
   }
 };
-
 // Get all doctors
 export const getDoctors = async () => {
   try {

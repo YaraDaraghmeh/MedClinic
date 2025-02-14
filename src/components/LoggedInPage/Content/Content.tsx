@@ -8,12 +8,14 @@ import ErrorPage from '../../ErrorPage/ErrorPage';
 import ContactPage from '../../ContactPage/ContactPage';
 import HomePage from '../../HomePage/HomePage';
 import Footer from '../../Footer/Footer';
+import Dashboard from '../Dashboard/Dashboard';
 
 interface ContentProps {
   isCollapsed: boolean;
+  user: any;
 }
 
-const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
+const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
   return (
     <Box
       sx={{
@@ -32,6 +34,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<SignInComponent />} />
         <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
+        <Route path="/dashboard" element={<Dashboard user={user}/>} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />
