@@ -9,7 +9,7 @@ export interface User {
   specialization?: { stringValue: string };
 }
 
-export interface Appointment {
+export interface AppointmentWithDetails {
   id: string;
   patientEmail: { stringValue: string };
   appointmentDate: { stringValue: string };
@@ -20,4 +20,19 @@ export interface Appointment {
 export interface ChartData {
   day: string;
   appointments: number;
+}
+export interface Appointment {
+  id: string;
+  patient: string;
+  age: number;
+  date: string;
+  time: string;
+  status: string;
+}
+
+export interface FormValues {
+  patient: string;
+  age: number;
+  date: string;
+  time: string;
 }

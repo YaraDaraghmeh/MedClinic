@@ -53,7 +53,7 @@ const Main: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Dashboard/>} />{/*changed*/}
+          <Route path="/login" element={<SignInComponent/>} />
           <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
           <Route path="/doctor" element={<Dashboard/>} /> {/* Route for Doctor Dashboard */}
 
