@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Preloader from '../loader/Preloader';
+import LoggedInPage from '../LoggedInPage/LoggedInPage';
 
 // Lazy loading components
 const Services = React.lazy(() => import('../ServicesPage/Services'));
@@ -11,7 +12,7 @@ const Footer = React.lazy(() => import('../Footer/Footer'));
 const About = React.lazy(() => import('../AboutPage/about').then(module => ({ default: module.About })));
 const SignInComponent = React.lazy(() => import('../LoginSignUp/login'));
 const ErrorPage = React.lazy(() => import('../ErrorPage/ErrorPage'));
-const Sidebar = React.lazy(() => import('../SideBar/SideBar'));
+const LoggedInpage = React.lazy(() => import('../LoggedInPage/LoggedInPage'));
 
 const Home: React.FC = () => {
   return <HomePage />;
@@ -45,19 +46,19 @@ const Main: React.FC = () => {
       {/* Render Sidebar if user exists */}
       {user && (
         <Suspense fallback={<div>Loading Sidebar... Please wait.</div>}>
-          <Sidebar />
+         <LoggedInPage/>
         </Suspense>
       )}
 
       {/* Render Header only if the route is not in the array or /error */}
-      {!shouldHideHeader && (
+      {shouldHideHeader && (
         <Suspense fallback={<div>Loading Header... Please wait.</div>}>
           <Header />
         </Suspense>
       )}
 
       {/* Main Content */}
-      <div className={`mt-4 ${user ? 'ml-64' : ''}`}> {/* Add margin-left to content if user is logged in */}
+      {!user &&(<div className={`mt-4 ${user ? 'ml-64' : ''}`}> {/* Add margin-left to content if user is logged in */}
         <Suspense fallback={<Preloader/>}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -70,9 +71,9 @@ const Main: React.FC = () => {
           </Routes>
         </Suspense>
       </div>
-
+      )}
       {/* Render Footer only if the route is not /error or wildcard */}
-      {location.pathname !== '/error' && (
+      {!user && location.pathname !== '/error' && (
         <Suspense fallback={<Preloader/>}>
           <Footer />
         </Suspense>
