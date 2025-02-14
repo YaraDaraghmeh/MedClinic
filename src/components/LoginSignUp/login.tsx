@@ -119,17 +119,18 @@ const SignInComponent = () => {
         });
   
         // Navigate based on user role
-        const role = userProfile.role;
-        console.log(userProfile.email)
-        if (role === 'doctor') {
-          navigate('/doctor-dashboard');
-        } else if (role === 'manager') {
-          navigate('/manager-dashboard');
-        } else if (role === 'patient') {
-          navigate('/patient-dashboard');
-        } else {
-          navigate('/error'); // Navigate to an error page if the role doesn't match
-        }
+        // const role = userProfile.role;
+        navigate('/appointment');
+        // console.log(userProfile.email)
+        // if (role === 'doctor') {
+        //   navigate('/doctor-dashboard');
+        // } else if (role === 'manager') {
+        //   navigate('/manager-dashboard');
+        // } else if (role === 'patient') {
+        //   navigate('/patient-dashboard');
+        // } else {
+        //   navigate('/error'); // Navigate to an error page if the role doesn't match
+        // }
       }
     } catch (error: any) {
       toast.error(error.message);

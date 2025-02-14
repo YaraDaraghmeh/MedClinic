@@ -6,10 +6,11 @@ import HomePage from '../HomePage/HomePage';
 import ContactPage from '../ContactPage/ContactPage';
 import Footer from '../Footer/Footer';
 import { About } from '../AboutPage/about';
-import Appointment from '../../screens/Patient.screen';
+import Appointment from '../appointment/Patient.screen';
 import SignInComponent from '../LoginSignUp/login';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import Sidebar from '../SideBar/SideBar';
+import AppointmentsPage from '../appointment/AppointmentsPage';
 
 const Home: React.FC = () => {
   return <HomePage />;
@@ -54,6 +55,8 @@ const Main: React.FC = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<SignInComponent/>}/>
+          <Route path="/appointment" element={<Appointment/>}/>
+          <Route path="/appointments" element={<AppointmentsPage/>}/>
         </Routes>
       </div>
 
