@@ -9,6 +9,7 @@ import { About } from '../AboutPage/about';
 import SignInComponent from '../LoginSignUp/login';
 import ErrorPage from '../ErrorPage/ErrorPage';
 import Sidebar from '../SideBar/SideBar';
+import Dashboard from '../DoctorPage/Dashboard'; // Import the Dashboard component
 
 const Home: React.FC = () => {
   return <HomePage />;
@@ -52,8 +53,10 @@ const Main: React.FC = () => {
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<SignInComponent />} />
+          <Route path="/login" element={<Dashboard/>} />{/*changed*/}
           <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
+          <Route path="/doctor" element={<Dashboard/>} /> {/* Route for Doctor Dashboard */}
+
           <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
         </Routes>
       </div>
