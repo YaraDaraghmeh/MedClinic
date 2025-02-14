@@ -6,6 +6,12 @@
     --lightGray: #e2e8f0;
     --accent: #2563eb;
     --accentHover: #60a5fa;
+
+    --pending: #fbbf24;
+    --confirmed: #22c55e;
+    --completed: #3b82f6;
+    --canceled: #ef4444;
+
   }
   
   .appointment-container {
@@ -59,6 +65,9 @@
     z-index: 1;
     font-size: 40px;
     font-weight: bold;
+
+    color: white;
+
   }
  
    
@@ -96,6 +105,11 @@
     font-size: 24px;
     font-weight: bold;
   }
+
+  .emergency-contact h3{
+    color: var(--primary);
+  }
+
   
   .appointment-form {
     display: flex;
@@ -146,4 +160,88 @@
     font-weight: bold;
     margin-bottom: 15px;
   }
+
   
+  .appointments-container {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .appointments-container h2 {
+    color: var(--primary);
+    margin-bottom: 100px;
+  }
+  
+  .appointments-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .appointment-card {
+    background: #fff;
+    
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+
+  .appointment-card p{
+    color: #1e3a8a;
+  }
+  
+  .view-appointments-btn, .back-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    border: none;
+    background: #1e3a8a;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .view-appointments-btn:hover, .back-btn:hover {
+    background: #2563eb;
+  }
+  
+  .appointment-card .doc {
+    font-size: 24px;
+    color: var(--primary);
+    font-weight: bold;
+  }
+
+ 
+.appointment-card .status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+}
+.appointment-card .date{
+  font-weight: bold;
+  color: var(--textColor);
+}
+.appointment-card .status.pending {
+  background-color: var(--pending);
+  color: #fff;
+}
+
+.appointment-card .status.confirmed {
+  background-color: var(--confirmed);
+  color: #fff;
+}
+
+.appointment-card .status.completed {
+  background-color: var(--completed);
+  color: #fff;
+}
+
+.appointment-card .status.canceled {
+  background-color: var(--canceled);
+  color: #fff;
+}
+
