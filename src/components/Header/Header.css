@@ -17,6 +17,8 @@
   transition: color 0.3s ease;
 }
 
+
+
 .navbar-link::after {
   content: "";
   position: absolute;
@@ -37,14 +39,13 @@
   color: var(--accent);
 }
 
-
 /* Login Button */
 .login-btn {
   background-color: var(--accent);
   color: white;
   border-radius: 0.5rem;
   font-weight: 500;
-  font-size: 0.875rem; 
+  font-size: 0.875rem;
   padding: 0.5rem 1.25rem;
   transition: all 0.3s ease-in-out;
 }
@@ -55,4 +56,45 @@
   color: black;
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+.greeting {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.2;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.greeting:hover {
+  color: #007bff;
+}
+
+.user-info:hover {
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  padding: 6px;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.1);
 }

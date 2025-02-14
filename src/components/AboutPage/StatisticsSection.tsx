@@ -4,7 +4,7 @@ import { StatisticsCard } from "./StatisticsCard";
 
 export const StatisticsSection = () => {
   const stats = [
-    { icon: FaUsers, target: 100, suffix: "k", label: "Happy People" },
+    { icon: FaUsers, target: 100, suffix: "k", label: "Happy Patients" },
     { icon: FaSyringe, target: 1000, suffix: "+", label: "Surgery Completed" },
     { icon: FaUserMd, target: 50, suffix: "+", label: "Expert Doctors" },
     { icon: FaMapMarkerAlt, target: 10, suffix: "+", label: "Worldwide Branches" },
