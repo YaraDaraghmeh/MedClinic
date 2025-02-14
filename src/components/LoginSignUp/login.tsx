@@ -119,8 +119,8 @@ const SignInComponent = () => {
         });
   
         // Navigate based on user role
-        var role = userProfile.role;
-         role='doctor';
+        const role = userProfile.role;
+         
         if (role === 'doctor') {
           navigate('/doctor');
         } else if (role === 'manager') {
@@ -128,7 +128,7 @@ const SignInComponent = () => {
         } else if (role === 'patient') {
           navigate('/patient-dashboard');
         } else {
-          navigate('/doctor'); // Navigate to an error page if the role doesn't match
+          navigate('/error'); 
         }
       }
     } catch (error: any) {
