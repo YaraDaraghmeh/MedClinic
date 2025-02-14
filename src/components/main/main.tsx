@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Services from '../ServicesPage/Services';
-import Header from '../Header/Header';
-import HomePage from '../HomePage/HomePage';
-import ContactPage from '../ContactPage/ContactPage';
-import Footer from '../Footer/Footer';
-import { About } from '../AboutPage/about';
-import SignInComponent from '../LoginSignUp/login';
-import ErrorPage from '../ErrorPage/ErrorPage';
-import Sidebar from '../SideBar/SideBar';
+import Preloader from '../loader/Preloader';
+
+// Lazy loading components
+const Services = React.lazy(() => import('../ServicesPage/Services'));
+const Header = React.lazy(() => import('../Header/Header'));
+const HomePage = React.lazy(() => import('../HomePage/HomePage'));
+const ContactPage = React.lazy(() => import('../ContactPage/ContactPage'));
+const Footer = React.lazy(() => import('../Footer/Footer'));
+const About = React.lazy(() => import('../AboutPage/about').then(module => ({ default: module.About })));
+const SignInComponent = React.lazy(() => import('../LoginSignUp/login'));
+const ErrorPage = React.lazy(() => import('../ErrorPage/ErrorPage'));
+const Sidebar = React.lazy(() => import('../SideBar/SideBar'));
 
 const Home: React.FC = () => {
   return <HomePage />;
@@ -40,26 +43,40 @@ const Main: React.FC = () => {
   return (
     <>
       {/* Render Sidebar if user exists */}
-      {user && <Sidebar />}
+      {user && (
+        <Suspense fallback={<div>Loading Sidebar... Please wait.</div>}>
+          <Sidebar />
+        </Suspense>
+      )}
 
       {/* Render Header only if the route is not in the array or /error */}
-      {!shouldHideHeader && <Header />}
+      {!shouldHideHeader && (
+        <Suspense fallback={<div>Loading Header... Please wait.</div>}>
+          <Header />
+        </Suspense>
+      )}
 
       {/* Main Content */}
       <div className={`mt-4 ${user ? 'ml-64' : ''}`}> {/* Add margin-left to content if user is logged in */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<SignInComponent />} />
-          <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
-          <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
-        </Routes>
+        <Suspense fallback={<Preloader/>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<SignInComponent />} />
+            <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
+            <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
+          </Routes>
+        </Suspense>
       </div>
 
       {/* Render Footer only if the route is not /error or wildcard */}
-      {location.pathname !== '/error' && <Footer />}
+      {location.pathname !== '/error' && (
+        <Suspense fallback={<Preloader/>}>
+          <Footer />
+        </Suspense>
+      )}
     </>
   );
 };
