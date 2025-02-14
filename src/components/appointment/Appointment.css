@@ -245,3 +245,130 @@
   color: #fff;
 }
 
+@media screen and (max-width: 1200px) {
+  .appointment-content {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .emergency-contact {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .appointment-header {
+    height: 500px;
+    font-size: 28px;
+  }
+
+  .appointment-header h1, .appointment-header h3 {
+    font-size: 32px;
+  }
+
+  .appointment-content {
+    width: 95%;
+  }
+
+  .appointment-form input,
+  .appointment-form select,
+  .appointment-form textarea {
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .appointment-header {
+    height: 400px;
+    font-size: 24px;
+  }
+
+  .appointment-header h1, .appointment-header h3 {
+    font-size: 28px;
+  }
+
+  .appointment-content {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .appointment-container {
+    padding: 10px;
+  }
+
+  .appointment-form input,
+  .appointment-form select,
+  .appointment-form textarea {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+@media screen and (max-width: 700px) {
+
+
+  .appointment-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .appointment-header {
+    height: 300px;
+    font-size: 20px;
+  }
+
+  .appointment-header h1,
+  .appointment-header h3 {
+    font-size: 24px;
+  }
+
+  .appointment-content {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .appointment-header {
+    height: 300px;
+    font-size: 20px;
+  }
+
+  .appointment-header h1, .appointment-header h3 {
+    font-size: 24px;
+  }
+
+  .appointment-content {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .emergency-contact {
+    font-size: 24px;
+  }
+
+  .appointment-form input,
+  .appointment-form select,
+  .appointment-form textarea {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .submit-btn {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
+
+
