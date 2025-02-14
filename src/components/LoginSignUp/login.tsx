@@ -120,6 +120,7 @@ const SignInComponent = () => {
   
         // Navigate based on user role
         const role = userProfile.role;
+        console.log(userProfile.email)
         if (role === 'doctor') {
           navigate('/doctor-dashboard');
         } else if (role === 'manager') {
