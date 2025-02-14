@@ -1,0 +1,210 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700");
+
+.container-1 {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  text-align: center;
+  padding: 0 5%;
+}
+
+.cog-wheel1-1,
+.cog-wheel2-1 {
+  transform: scale(0.7);
+  margin: 0 auto;
+}
+
+.cog1-1,
+.cog2-1 {
+  width: 40vmin;
+  height: 40vmin;
+  border-radius: 50%;
+  border: 6vmin solid #f3c623;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.cog2-1 {
+  border: 6vmin solid #4f8a8b;
+}
+
+.top-1,
+.down-1,
+.left-1,
+.right-1,
+.left-top-1,
+.left-down-1,
+.right-top-1,
+.right-down-1 {
+  width: 10vmin;
+  height: 10vmin;
+  background-color: #f3c623;
+  position: absolute;
+}
+
+.cog2-1 .top-1,
+.cog2-1 .down-1,
+.cog2-1 .left-1,
+.cog2-1 .right-1,
+.cog2-1 .left-top-1,
+.cog2-1 .left-down-1,
+.cog2-1 .right-top-1,
+.cog2-1 .right-down-1 {
+  background-color: #4f8a8b;
+}
+
+.top-1 {
+  top: -14vmin;
+  left: 9vmin;
+}
+
+.down-1 {
+  bottom: -14vmin;
+  left: 9vmin;
+}
+
+.left-1 {
+  left: -14vmin;
+  top: 9vmin;
+}
+
+.right-1 {
+  right: -14vmin;
+  top: 9vmin;
+}
+
+.left-top-1 {
+  transform: rotateZ(-45deg);
+  left: -8vmin;
+  top: -8vmin;
+}
+
+.left-down-1 {
+  transform: rotateZ(45deg);
+  left: -8vmin;
+  top: 25vmin;
+}
+
+.right-top-1 {
+  transform: rotateZ(45deg);
+  right: -8vmin;
+  top: -8vmin;
+}
+
+.right-down-1 {
+  transform: rotateZ(-45deg);
+  right: -8vmin;
+  top: 25vmin;
+}
+
+.cog2-1 {
+  position: relative;
+  left: -10.2vmin;
+  bottom: 10vmin;
+}
+
+h1 {
+  color: #142833;
+}
+
+.first-four-1 {
+  position: relative;
+  left: 6vmin;
+  font-size: 40vmin;
+}
+
+.second-four-1 {
+  position: relative;
+  right: 18vmin;
+  z-index: -1;
+  font-size: 40vmin;
+}
+
+.wrong-para-1 {
+  font-family: "Montserrat", sans-serif;
+  position: absolute;
+  bottom: 15vmin;
+  padding: 3vmin 12vmin 3vmin 3vmin;
+  font-weight: 600;
+  color: #092532;
+  opacity: 0;
+  font-size: 2rem;
+  word-wrap: break-word;
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .container-1 {
+    padding: 0 10%;
+  }
+
+  .first-four-1,
+  .second-four-1 {
+    font-size: 30vmin;
+  }
+
+  .cog1-1,
+  .cog2-1 {
+    width: 30vmin;
+    height: 30vmin;
+    border-width: 5vmin;
+  }
+
+  .wrong-para-1 {
+    font-size: 1.5rem;
+    bottom: 10vmin;
+  }
+
+  .top-1,
+  .down-1,
+  .left-1,
+  .right-1,
+  .left-top-1,
+  .left-down-1,
+  .right-top-1,
+  .right-down-1 {
+    width: 8vmin;
+    height: 8vmin;
+  }
+}
+
+@media (max-width: 480px) {
+  .container-1 {
+    padding: 0 5%;
+  }
+
+  .first-four-1,
+  .second-four-1 {
+    font-size: 25vmin;
+  }
+
+  .cog1-1,
+  .cog2-1 {
+    width: 25vmin;
+    height: 25vmin;
+    border-width: 4vmin;
+  }
+
+  .wrong-para-1 {
+    font-size: 1.2rem;
+    bottom: 5vmin;
+  }
+
+  .top-1,
+  .down-1,
+  .left-1,
+  .right-1,
+  .left-top-1,
+  .left-down-1,
+  .right-top-1,
+  .right-down-1 {
+    width: 6vmin;
+    height: 6vmin;
+  }
+}
