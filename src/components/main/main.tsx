@@ -1,7 +1,22 @@
+
 import React, { useState, useEffect, Suspense } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Preloader from "../loader/Preloader";
 import LoggedInPage from "../LoggedInPage/LoggedInPage";
+
+import React, { useState, useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import Services from '../ServicesPage/Services';
+import Header from '../Header/Header';
+import HomePage from '../HomePage/HomePage';
+import ContactPage from '../ContactPage/ContactPage';
+import Footer from '../Footer/Footer';
+import { About } from '../AboutPage/about';
+import SignInComponent from '../LoginSignUp/login';
+import ErrorPage from '../ErrorPage/ErrorPage';
+import Sidebar from '../SideBar/SideBar';
+import Dashboard from '../DoctorPage/Dashboard'; // Import the Dashboard component
+
 
 // Lazy loaded components
 const Services = React.lazy(() => import("../ServicesPage/Services"));
@@ -40,6 +55,7 @@ const Main: React.FC = () => {
         <Header />
       </Suspense>
 
+ 
       <div className="mt-4">
         <Suspense fallback={<Preloader />}>
           <Routes>
@@ -48,10 +64,12 @@ const Main: React.FC = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<SignInComponent />} />
+             <Route path="/doctor" element={<Dashboard/>} /> {/* Route for Doctor Dashboard */}
             <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
             <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
           </Routes>
         </Suspense>
+
       </div>
 
       <Suspense fallback={<Preloader />}>

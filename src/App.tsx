@@ -3,7 +3,7 @@ import './App.css'
 import Preloader from './components/loader/Preloader'
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'; // Correct import
-
+import 'antd/dist/reset.css'; // Import Ant Design styles
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
 
