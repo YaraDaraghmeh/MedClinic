@@ -95,11 +95,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
       {/* Role-Based Navigation */}
       {user?.role?.stringValue === 'manager' && (
         <div className="sidebar-links">
-          <Link to="/show-doctors" className="sidebar-link">
-            <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Show Doctors'}
-          </Link>
-          <Link to="/add-doctor" className="sidebar-link">
-            <PersonAddOutlined className="sidebar-icon" /> {!isCollapsed && 'Add Doctor'}
+          <Link to="/doctors" className="sidebar-link">
+            <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Doctors'}
           </Link>
           <Link to="/all-appointments" className="sidebar-link">
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'All Appointments'}
