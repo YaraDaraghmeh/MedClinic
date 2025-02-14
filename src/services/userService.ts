@@ -23,7 +23,11 @@ export const getUsers = async () => {
       ...doc.fields,
     }));
   } catch (error: unknown) {
-    throw new Error(`Error fetching users: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error fetching users: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -36,7 +40,11 @@ export const getDoctors = async () => {
     );
     return doctors;
   } catch (error: unknown) {
-    throw new Error(`Error fetching doctors: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error fetching doctors: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -49,7 +57,11 @@ export const getPatients = async () => {
     );
     return patients;
   } catch (error: unknown) {
-    throw new Error(`Error fetching patients: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error fetching patients: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -82,15 +94,20 @@ export const addUser = async (userData: {
       role: { stringValue: userData.role },
       gender: { stringValue: userData.gender },
       imageUrl: { stringValue: imageUrl },
-      ...(userData.role === "doctor" && userData.specialization && {
-        specialization: { stringValue: userData.specialization },
-      }),
+      ...(userData.role === "doctor" &&
+        userData.specialization && {
+          specialization: { stringValue: userData.specialization },
+        }),
     };
 
     const response = await axiosInstance.patch(`/users/${docId}`, { fields });
     return response.data;
   } catch (error: unknown) {
-    throw new Error(`Error adding user: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error adding user: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -129,7 +146,11 @@ export const updateUser = async (
     );
     return response.data;
   } catch (error: unknown) {
-    throw new Error(`Error updating user with email ${email}: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error updating user with email ${email}: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -139,7 +160,7 @@ export const isEmailTaken = async (email: string): Promise<boolean> => {
     const user = await getUserByEmail(email);
     return user ? true : false; // Return true if the user exists, else false
   } catch (error: unknown) {
-    throw new Error(`Error checking if email ${email} is taken: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    return false; // Return false if there is an error
   }
 };
 
@@ -150,7 +171,11 @@ export const deleteUser = async (email: string) => {
     await axiosInstance.delete(`/users/${encodedEmail}`);
     return { success: true, message: `User ${email} deleted successfully` };
   } catch (error: unknown) {
-    throw new Error(`Error deleting user with email ${email}: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error deleting user with email ${email}: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -160,7 +185,7 @@ export const authenticateUser = async (email: string, password: string) => {
     const user = await getUserByEmail(email);
 
     if (!user || !user.password) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     const storedPassword = user.password?.stringValue || user.password;
@@ -169,12 +194,16 @@ export const authenticateUser = async (email: string, password: string) => {
     const isMatch = await bcrypt.compare(password, storedPassword);
 
     if (!isMatch) {
-      throw new Error('Invalid password');
+      throw new Error("Invalid password");
     }
 
     return user;
   } catch (error: unknown) {
-    throw new Error(`Authentication Error: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Authentication Error: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -184,7 +213,11 @@ export const getUserProfile = async (email: string) => {
     const user = await getUserByEmail(email);
     return user;
   } catch (error: unknown) {
-    throw new Error(`Error fetching user profile: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error fetching user profile: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
@@ -195,42 +228,26 @@ export const getUserByEmail = async (email: string) => {
     const response = await axiosInstance.get(`/users/${encodedEmail}`);
 
     if (!response.data || !response.data.fields) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     return response.data.fields;
   } catch (error: unknown) {
-    throw new Error(`Error fetching user with email ${email}: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
+    throw new Error(
+      `Error fetching user with email ${email}: ${
+        error instanceof Error ? error.message : "An unknown error occurred."
+      }`
+    );
   }
 };
 
 // Get users by role and filter by criteria
-export const getUsersByCriteria = async (
-  role: "doctor" | "patient",
-  searchCriteria: { name?: string; email?: string;  }
-) => {
-  try {
-    const users = await getUsers();
-    const filteredUsers = users.filter((user: User) => {
-      const matchesRole = user.role?.stringValue === role;
-      const matchesName = searchCriteria.name
-        ? user.name?.stringValue
-            .toLowerCase()
-            .includes(searchCriteria.name.toLowerCase())
-        : true;
-      const matchesEmail = searchCriteria.email
-        ? user.email?.stringValue
-            .toLowerCase()
-            .includes(searchCriteria.email.toLowerCase())
-        : true;
-     
-      return matchesRole && matchesName && matchesEmail ;
-    });
-    return filteredUsers;
-  } catch (error: unknown) {
-    throw new Error(`Error fetching users by criteria: ${error instanceof Error ? error.message : 'An unknown error occurred.'}`);
-  }
+export const getUsersByCriteria = (role: "doctor" | "patient", searchCriteria: { name?: string; email?: string } = {}) => {
+  return axiosInstance.get(`/users?role=${role}`, {
+    params: searchCriteria, // Default to empty object if no criteria is passed
+  });
 };
+
 
 // Get doctors by criteria
 export const getDoctorsByCriteria = async (searchCriteria: {

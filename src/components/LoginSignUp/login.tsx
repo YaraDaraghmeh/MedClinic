@@ -120,16 +120,20 @@ const SignInComponent = () => {
   
         // Navigate based on user role
         const role = userProfile.role;
+        console.log(userProfile.email)  ;
+        navigate('/');
+       
          
-        if (role === 'doctor') {
-          navigate('/doctor');
-        } else if (role === 'manager') {
-          navigate('/manager-dashboard');
-        } else if (role === 'patient') {
-          navigate('/patient-dashboard');
-        } else {
-          navigate('/error'); 
-        }
+      if (role === 'doctor') {
+  navigate('/doctor');
+} else if (role === 'manager') {
+  navigate('/manager-dashboard');
+} else if (role === 'patient') {
+  navigate('/patient-dashboard');
+} else {
+  navigate('/error');
+}
+
       }
     } catch (error: any) {
       toast.error(error.message);

@@ -10,7 +10,7 @@ function Services() {
                     <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
                         <div className="flex flex-col md:flex-row items-center justify-between">
                             <div className="w-full md:w-1/2 mb-12 md:mb-0">
-                                <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                                <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight !text-white">
                                 Care.<br />Innovation.<br />Trust.
                                 </h1>
                                 <p className="text-xl mb-8 text-gray-300">For A better life check your in body every 6 months </p>
