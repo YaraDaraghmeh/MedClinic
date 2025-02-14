@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { getDoctors } from '../../services/userService'; 
 import { createAppointment } from '../../services/appointmentService';
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 import './Appointment.css';
-
+import { calculateAge } from '../../functions';
 
 interface IAppointmentForm {
   patientName: string;
   patientContact: string;
   patientAge: number;
   patientGender: string;
-  dateTime: string;
+  date: string;
+  time: string;
   symptoms: string;
   doctorId?: string;
   doctorEmail: string;
-
 }
 
 const INITIAL_STATE: IAppointmentForm = {
@@ -21,7 +23,8 @@ const INITIAL_STATE: IAppointmentForm = {
   patientContact: '',
   patientAge: 0,
   patientGender: '',
-  dateTime: '',
+  date: '',
+  time: '',
   symptoms: '',
   doctorId: '',
   doctorEmail: '',
@@ -30,99 +33,148 @@ const INITIAL_STATE: IAppointmentForm = {
 const AppointmentForm: React.FC = () => {
   const [formData, setFormData] = useState<IAppointmentForm>(INITIAL_STATE);
   const [confirmation, setConfirmation] = useState(false);
+  const [doctors, setDoctors] = useState<any[]>([]);
+
+ 
+
+  // Fetch doctors when the component mounts
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const doctorsData = await getDoctors();
+        setDoctors(doctorsData);
+      } catch (error) {
+        toast.error("Failed to fetch doctor list. Please try again later.");
+      }
+    };
+    fetchDoctors();
+    
+    const user = sessionStorage.getItem('user');
+    if (user) {
+      const userData = JSON.parse(user);
+      console.log(userData);
+
+      // Ensure the dateOfBirth is in the expected format
+      const dob = userData.dateOfBirth.stringValue;
+      //console.log(dob)
+      const age = calculateAge(dob);
+      //console.log(age);
+      setFormData({
+        ...formData,
+        patientName: userData.name.stringValue,
+        patientContact: userData.email.stringValue,
+        patientAge: age,
+        patientGender: userData.gender.stringValue,
+      });
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-
   };
 
-  const handleDateTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDateTime = new Date(e.target.value);
-    const hours = selectedDateTime.getHours();
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = new Date(e.target.value);
+    const today = new Date();
 
-    
-    if (hours < 9 || hours >= 17) {
-      alert("The clinic operates between 9:00 AM and 5:00 PM. Please choose a valid time.");
-    } else {
-      setFormData({ ...formData, dateTime: e.target.value });
+    if (selectedDate < today) {
+      toast.error("You cannot select a past date.");
+      return;
     }
+
+    setFormData({ ...formData, date: e.target.value });
+  };
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedTime = e.target.value;
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+
+    if (hours < 9 || hours >= 17) {
+      toast.error("The clinic operates between 9:00 AM and 5:00 PM. Please choose a valid time.");
+      return;
+    }
+
+    setFormData({ ...formData, time: selectedTime });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      const user=sessionStorage.getItem('user');
-      // console.log(user!.email)
-      await createAppointment({
-        doctorEmail: formData.doctorId || "",
-        patientEmail: "",
-        appointmentDate: new Date(formData.dateTime),
-        appointmentTime: formData.dateTime.split("T")[1],
+      let user = sessionStorage.getItem('user');
+      if (!user) {
+        toast.error("User not found. Please log in again.");
+        return;
+      }
+
+      const userData = JSON.parse(user!);
+      type AppointmentStatus = "pending" | "confirmed" | "completed" | "canceled";
+
+      const appointmentDate = new Date(formData.date);
+      const [hour, minute] = formData.time.split(":");
+      appointmentDate.setHours(parseInt(hour), parseInt(minute));
+
+      const response = await createAppointment({
+        doctorEmail: formData.doctorEmail, 
+        patientEmail: userData.email.stringValue,
+        appointmentDate: appointmentDate, 
+        appointmentTime: formData.time,
         reason: formData.symptoms,
-        status: "pending",
+        status: "pending" as AppointmentStatus,
       });
+
       setConfirmation(true);
       setFormData(INITIAL_STATE);
+      toast.success("Your appointment has been booked successfully!");
     } catch (error) {
-      console.error("Error creating appointment:", error);
-
+      toast.error("An error occurred while booking the appointment.");
     }
   };
 
   return (
-
-    <div className='appointment-container'>
-
+    <div className="appointment-container">
       <h2>Book an Appointment</h2>
-      {confirmation && <p className="success-message">Your appointment has been booked successfully!</p>}
+      
       <form onSubmit={handleSubmit} className="appointment-form">
         <label>Patient Name</label>
-
         <input type="text" name="patientName" value={formData.patientName} onChange={handleChange} required />
 
         <label>Contact</label>
         <input type="text" name="patientContact" value={formData.patientContact} onChange={handleChange} required />
 
         <label>Age</label>
-        <input type="number" name="patientAge" value={formData.patientAge} onChange={handleChange} required />
+        <input type="text" name="patientAge" value={formData.patientAge} readOnly />
 
         <label>Gender</label>
-        <select name="patientGender" value={formData.patientGender} onChange={handleChange} required>
-          <option value="">Select</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-
+        <input type="text" name="patientGender" value={formData.patientGender} readOnly />
 
         <label>Doctor</label>
         <select name="doctorEmail" value={formData.doctorEmail} onChange={handleChange} required>
           <option value="">Select</option>
-          <option value="Dr.JohnDoe">Dr. John Doe</option>
-          <option value="Dr.JaneSmith">Dr. Jane Smith</option>
-          <option value="Dr.EmmaWhite">Dr. Emma White</option>
-          <option value="Dr.TomBrown">Dr. Tom Brown</option>
-          <option value="Dr.OliviaGreen">Dr. Olivia Green</option>
-          <option value="Dr.AvaBlue">Dr. Ava Blue</option>
-          <option value="Dr.JackBlack">Dr. Jack Black</option>
+          {doctors.map((doctor) => (
+            <option key={doctor.email.stringValue} value={doctor.email.stringValue}>
+              {doctor.name.stringValue}
+            </option>
+          ))}
         </select>
 
+        <label>Appointment Date</label>
+        <input type="date" name="date" value={formData.date} onChange={handleDateChange} required />
 
-        <label>Appointment Date & Time</label>
-        <input type="datetime-local" name="dateTime" value={formData.dateTime} onChange={handleDateTimeChange} required />
+        <label>Appointment Time</label>
+        <input type="time" name="time" value={formData.time} onChange={handleTimeChange} required />
 
         <label>Symptoms Description</label>
         <textarea name="symptoms" rows={3} value={formData.symptoms} onChange={handleChange} required />
 
-
         <button type="submit" className="submit-btn">Submit</button>
       </form>
+      <ToastContainer position='bottom-left' />
     </div>
-
   );
 };
 
 export default AppointmentForm;
-
