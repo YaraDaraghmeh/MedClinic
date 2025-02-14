@@ -9,7 +9,7 @@ export enum AppointmentStatus {
 export type Appointment = {
   id: string;
   patientId: string;
-  doctorId?: string;
+  doctorId: string;
   dateTime: Date;
   symptoms: string;
   status: AppointmentStatus;
