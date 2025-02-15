@@ -126,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
           <Link to="/appointment" className="sidebar-link">
             <MedicalServicesOutlined className="sidebar-icon" /> {!isCollapsed && 'Make Appointment'}
           </Link>
-          <Link to="/show-doctors" className="sidebar-link">
+          <Link to="doctors" className="sidebar-link">
             <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Show Doctors'}
           </Link>
           <Link to="/appointments" className="sidebar-link">

@@ -13,6 +13,154 @@
   --canceled: #ef4444;
 }
 
+
+.appointment-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  background-color: #f8fafc;
+}
+.appointment-containe {
+
+  width: 50%;
+  padding: 20px;
+  
+}
+.appointment-container h2 {
+
+ color: var(--primary);
+  
+}
+
+.appointment-header {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background: url('../../assets/heroAppBackgroundImg.jpg') no-repeat center center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.appointment-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); 
+}
+
+.appointment-header h1,h3 {
+  position: relative;
+  z-index: 1;
+  font-size: 40px;
+  font-weight: bold;
+
+  color: white;
+
+}
+
+ 
+.appointment-content {
+  display: flex;
+   /* flex-direction: column;  */
+  align-items: center; 
+  justify-content: space-between;
+  /* gap: 20px; */
+  width: 80%;
+  /* max-width: 800px; */
+  /* width: 100%; */
+  margin-top: 20px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.emergency-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 38px;
+  color: var(--primary);
+  /* background-color: var(--lightGray); */
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.emergency-contact h2 {
+  color: var(--darkBlue);
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.emergency-contact h3{
+  color: var(--primary);
+}
+
+
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.appointment-form label {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px 0;
+  color: var(--textColor);
+}
+
+.appointment-form input,
+.appointment-form select,
+.appointment-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--lightGray);
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.appointment-form textarea {
+  resize: none;
+}
+
+.submit-btn {
+  background-color: var(--accent);
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: var(--accentHover);
+}
+
+.success-message {
+  color: green;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
 .appointments-container {
   text-align: center;
   padding: 20px;
@@ -193,6 +341,20 @@
   background: var(--accentHover);
 }
 
+.view-appointments-btn, .back-btn {
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: none;
+  background: #1e3a8a;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.view-appointments-btn:hover, .back-btn:hover {
+  background: #2563eb;
+}
+
 /* Media Queries for Responsiveness */
 @media (min-width: 600px) {
   .patient-info-container {
@@ -240,5 +402,133 @@
 @media (min-width: 1024px) {
   .appointments-list {
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+}
+
+
+
+@media screen and (max-width: 1200px) {
+  .appointment-content {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .emergency-contact {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .appointment-header {
+    height: 500px;
+    font-size: 28px;
+  }
+
+  .appointment-header h1, .appointment-header h3 {
+    font-size: 32px;
+  }
+
+  .appointment-content {
+    width: 95%;
+  }
+
+  .appointment-form input,
+  .appointment-form select,
+  .appointment-form textarea {
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .appointment-header {
+    height: 400px;
+    font-size: 24px;
+  }
+
+  .appointment-header h1, .appointment-header h3 {
+    font-size: 28px;
+  }
+
+  .appointment-content {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .appointment-container {
+    padding: 10px;
+  }
+
+  .appointment-form input,
+  .appointment-form select,
+  .appointment-form textarea {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+@media screen and (max-width: 700px) {
+
+
+  .appointment-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .appointment-header {
+    height: 300px;
+    font-size: 20px;
+  }
+
+  .appointment-header h1,
+  .appointment-header h3 {
+    font-size: 24px;
+  }
+
+  .appointment-content {
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+
+@media screen and (max-width: 480px) {
+  .appointment-header {
+    height: 300px;
+    font-size: 20px;
+  }
+
+  .appointment-header h1, .appointment-header h3 {
+    font-size: 24px;
+  }
+
+  .appointment-content {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .emergency-contact {
+    font-size: 24px;
+  }
+
+  .appointment-form input,
+  .appointment-form select,
+  .appointment-form textarea {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .submit-btn {
+    font-size: 12px;
+    padding: 6px;
   }
 }

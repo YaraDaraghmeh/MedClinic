@@ -11,6 +11,7 @@ import Footer from '../../Footer/Footer';
 import AppointmentForm from '../../appointment/FormAppSection';
 import AppointmentsPage from '../../appointment/AppointmentsPage';
 import Appointment from '../../appointment/Patient.screen';
+import DoctorsPage from '../../appointment/ShowDoctors';
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -37,6 +38,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
         <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
+        <Route path="/doctors" element={<DoctorsPage/>} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />
