@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
-  Box, IconButton, Typography, Divider, Dialog, DialogActions, DialogContent, 
-  DialogTitle, Button 
+  Box, IconButton, Typography, Divider 
 } from '@mui/material';
 import { 
   HomeOutlined, PeopleOutlined, ReceiptOutlined, CalendarTodayOutlined, 
   ExitToAppOutlined, DashboardOutlined, PersonAddOutlined, FeedbackOutlined, 
   EventAvailableOutlined, MedicalServicesOutlined
 } from '@mui/icons-material';
+import LogoutDialog from '../LogoutDialog/LogoutDialog'; 
 import '../LoggedInpage.css';
 
 interface SidebarProps {
@@ -18,7 +18,7 @@ interface SidebarProps {
   onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onLogout}) => {
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onLogout }) => {
   const navigate = useNavigate();
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 
@@ -157,20 +157,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
       </button>
 
       {/* Logout Confirmation Dialog */}
-      <Dialog open={openLogoutDialog} onClose={() => setOpenLogoutDialog(false)}>
-        <DialogTitle>Confirm Logout</DialogTitle>
-        <DialogContent>
-          <Typography>Are you sure you want to log out?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenLogoutDialog(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={onLogout} color="error" variant="contained">
-            Logout
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <LogoutDialog
+        open={openLogoutDialog}
+        onClose={() => setOpenLogoutDialog(false)}
+        onLogout={handleLogout}
+       
+      />
     </Box>
   );
 };
