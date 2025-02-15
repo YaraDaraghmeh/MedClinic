@@ -1,0 +1,51 @@
+[33m8a5e9bf[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'DoctorPage' into main
+[33mc62d21f[m fixed a link to the doctors in the role manager
+[33m8633d31[m added some options for each user according to its role + logout button worked
+[33m6b3f6eb[m fixed sidebar styles for user's data
+[33m3d73df5[m added a loggedInPage with sidepage and header
+[33mc289d39[m refactor SignInComponent to use const for role and update error navigation
+[33m98b0576[m add PieChartComponent for visualizing appointment status
+[33mebb3489[m add LineChartComponent for visualizing patient growth over time
+[33md9a5ff6[m add BarChartComponent and StatisticsCards for displaying appointment statistics
+[33mb5ccb48[m add PatientsTable component for displaying and managing patient information
+[33mc7659bc[m add PatientFormModal component for adding new patient details
+[33mc4ad786[m add ManageAppointments component for handling appointment management
+[33m7033d9b[m add AppHeader component for the DoctorPage layout
+[33m258d120[m add AppointmentsTable and Dashboard components for managing appointments and displaying statistics
+[33mcdd1137[m add AppointmentFormModal component for adding new appointments
+[33m032d750[m refactor appointment types; add useAppointments hook and constants for patient data
+[33mafd61b7[m  update routing for doctor dashboard; add Ant Design styles and designing the dashboad for the doctor
+[33mf30dedb[m ADDED LAZY LOADING
+[33mdaff72b[m added unit tests for the services files
+[33m3e3d9e4[m Merge branch 'main' of https://github.com/YaraDaraghmeh/MedClinic
+[33m11ac153[m refactor HeroContent and HeroSection for improved styling; update userService error handling
+[33md6b3cc7[m Update README.md
+[33meced794[m Update README.md
+[33m7621104[m Update README.md
+[33mba4b30c[m Update README.md
+[33mf778ee8[m add DoctorDashboard, StatsCard, AppointmentsChart, and AppointmentsList components; update appointment types
+[33m44620a8[m Merge pull request #3 from YaraDaraghmeh/main
+[33m13f1433[m add appointment and user type definitions with role enumeration
+[33m304bf00[m fixed major issues +added a side bar (it needs to be fixed )
+[33mca68b46[m edited the footer styles
+[33ma0174f5[m added an error page
+[33m749560d[m added a package
+[33mc6fca98[m Merge pull request #2 from YaraDaraghmeh/database
+[33mbd46239[m[33m ([m[1;31morigin/database[m[33m)[m fixed some errors
+[33mc56349b[m almost done with database and login/signup functionality
+[33m1e0e3f7[m connected it to the database
+[33m600c06f[m Merge branch 'main' of https://github.com/YaraDaraghmeh/MedClinic
+[33m9b91731[m deleted some unnecessary files
+[33m70e4dcd[m Merge pull request #1 from YaraDaraghmeh/LandingPage
+[33m8b60d03[m[33m ([m[1;31morigin/LandingPage[m[33m)[m Added the link for the login button
+[33m9336ea3[m login page
+[33mfdd1a65[m Add new images and components for About and Services pages
+[33m28f53cc[m Service and About Page Component
+[33m697b746[m SignUp Form
+[33m3382713[m home page and contact
+[33mf15c881[m intalled bootstrap
+[33m0da231b[m Add files via upload
+[33m35c51a5[m Add files via upload
+[33ma0e50f4[m Add files via upload
+[33m438f067[m Update README.md
+[33m60b788a[m Initial commit
