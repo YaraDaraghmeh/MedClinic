@@ -1,374 +1,244 @@
 :root {
-    --primary: #1e3a8a;
-    --lightBlue: #93c5fd;
-    --darkBlue: #1e293b;
-    --textColor: #334155;
-    --lightGray: #e2e8f0;
-    --accent: #2563eb;
-    --accentHover: #60a5fa;
+  --primary: #1e3a8a;
+  --lightBlue: #93c5fd;
+  --darkBlue: #1e293b;
+  --textColor: #334155;
+  --lightGray: #e2e8f0;
+  --accent: #2563eb;
+  --accentHover: #60a5fa;
 
-    --pending: #fbbf24;
-    --confirmed: #22c55e;
-    --completed: #3b82f6;
-    --canceled: #ef4444;
+  --pending: #fbbf24;
+  --confirmed: #22c55e;
+  --completed: #3b82f6;
+  --canceled: #ef4444;
+}
 
-  }
-  
-  .appointment-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    padding: 20px;
-    background-color: #f8fafc;
-  }
-  .appointment-containe {
+.appointments-container {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--lightGray);
+}
 
-    width: 50%;
-    padding: 20px;
-    
-  }
-  .appointment-containe h2 {
+.patient-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
 
-   color: var(--primary);
-    
-  }
-  
-  .appointment-header {
-    position: relative;
-    width: 100%;
-    height: 600px;
-    background: url('../../assets/heroAppBackgroundImg.jpg') no-repeat center center/cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 36px;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .appointment-header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); 
-  }
-  
-  .appointment-header h1,h3 {
-    position: relative;
-    z-index: 1;
-    font-size: 40px;
-    font-weight: bold;
+.patient-info {
+  text-align: left;
+  background-color: var(--lightBlue);
+  padding: 18px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
 
-    color: white;
+.img img {
+  width: 100%;
+  max-width: 120px;
+  height: auto;
+  border-radius: 10px;
+}
 
-  }
- 
-   
-  .appointment-content {
-    display: flex;
-     /* flex-direction: column;  */
-    align-items: center; 
-    justify-content: space-between;
-    /* gap: 20px; */
-    width: 80%;
-    /* max-width: 800px; */
-    /* width: 100%; */
-    margin-top: 20px;
-    padding: 20px;
-    background: white;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-  }
-  
-  .emergency-contact {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    font-size: 38px;
-    color: var(--primary);
-    /* background-color: var(--lightGray); */
-    border-radius: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .emergency-contact h2 {
-    color: var(--darkBlue);
-    font-size: 24px;
-    font-weight: bold;
-  }
+.info {
+  text-align: center;
+}
 
-  .emergency-contact h3{
-    color: var(--primary);
-  }
+.patient-info h1 {
+  color: var(--primary);
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+ h2{
+  color: var(--primary);
+ }
+.patient-description {
+  color: var(--textColor);
+  font-size: 16px;
+}
 
-  
-  .appointment-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-  
-  .appointment-form label {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 5px 0;
-    color: var(--textColor);
-  }
-  
-  .appointment-form input,
-  .appointment-form select,
-  .appointment-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid var(--lightGray);
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .appointment-form textarea {
-    resize: none;
-  }
-  
-  .submit-btn {
-    background-color: var(--accent);
-    color: white;
-    font-size: 18px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .submit-btn:hover {
-    background-color: var(--accentHover);
-  }
-  
-  .success-message {
-    color: green;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
+.appointment-count {
+  background-color: var(--completed);
+  text-align: center;
+  padding: 18px;
+  border-radius: 10px;
+}
 
-  
-  .appointments-container {
-    text-align: center;
-    padding: 20px;
-  }
+.appointment-count h2 {
+  color: var(--lightGray);
+  font-size: 20px;
+  margin-bottom: 10px;
+}
 
-  .appointments-container h2 {
-    color: var(--primary);
-    margin-bottom: 100px;
-  }
-  
-  .appointments-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .appointment-card {
-    background: #fff;
-    
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
-  }
+.appointment-count p {
+  color: var(--lightGray);
+  font-size: 22px;
+  font-weight: bold;
+}
 
-  .appointment-card p{
-    color: #1e3a8a;
-  }
-  
-  .view-appointments-btn, .back-btn {
-    margin-top: 20px;
-    padding: 10px 15px;
-    border: none;
-    background: #1e3a8a;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .view-appointments-btn:hover, .back-btn:hover {
-    background: #2563eb;
-  }
-  
-  .appointment-card .doc {
-    font-size: 24px;
-    color: var(--primary);
-    font-weight: bold;
-  }
+.appointments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
 
- 
-.appointment-card .status {
+.appointment-card {
+  background: #fff;
+  border: 1px solid var(--lightGray);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.appointment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.appointment-details {
+  text-align: left;
+}
+
+.appointment-details p {
+  color: var(--textColor);
+  margin: 10px 0;
+}
+
+.appointment-details .doc {
+  font-size: 20px;
+  color: var(--primary);
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.appointment-details .date,
+.appointment-details .time {
+  font-weight: bold;
+  color: var(--textColor);
+}
+
+.appointment-details .symptoms {
+  color: var(--textColor);
+}
+
+.appointment-details .status {
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 14px;
   font-weight: bold;
   text-align: center;
   display: inline-block;
+  margin-top: 10px;
 }
-.appointment-card .date{
-  font-weight: bold;
-  color: var(--textColor);
-}
-.appointment-card .status.pending {
+
+.appointment-details .status.pending {
   background-color: var(--pending);
   color: #fff;
 }
 
-.appointment-card .status.confirmed {
+.appointment-details .status.confirmed {
   background-color: var(--confirmed);
   color: #fff;
 }
 
-.appointment-card .status.completed {
+.appointment-details .status.completed {
   background-color: var(--completed);
   color: #fff;
 }
 
-.appointment-card .status.canceled {
+.appointment-details .status.canceled {
   background-color: var(--canceled);
   color: #fff;
 }
 
-@media screen and (max-width: 1200px) {
-  .appointment-content {
-    flex-direction: column;
-    width: 90%;
+.delete-btn {
+  background-color: var(--accentHover);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.back-btn {
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+}
+
+.back-btn:hover {
+  background: var(--accentHover);
+}
+
+/* Media Queries for Responsiveness */
+@media (min-width: 600px) {
+  .patient-info-container {
+    flex-direction: row;
   }
 
-  .emergency-contact {
-    font-size: 30px;
+  .patient-info {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .info {
+    text-align: left;
+  }
+
+  .delete-btn {
+    width: auto;
+    position: static;
+    transform: none;
   }
 }
 
-@media screen and (max-width: 992px) {
-  .appointment-header {
-    height: 500px;
+@media (min-width: 768px) {
+  .patient-info h1 {
     font-size: 28px;
   }
 
-  .appointment-header h1, .appointment-header h3 {
-    font-size: 32px;
+  .patient-description {
+    font-size: 18px;
   }
 
-  .appointment-content {
-    width: 95%;
-  }
-
-  .appointment-form input,
-  .appointment-form select,
-  .appointment-form textarea {
-    font-size: 14px;
-  }
-
-  .submit-btn {
-    font-size: 16px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .appointment-header {
-    height: 400px;
+  .appointment-count h2 {
     font-size: 24px;
   }
 
-  .appointment-header h1, .appointment-header h3 {
-    font-size: 28px;
+  .appointment-count p {
+    font-size: 25px;
   }
 
-  .appointment-content {
-    width: 100%;
-    padding: 15px;
-  }
-
-  .appointment-container {
-    padding: 10px;
-  }
-
-  .appointment-form input,
-  .appointment-form select,
-  .appointment-form textarea {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .submit-btn {
-    font-size: 14px;
-    padding: 8px;
-  }
-}
-@media screen and (max-width: 700px) {
-
-
-  .appointment-container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  .appointment-header {
-    height: 300px;
-    font-size: 20px;
-  }
-
-  .appointment-header h1,
-  .appointment-header h3 {
+  .appointment-details .doc {
     font-size: 24px;
-  }
-
-  .appointment-content {
-    flex-direction: column;
-    width: 100%;
-    padding: 10px;
   }
 }
 
-
-@media screen and (max-width: 480px) {
-  .appointment-header {
-    height: 300px;
-    font-size: 20px;
-  }
-
-  .appointment-header h1, .appointment-header h3 {
-    font-size: 24px;
-  }
-
-  .appointment-content {
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  .emergency-contact {
-    font-size: 24px;
-  }
-
-  .appointment-form input,
-  .appointment-form select,
-  .appointment-form textarea {
-    font-size: 12px;
-    padding: 6px;
-  }
-
-  .submit-btn {
-    font-size: 12px;
-    padding: 6px;
+@media (min-width: 1024px) {
+  .appointments-list {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   }
 }
-
-

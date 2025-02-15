@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAppointmentsByPatient } from "../../services/appointmentService";
+import { deleteAppointment, getAppointmentsByPatient } from "../../services/appointmentService";
 import { getDoctors } from "../../services/userService";
 import { Appointment, AppointmentStatus } from "../../types/appointment.types";
 import { toast, ToastContainer } from "react-toastify";
@@ -30,11 +30,8 @@ const AppointmentsPage: React.FC = () => {
           getDoctors()
         ]);
 
-        // console.log("=== Debug: Fetched Appointments ===", fetchedAppointments);
-        // console.log("=== Debug: Fetched Doctors ===", doctorsData);
-
         const formattedAppointments: Appointment[] = fetchedAppointments.map((appointment: any) => {
-          // Parse date
+         
           const dateParts = appointment.appointmentDate?.stringValue?.split("-") || [];
           const timeParts = appointment.appointmentTime?.stringValue?.split(":") || [];
          
@@ -73,69 +70,96 @@ const AppointmentsPage: React.FC = () => {
   }, [patientEmail, navigate]);
 
  
-  const getDoctorName = (doctorId: string) => {
-    // if (!doctorId || doctorId === "unassigned") return "Not Assigned";
-
-   
+   const getDoctorName = (doctorId: string) => {
     const doctor = doctors.find(d => d.id === doctorId);
-// console.log(doctorId)
-    // console.log("=== Doctor Match ===", {
-    //   doctorId,
-    //   doctor: doctor ? doctor.name?.stringValue : "Not Found"
-    // });
-     
+
     console.log(doctor)
     if (!doctor) return "Unknown Doctor";
 
     return doctor.name?.stringValue || "Unnamed Doctor";
   };
+
+  const handleDeleteAppointment = async (appointmentId: string) => {
+    try {
+      const response = await deleteAppointment(appointmentId);
+      if (response.success) {
+        toast.success(response.message);
+       
+        setAppointments(prevAppointments => prevAppointments.filter(app => app.id !== appointmentId));
+      }
+    } catch (error) {
+      toast.error("Failed to delete appointment");
+      console.error("Delete error:", error);
+    }
+  };
  
 
   return (
     <div className="appointments-container">
-      <h2>My Appointments</h2>
-      <ToastContainer position='bottom-left' />
-      
-      {loading ? (
-        <p>Loading...</p>
-      ) : appointments.length === 0 ? (
-        <p>No appointments found</p>
-      ) : (
-        <div className="appointments-list">
-          {appointments.map((appointment) => (
-            <div key={appointment.id} className="appointment-card">
-              <p className="doc">
-                Doctor: {getDoctorName(appointment.doctorId)}
-                <br />
-                {/* <small>ID: {appointment.doctorId || "N/A"}</small> */}
-              </p>
-              
-              <p className="date">
-                Date: {appointment.dateTime?.toLocaleDateString('en-GB') || "N/A"}
-              </p>
-              
-              <p className="date">
-                Time: {appointment.dateTime?.toLocaleTimeString('en-US', { 
-                  hour: 'numeric', 
-                  minute: '2-digit',
-                  hour12: true 
-                }) || "N/A"}
-              </p>
-              
-              <p className="symptoms">{appointment.symptoms}</p>
-              
-              <p className={`status ${appointment.status.toLowerCase()}`}>
-                {appointment.status}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-      
-      <button onClick={() => navigate("/")} className="back-btn">
-        Back to Home
-      </button>
+  <div className="patient-info-container">
+
+    <div className="patient-info">
+      <div className="img">
+        <img src="https://demo.awaikenthemes.com/theme-medipro/wp-content/uploads/2024/05/hero-img-1.jpg" alt="not found" />
+      </div>
+
+      <div className="info">
+      <h1>Hello, {patientEmail}</h1>
+      <p className="patient-description">
+        Lorem ipsum dolor sit amet consectetur adipiscing elit. Fisitis,
+        num metodoctoral pariaturis sede ut aliquip ex ea commodo consequat.
+        Aduurendus repsiduntis necessitatibus labore.
+      </p>
+      </div>
+
     </div>
+    <div className="appointment-count">
+      <h2>Total Appointments</h2>
+      <p>{appointments.length}</p>
+    </div>
+  </div>
+
+ <div className="allAppointments">
+  <h2>My Appointments</h2>
+  <ToastContainer position='bottom-left' />
+  
+  {loading ? (
+    <p>Loading...</p>
+  ) : appointments.length === 0 ? (
+    <p>No appointments found</p>
+  ) : (
+    <div className="appointments-list">
+      {appointments.map((appointment) => (
+        <div key={appointment.id} className="appointment-card">
+          <div className="appointment-details">
+            <p className="doc">Doctor: {getDoctorName(appointment.doctorId)}</p>
+            <p className="date">Date: {appointment.dateTime?.toLocaleDateString('en-GB') || "N/A"}</p>
+            <p className="time">Time: {appointment.dateTime?.toLocaleTimeString('en-US', { 
+              hour: 'numeric', 
+              minute: '2-digit',
+              hour12: true 
+            }) || "N/A"}</p>
+            <p className="symptoms">Symptoms: {appointment.symptoms}</p>
+            <p className={`status ${appointment.status.toLowerCase()}`}>
+              Status: {appointment.status}
+            </p>
+          </div>
+          <button 
+            onClick={() => handleDeleteAppointment(appointment.id)} 
+            className="delete-btn"
+          >
+            Delete Appointment
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+  </div>
+  
+  <button onClick={() => navigate("/")} className="back-btn">
+    Back to Home
+  </button>
+</div>
   );
 };
 

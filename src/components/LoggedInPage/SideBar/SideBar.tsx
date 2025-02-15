@@ -123,13 +123,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
 
       {user?.role?.stringValue === 'patient' && (
         <div className="sidebar-links">
-          <Link to="/make-appointment" className="sidebar-link">
+          <Link to="/appointment" className="sidebar-link">
             <MedicalServicesOutlined className="sidebar-icon" /> {!isCollapsed && 'Make Appointment'}
           </Link>
           <Link to="/show-doctors" className="sidebar-link">
             <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Show Doctors'}
           </Link>
-          <Link to="/my-appointments" className="sidebar-link">
+          <Link to="/appointments" className="sidebar-link">
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'My Appointments'}
           </Link>
         </div>
