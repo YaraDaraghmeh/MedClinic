@@ -1,5 +1,5 @@
 import React from "react";
-import ManagerDashboard from "./ManagerDashboard/ManagerDashboard";
+import ManagerDashboard from "./ManagerDashboard/Dashboard/ManagerDashboard";
 import DoctorDashboard from "./DoctorsDashboard/DoctorsDashboard";
 import PatientDashboard from "./PatientDashboard.tsx/PatientDashboard";
 
@@ -8,13 +8,13 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ user }) => {
-  switch (user.role) {
+  switch (user.role?.stringValue) {
     case "manager":
-      return <ManagerDashboard/>;
+      return <ManagerDashboard />;
     case "doctor":
-      return <DoctorDashboard/>;
+      return <DoctorDashboard />;
     case "patient":
-      return <PatientDashboard/>;
+      return <PatientDashboard />;
     default:
       return <div>No dashboard available for this role</div>;
   }

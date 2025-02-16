@@ -94,7 +94,7 @@ const AppointmentsPage: React.FC = () => {
   }, []);
 
   return (
-    <Box sx={{ padding: 3, backgroundColor: "#ffffff", minHeight: "100vh" }}>
+    <Box sx={{ padding: 3, backgroundColor: "#ffffff", minHeight: "100%" }}>
       <ToastContainer position="bottom-left" />
       <Typography variant="h4" sx={{ marginBottom: 3, color: "#1976d2", fontWeight: "bold" }}>
         Appointments

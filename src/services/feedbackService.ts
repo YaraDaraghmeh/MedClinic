@@ -60,16 +60,14 @@ export const getFeedbackByEmail = async (email: string) => {
   }
 };
 
-export const calculateStars = (rating: number): number => {
-  return parseFloat(((rating / 10) * 5).toFixed(1));
-};
+
 
 export const getAverageRating = async () => {
   try {
     const feedbacks = await getFeedback();
 
     const totalRatings = feedbacks.reduce((sum: number, feedback: any) => {
-      return sum + (feedback.rating?.integerValue ?? 0);
+      return sum + (feedback.rating?.doubleValue ?? 0);
     }, 0);
 
     const averageRating = feedbacks.length > 0 ? (totalRatings / feedbacks.length).toFixed(1) : "0.0";

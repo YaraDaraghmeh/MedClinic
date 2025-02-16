@@ -10,3 +10,17 @@ export const getFirstTwoWords = (name: string) => {
     const ageDate = new Date(diff);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
+  export const calculateStars = (rating: number): number => {
+    return parseFloat(((rating / 10) * 5).toFixed(1));
+  };
+
+export const generatePassword = () => {
+  const length = 10; // Password length
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+};
