@@ -113,10 +113,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
       {user?.role?.stringValue === 'doctor' && (
         <div className="sidebar-links">
           <Link to="/todays-patients" className="sidebar-link">
-            <EventAvailableOutlined className="sidebar-icon" /> {!isCollapsed && "Today's Patients"}
+            <EventAvailableOutlined className="sidebar-icon" /> {!isCollapsed && "Statics and Facts"}
           </Link>
           <Link to="/all-appointments" className="sidebar-link">
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'All Appointments'}
+          </Link>
+          <Link to="/all-appointments" className="sidebar-link">
+            <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'Patients List'}
+          </Link>
+          <Link to="/all-appointments" className="sidebar-link">
+            <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'Reports'}
           </Link>
         </div>
       )}

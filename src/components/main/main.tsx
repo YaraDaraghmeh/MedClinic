@@ -5,8 +5,8 @@ import LoggedInPage from "../LoggedInPage/LoggedInPage";
 
 import React, { useState, useEffect,Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Sidebar from '../SideBar/SideBar';
-import Dashboard from '../DoctorPage/Dashboard'; // Import the Dashboard component
+import Sidebar from '../LoggedInPage/SideBar/SideBar';
+
 
 
 // Lazy loaded components
@@ -55,7 +55,6 @@ const Main: React.FC = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<SignInComponent />} />
-             <Route path="/doctor" element={<Dashboard/>} /> {/* Route for Doctor Dashboard */}
             <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
             <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
           </Routes>

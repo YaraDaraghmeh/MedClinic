@@ -31,6 +31,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<SignInComponent />} />
+        
         <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
