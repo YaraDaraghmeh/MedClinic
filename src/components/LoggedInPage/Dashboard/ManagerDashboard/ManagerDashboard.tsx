@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import { getDoctors, getPatients } from "../../../../services/userService";
 import { getAppointmentsForDoctorToday } from "../../../../services/appointmentService";
 
@@ -79,11 +78,7 @@ const ManagerDashboard = () => {
 
       <div className="charts-container">
         <h4>Appointment Status Today</h4>
-        {appointmentsData && Object.keys(appointmentsData).length > 0 ? (
-          <ReactApexChart options={radialChartOptions} series={radialChartOptions.series} type="radialBar" height={350} />
-        ) : (
-          <p>Loading chart...</p>
-        )}
+       
       </div>
     </div>
   );

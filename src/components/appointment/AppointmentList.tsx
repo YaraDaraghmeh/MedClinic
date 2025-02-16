@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAppointments } from "../services/appointmentService";
+import { getAppointments } from "../../services/appointmentService";
 import AppointmentItem from "./AppointmentItem";
 
 const AppointmentList: React.FC = () => {

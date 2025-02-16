@@ -9,6 +9,8 @@ import ContactPage from '../../ContactPage/ContactPage';
 import HomePage from '../../HomePage/HomePage';
 import Footer from '../../Footer/Footer';
 import Dashboard from '../Dashboard/Dashboard';
+import AppointmentsPage from '../Dashboard/ManagerDashboard/AllAppointments/AppointmentsPage';
+import AppointmentList from '../../appointment/AppointmentList';
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -35,6 +37,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
         <Route path="/login" element={<SignInComponent />} />
         <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
         <Route path="/dashboard" element={<Dashboard user={user}/>} />
+        <Route path="/all-appointments" element={<AppointmentsPage/>} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />

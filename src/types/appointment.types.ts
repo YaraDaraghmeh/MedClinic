@@ -7,6 +7,7 @@ export enum AppointmentStatus {
 }
 
 export type Appointment = {
+  patientEmail: any;
   id: string;
   patientId: string;
   doctorId?: string;
