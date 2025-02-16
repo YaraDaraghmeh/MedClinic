@@ -1,19 +1,10 @@
 
-import React, { useState, useEffect, Suspense } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+
 import Preloader from "../loader/Preloader";
 import LoggedInPage from "../LoggedInPage/LoggedInPage";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Services from '../ServicesPage/Services';
-import Header from '../Header/Header';
-import HomePage from '../HomePage/HomePage';
-import ContactPage from '../ContactPage/ContactPage';
-import Footer from '../Footer/Footer';
-import { About } from '../AboutPage/about';
-import SignInComponent from '../LoginSignUp/login';
-import ErrorPage from '../ErrorPage/ErrorPage';
 import Sidebar from '../SideBar/SideBar';
 import Dashboard from '../DoctorPage/Dashboard'; // Import the Dashboard component
 

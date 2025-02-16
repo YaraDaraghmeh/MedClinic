@@ -12,14 +12,15 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.4",
+    "@mui/material": "^6.4.4",
     "@react-google-maps/api": "^2.20.5",
     "@tailwindcss/vite": "^4.0.3",
     "@vis.gl/react-google-maps": "^1.5.1",
- 
-
     "antd": "^5.24.0",
     "axios": "^1.7.9",
- 
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",
