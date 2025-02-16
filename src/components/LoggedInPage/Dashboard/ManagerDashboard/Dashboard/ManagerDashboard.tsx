@@ -59,6 +59,14 @@ const ManagerDashboard: React.FC = () => {
     fetchData();
   }, []);
 
+  const getTodaysAppointments = () => {
+    const today = new Date();
+    const formattedToday = `${String(today.getDate()).padStart(2, "0")}-${String(today.getMonth() + 1).padStart(2, "0")}-${today.getFullYear()}`;
+
+    return appointments.filter(appointment => appointment.appointmentDate.stringValue === formattedToday);
+  };
+  
+
   if (loading) {
     return (
       <Box
@@ -74,6 +82,8 @@ const ManagerDashboard: React.FC = () => {
       </Box>
     );
   }
+
+  const todaysAppointments = getTodaysAppointments();
 
   return (
     <Box sx={{ padding: 3, backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
@@ -95,12 +105,28 @@ const ManagerDashboard: React.FC = () => {
       {/* Charts Section */}
       <Charts doctors={doctors.length} patients={patients.length} />
 
-      {/* Recent Appointments */}
+      {/* Today's Appointments */}
       <Box sx={{ marginBottom: 3 }}>
         <Typography variant="h5" sx={{ marginBottom: 2, color: "#1976d2" }}>
-          Recent Appointments
+          Today's Appointments
         </Typography>
-        <RecentAppointmentsTable appointments={appointments.slice(0, 5)} />
+        {todaysAppointments.length > 0 ? (
+          <RecentAppointmentsTable appointments={todaysAppointments} />
+        ) : (
+          <Typography 
+          variant="body1" 
+          sx={{ 
+            color: "gray", 
+            fontStyle: "italic", 
+            
+            padding: "8px", 
+            backgroundColor: "#f5f5f5", 
+            borderRadius: "8px" 
+          }}
+        >
+          No appointments for today.
+        </Typography>
+           )}
       </Box>
 
       {/* Recent Feedback */}

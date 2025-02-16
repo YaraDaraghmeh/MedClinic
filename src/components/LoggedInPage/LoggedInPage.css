@@ -24,9 +24,12 @@
 }
 
 .sidebar-link:hover .sidebar-icon {
-  color: #2196f3; /* Change icon color to blue on hover */
-  animation: shake 0.5s ease-in-out; /* Add shake animation */
+  color: #2196f3;
+  animation: shake 0.5s ease-in-out; 
 }
+.sidebar-link.active  {
+  color: #2196f3;
+  }
 
 .sidebar-icon {
   margin-right: 10px;
@@ -96,3 +99,4 @@
 .collapsed-user-box:hover p {
   color: #1565c0; /* Dark blue text on hover */
 }
+

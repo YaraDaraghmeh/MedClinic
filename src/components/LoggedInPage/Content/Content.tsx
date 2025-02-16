@@ -12,6 +12,8 @@ import Dashboard from '../Dashboard/Dashboard';
 import AppointmentsPage from '../Dashboard/ManagerDashboard/AllAppointments/AppointmentsPage';
 import AppointmentList from '../../appointment/AppointmentList';
 import DoctorsComponent from '../Dashboard/ManagerDashboard/Doctors/DoctorsComponent';
+import FeedbackViewer from '../Dashboard/ManagerDashboard/Feedbacks/FeedbackViewer';
+
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -39,7 +41,8 @@ const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
         <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
         <Route path="/dashboard" element={<Dashboard user={user}/>} />
         <Route path="/all-appointments" element={<AppointmentsPage/>} />
-       <Route path="/doctors" element={<DoctorsComponent/>} />
+       <Route path="/feedbacks" element={<FeedbackViewer/>} />
+       <Route path="/doctors" element={ <DoctorsComponent/>} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />

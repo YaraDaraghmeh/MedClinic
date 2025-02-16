@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import StarRating from "./starRating"; // Import the StarRating component
+import StarRating from "./starRating"; 
 
 interface RecentFeedbackTableProps {
   feedback: any[];
