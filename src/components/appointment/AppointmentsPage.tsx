@@ -11,6 +11,8 @@ const AppointmentsPage: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [doctors, setDoctors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6);
   const navigate = useNavigate();
 
   const user = sessionStorage.getItem("user");
@@ -92,6 +94,16 @@ const AppointmentsPage: React.FC = () => {
       console.error("Delete error:", error);
     }
   };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentAppointments = appointments.slice(indexOfFirstItem, indexOfLastItem);
+
+  // توليد أرقام الصفحات
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(appointments.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
  
 
   return (
@@ -129,7 +141,7 @@ const AppointmentsPage: React.FC = () => {
     <p>No appointments found</p>
   ) : (
     <div className="appointments-list">
-      {appointments.map((appointment) => (
+      {currentAppointments.map((appointment) => (
         <div key={appointment.id} className="appointment-card">
           <div className="appointment-details">
             <p className="doc">Doctor: {getDoctorName(appointment.doctorId)}</p>
@@ -152,10 +164,34 @@ const AppointmentsPage: React.FC = () => {
           </button>
         </div>
       ))}
-    </div>
+      </div>    
   )}
   </div>
-  
+  <div className="pagination">
+              <button 
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              
+              {pageNumbers.map(number => (
+                <button
+                  key={number}
+                  onClick={() => setCurrentPage(number)}
+                  className={currentPage === number ? "active" : ""}
+                >
+                  {number}
+                </button>
+              ))}
+              
+              <button 
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === pageNumbers.length}
+              >
+                Next
+              </button>
+            </div>
   <button onClick={() => navigate("/")} className="back-btn">
     Back to Home
   </button>
