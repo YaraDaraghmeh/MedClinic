@@ -69,7 +69,9 @@ export const deleteAppointment = async (appointmentId: string) => {
 export const getAppointmentsByDoctor = async (doctorEmail: string) => {
   try {
     const appointments = await getAppointments();
-    return appointments.filter((appointment: Appointment) => appointment.doctorEmail?.stringValue === doctorEmail);
+    return appointments.filter((appointment: Appointment) =>
+      appointment.doctorEmail?.stringValue?.toLowerCase() === doctorEmail.toLowerCase()
+    );
   } catch (error) {
     throw error;
   }
