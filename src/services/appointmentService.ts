@@ -1,3 +1,4 @@
+
 import axiosInstance from "../database/axiosInstance";
 import { Appointment } from "../Types";
 
@@ -55,6 +56,15 @@ export const getAppointments = async () => {
       id: doc.name.split("/").pop(),
       ...doc.fields,
     }));
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAppointment = async (appointmentId: string) => {
+  try {
+    await axiosInstance.delete(`/appointments/${appointmentId}`);
+    return { success: true, message: `Appointment ${appointmentId} deleted successfully` };
   } catch (error) {
     throw error;
   }
@@ -123,17 +133,15 @@ export const getAppointmentsForDoctorToday = async (doctorEmail: string) => {
       }
     );
 
-    const sortedAppointments = appointmentsToday.sort(
-      (a: Appointment, b: Appointment) => {
-        const timeA = a.appointmentTime?.stringValue;
-        const timeB = b.appointmentTime?.stringValue;
+    const sortedAppointments = appointmentsToday.sort((a: Appointment, b: Appointment) => {
+      const timeA = a.appointmentTime?.stringValue;
+      const timeB = b.appointmentTime?.stringValue;
 
-        if (timeA && timeB) {
-          return timeA.localeCompare(timeB);
-        }
-        return 0;
+      if (timeA && timeB) {
+        return timeA.localeCompare(timeB);
       }
-    );
+      return 0;
+    });
 
     return sortedAppointments;
   } catch (error) {
@@ -141,7 +149,7 @@ export const getAppointmentsForDoctorToday = async (doctorEmail: string) => {
   }
 };
 
-export  const cancelAppointments = async (doctorEmail: string) => {
+export const cancelAppointments = async (doctorEmail: string) => {
   try {
     const appointments = await getAppointmentsByDoctor(doctorEmail);
     const now = new Date();
@@ -189,7 +197,7 @@ export  const cancelAppointments = async (doctorEmail: string) => {
   }
 };
 
- export const forwardAppointments = async (
+export const forwardAppointments = async (
   oldDoctorEmail: string,
   newDoctorEmail: string
 ) => {

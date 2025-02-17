@@ -1,4 +1,3 @@
-// components/Dashboard/DoctorsDashboard/DoctorAppointmentsTable.tsx
 import React, { useEffect, useState, useMemo } from 'react';
 import { Table, Tag, Space, Button, Typography, Modal, Form, Input, DatePicker, TimePicker, Select, Row, Col } from 'antd';
 import moment from 'moment';
