@@ -45,7 +45,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
        <Route path="/doctors" element={<DoctorsComponent/>} />
        <Route  path="/doctor-dashboard"  element={ <DoctorDashboard user={user} /> } />
        <Route path="/doctor-dashboard-table" element={<DoctorAppointmentsTable user={user}/>} />
-       <Route path='/Doctor-Patients' element={<DoctorPationts user={user} />} />
+       <Route path='/Doctor-Patients' element={<DoctorPationts doctor={user} />} />
        <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />

@@ -8,21 +8,24 @@ import {
   TableRow, 
   Paper,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Box
 } from '@mui/material';
 import { User, Appointment } from '../../../../Types';
 import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
 import { getUserByEmail } from '../../../../services/userService';
 
 type PatientData = {
-  patient: User;
-  appointmentCount: number;
-  upcomingAppointments: number;
-  completedAppointments: number;
+  name: string;
+  email: string;
+  gender: string;
   age: number;
+  totalAppointments: number;
+  upcoming: number;
+  completed: number;
 };
 
-const calculateAge = (dateOfBirth: string) => {
+const calculateAge = (dateOfBirth: string): number => {
   const birthDate = new Date(dateOfBirth);
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -34,87 +37,106 @@ const calculateAge = (dateOfBirth: string) => {
 };
 
 const PatientsTable = ({ doctor }: { doctor: User }) => {
-  const [patientsData, setPatientsData] = useState<PatientData[]>([]);
+  const [patients, setPatients] = useState<PatientData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchPatientData = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError('');
         
-        if (!doctor?.email?.stringValue) return;
-
-        const appointments: Appointment[] = await getAppointmentsByDoctor(doctor.email.stringValue);
-        
-        const patientMap = new Map<string, PatientData>();
-
-        for (const appointment of appointments) {
-          const patientEmail = appointment.patientEmail?.stringValue;
-          if (!patientEmail) continue;
-
-          if (!patientMap.has(patientEmail)) {
-            try {
-              const patient = await getUserByEmail(patientEmail);
-              patientMap.set(patientEmail, {
-                patient,
-                appointmentCount: 0,
-                upcomingAppointments: 0,
-                completedAppointments: 0,
-                age: calculateAge(patient.dateOfBirth?.stringValue || '')
-              });
-            } catch (error) {
-              console.error(`Error fetching patient ${patientEmail}:`, error);
-              continue;
-            }
-          }
-
-          // Update appointment counts
-          const patientData = patientMap.get(patientEmail)!;
-          patientData.appointmentCount++;
-          
-          const status = appointment.status?.stringValue;
-          if (status === 'completed') {
-            patientData.completedAppointments++;
-          } else if (status === 'pending' || status === 'confirmed') {
-            patientData.upcomingAppointments++;
-          }
+        if (!doctor?.email?.stringValue) {
+          throw new Error('Doctor email not found');
         }
 
-        setPatientsData(Array.from(patientMap.values()));
+        // Get all appointments for this doctor
+        const appointments: Appointment[] = await getAppointmentsByDoctor(doctor.email.stringValue);
+        
+        // Get unique patient emails
+        const patientEmails = Array.from(
+          new Set(
+            appointments
+              .map(a => a.patientEmail?.stringValue)
+              .filter(Boolean) as string[]
+          )
+        );
+
+        // Fetch patient data and aggregate appointments
+        const patientsData = await Promise.all(
+          patientEmails.map(async (email) => {
+            try {
+              const patient = await getUserByEmail(email);
+              const patientAppointments = appointments.filter(
+                a => a.patientEmail?.stringValue === email
+              );
+
+              return {
+                name: patient.name?.stringValue || 'Unknown',
+                email,
+                gender: patient.gender?.stringValue || 'N/A',
+                age: calculateAge(patient.dateOfBirth?.stringValue || ''),
+                totalAppointments: patientAppointments.length,
+                upcoming: patientAppointments.filter(a => 
+                  ['pending', 'confirmed'].includes(a.status?.stringValue || '')
+                ).length,
+                completed: patientAppointments.filter(a => 
+                  a.status?.stringValue === 'completed'
+                ).length
+              };
+            } catch (error) {
+              console.error(`Error fetching patient ${email}:`, error);
+              return null;
+            }
+          })
+        );
+
+        setPatients(patientsData.filter(Boolean) as PatientData[]);
       } catch (error) {
-        console.error("Failed to fetch patient data:", error);
-        setError('Failed to load patient data. Please try again later.');
+        console.error('Failed to fetch patient data:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load patient data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPatientData();
+    fetchData();
   }, [doctor]);
 
   if (loading) {
-    return <CircularProgress sx={{ mt: 4 }} />;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>;
+    return (
+      <Typography color="error" sx={{ mt: 2, p: 2 }}>
+        Error: {error}
+      </Typography>
+    );
   }
 
-  if (patientsData.length === 0) {
-    return <Typography variant="body1" sx={{ p: 2 }}>No patients found</Typography>;
+  if (patients.length === 0) {
+    return (
+      <Typography variant="body1" sx={{ p: 2 }}>
+        No patients found for this doctor
+      </Typography>
+    );
   }
 
   return (
     <TableContainer component={Paper} sx={{ mt: 4, boxShadow: 3 }}>
       <Typography variant="h6" sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
-        Patient List - Dr. {doctor.name?.stringValue}
+        Patients of Dr. {doctor.name?.stringValue}
       </Typography>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Patient Name</TableCell>
+            <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Gender</TableCell>
             <TableCell>Age</TableCell>
@@ -124,17 +146,15 @@ const PatientsTable = ({ doctor }: { doctor: User }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {patientsData.map((patientData) => (
-            <TableRow key={patientData.patient.email.stringValue}>
-              <TableCell>
-                {patientData.patient.name?.stringValue || 'N/A'}
-              </TableCell>
-              <TableCell>{patientData.patient.email.stringValue}</TableCell>
-              <TableCell>{patientData.patient.gender?.stringValue || 'N/A'}</TableCell>
-              <TableCell>{patientData.age}</TableCell>
-              <TableCell>{patientData.appointmentCount}</TableCell>
-              <TableCell>{patientData.upcomingAppointments}</TableCell>
-              <TableCell>{patientData.completedAppointments}</TableCell>
+          {patients.map((patient) => (
+            <TableRow key={patient.email}>
+              <TableCell>{patient.name}</TableCell>
+              <TableCell>{patient.email}</TableCell>
+              <TableCell>{patient.gender}</TableCell>
+              <TableCell>{patient.age}</TableCell>
+              <TableCell>{patient.totalAppointments}</TableCell>
+              <TableCell>{patient.upcoming}</TableCell>
+              <TableCell>{patient.completed}</TableCell>
             </TableRow>
           ))}
         </TableBody>
