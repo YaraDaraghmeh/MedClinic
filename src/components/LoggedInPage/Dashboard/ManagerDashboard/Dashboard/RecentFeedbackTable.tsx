@@ -1,107 +1,166 @@
-import React from "react";
-import {
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-} from "@mui/material";
-import { motion } from "framer-motion";
-import StarRating from "./starRating"; // Import the StarRating component
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, Typography, Box } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import { format } from "date-fns";
+import StarRating, { calculateStars } from "./starRating";
 
 interface RecentFeedbackTableProps {
   feedback: any[];
 }
 
-const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({
-  feedback,
-}) => {
+const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % feedback.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [feedback.length]);
+
+  const formatTimestamp = (timestamp: string) => {
+    if (!timestamp) return "No date available";
+    try {
+      return format(new Date(timestamp), "MMMM dd, yyyy • hh:mm a");
+    } catch (error) {
+      return "Invalid date";
+    }
+  };
+
   return (
-    <TableContainer
-      component={Paper}
+    <Box
       sx={{
-        borderRadius: 2,
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-        overflow: "hidden",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        maxWidth: 500,
+        height: 310,
+        position: "relative",
+        padding: 2,
       }}
     >
-      <Table>
-        <TableHead>
-          <TableRow
-            sx={{
-              backgroundColor: "#1976d2", // Header background color
-            }}
+      {/* Background Card Layer */}
+      <Card
+        sx={{
+          position: "absolute",
+          width: "90%",
+          height: "90%",
+          borderRadius: 4,
+          boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.1)",
+          background: "#e3f2fd", // Light hospital blue
+          transform: "rotate(-3deg)",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Middle Card Layer */}
+      <Card
+        sx={{
+          position: "absolute",
+          width: "95%",
+          height: "95%",
+          borderRadius: 4,
+          boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.1)",
+          background: "#bbdefb", // Soft hospital blue
+          transform: "rotate(-1deg)",
+          zIndex: 2,
+        }}
+      />
+
+      {/* Foreground Card Layer */}
+      <AnimatePresence mode="wait">
+        {feedback.length > 0 && (
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.5, type: "spring" }}
+            style={{ position: "absolute", width: "100%", zIndex: 3 }}
           >
-            <TableCell
+            <Card
               sx={{
-                color: "#fff", // Header text color
-                fontWeight: 600,
-                fontSize: "1rem",
+                width: "100%",
+                height: "100%",
+                borderRadius: 4,
+                boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.1)",
+                padding: "25px",
+                background: "#ffffff", // Clean white
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
               }}
             >
-              User
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "#fff", // Header text color
-                fontWeight: 600,
-                fontSize: "1rem",
-              }}
-            >
-              Rating
-            </TableCell>
-            <TableCell
-              sx={{
-                color: "#fff", // Header text color
-                fontWeight: 600,
-                fontSize: "1rem",
-              }}
-            >
-              Message
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {feedback.map((fb) => (
-            <motion.tr
-              key={fb.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <TableCell
+              <CardContent>
+                {/* User Email */}
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#0277bd", // Deep hospital blue
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  {feedback[currentIndex]?.userEmail?.stringValue || "Anonymous"}
+                </Typography>
+
+                {/* Rating (Stars + Numeric Value) */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+                  <StarRating rating={feedback[currentIndex].rating.doubleValue} />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "#01579b", // Dark blue
+                      fontSize: "1rem",
+                      background: "#81d4fa", // Light blue accent
+                      padding: "4px 8px",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    {calculateStars(feedback[currentIndex]?.rating?.doubleValue) || 0} / 5 ⭐
+                  </Typography>
+                </Box>
+
+                {/* Message */}
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "#37474f", // Soft gray text
+                    marginTop: 2,
+                    fontSize: "1rem",
+                    fontStyle: "italic",
+                    background: "#e1f5fe", // Ultra-light blue
+                    padding: "8px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  {feedback[currentIndex]?.message?.stringValue || "No message provided."}
+                </Typography>
+              </CardContent>
+
+              {/* Timestamp (Bottom Right) */}
+              <Typography
+                variant="caption"
                 sx={{
-                  borderBottom: "1px solid #e0e0e0",
-                  fontSize: "0.95rem",
-                  color: "#333",
+                  alignSelf: "flex-end",
+                  color: "#ffffff",
+                  fontSize: "0.8rem",
+                  fontWeight: "bold",
+                  background: "#0288d1", // Strong hospital blue
+                  padding: "4px 6px",
+                  borderRadius: "6px",
                 }}
               >
-                {fb.userEmail?.stringValue || "N/A"}
-              </TableCell>
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #e0e0e0",
-                  fontSize: "0.95rem",
-                }}
-              >
-                <StarRating rating={fb.rating?.doubleValue || 0} />
-              </TableCell>
-              <TableCell
-                sx={{
-                  borderBottom: "1px solid #e0e0e0",
-                  fontSize: "0.95rem",
-                  color: "#333",
-                }}
-              >
-                {fb.message?.stringValue || "N/A"}
-              </TableCell>
-            </motion.tr>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                {formatTimestamp(feedback[currentIndex]?.timestamp?.stringValue)}
+              </Typography>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Box>
   );
 };
 

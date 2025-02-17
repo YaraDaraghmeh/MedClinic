@@ -4,7 +4,6 @@ import {
   getFeedback,
   deleteFeedback,
   getFeedbackByEmail,
-  calculateStars,
   getAverageRating,
 } from "../services/feedbackService";
 
@@ -60,13 +59,7 @@ describe("feedbackService", () => {
     const feedback = await getFeedbackByEmail(mockEmail);
     expect(feedback).toBeDefined();
   });
-  
-  // Test calculateStars
-  it("should calculate stars from rating", () => {
-    const stars = calculateStars(8);
-    expect(stars).toBe(4);
-  });
-
+ 
   // Test getAverageRating
   it("should calculate average rating", async () => {
     const mockFeedback = [

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Box, IconButton, Typography, Divider, Dialog, DialogActions, DialogContent, 
   DialogTitle, Button 
@@ -18,8 +18,9 @@ interface SidebarProps {
   onLogout: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onLogout}) => {
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onLogout }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 
   const handleLogout = () => {
@@ -32,6 +33,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
 
     // Redirect to the login page
     navigate('/Login');
+  };
+
+  // Function to check if a link is active
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -87,7 +93,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
 
       {/* Common Links for All Users */}
       <div className="sidebar-links">
-        <Link to="/dashboard" className="sidebar-link">
+        <Link
+          to="/dashboard"
+          className={`sidebar-link ${isActive('/dashboard') ? 'active' : ''}`} // Add active class conditionally
+        >
           <DashboardOutlined className="sidebar-icon" /> {!isCollapsed && 'Dashboard'}
         </Link>
       </div>
@@ -95,16 +104,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
       {/* Role-Based Navigation */}
       {user?.role?.stringValue === 'manager' && (
         <div className="sidebar-links">
-          <Link to="/doctors" className="sidebar-link">
+          <Link
+            to="/doctors"
+            className={`sidebar-link ${isActive('/doctors') ? 'active' : ''}`}
+          >
             <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Doctors'}
           </Link>
-          <Link to="/all-appointments" className="sidebar-link">
+          <Link
+            to="/all-appointments"
+            className={`sidebar-link ${isActive('/all-appointments') ? 'active' : ''}`}
+          >
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'All Appointments'}
           </Link>
-          <Link to="/todays-patients" className="sidebar-link">
-            <EventAvailableOutlined className="sidebar-icon" /> {!isCollapsed && "Today's Patients"}
-          </Link>
-          <Link to="/feedbacks" className="sidebar-link">
+          <Link
+            to="/feedbacks"
+            className={`sidebar-link ${isActive('/feedbacks') ? 'active' : ''}`}
+          >
             <FeedbackOutlined className="sidebar-icon" /> {!isCollapsed && 'Feedbacks'}
           </Link>
         </div>
@@ -115,7 +130,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
           <Link  to="/doctor-dashboard" state={{ user }}  className="sidebar-link">
             <EventAvailableOutlined className="sidebar-icon" />  {!isCollapsed && "Statics and Facts"}
          </Link>
-          <Link to="/doctor-dashboard-table" className="sidebar-link">
+          <Link
+            to="/todays-patients"
+            className={`sidebar-link ${isActive('/todays-patients') ? 'active' : ''}`}
+          >
+            <EventAvailableOutlined className="sidebar-icon" /> {!isCollapsed && "Today's Patients"}
+          </Link>
+          <Link
+            to="/all-appointments"
+            className={`sidebar-link ${isActive('/all-appointments') ? 'active' : ''}`}
+          >
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'All Appointments'}
           </Link>
           <Link to="/Doctor-Patients" className="sidebar-link">
@@ -129,13 +153,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user ,onL
 
       {user?.role?.stringValue === 'patient' && (
         <div className="sidebar-links">
-          <Link to="/make-appointment" className="sidebar-link">
+          <Link
+            to="/make-appointment"
+            className={`sidebar-link ${isActive('/make-appointment') ? 'active' : ''}`}
+          >
             <MedicalServicesOutlined className="sidebar-icon" /> {!isCollapsed && 'Make Appointment'}
           </Link>
-          <Link to="/show-doctors" className="sidebar-link">
+          <Link
+            to="/show-doctors"
+            className={`sidebar-link ${isActive('/show-doctors') ? 'active' : ''}`}
+          >
             <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Show Doctors'}
           </Link>
-          <Link to="/my-appointments" className="sidebar-link">
+          <Link
+            to="/my-appointments"
+            className={`sidebar-link ${isActive('/my-appointments') ? 'active' : ''}`}
+          >
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'My Appointments'}
           </Link>
         </div>

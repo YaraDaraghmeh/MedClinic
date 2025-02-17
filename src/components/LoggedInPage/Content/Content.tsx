@@ -15,6 +15,9 @@ import DoctorsComponent from '../Dashboard/ManagerDashboard/Doctors/DoctorsCompo
 import DoctorDashboard from '../Dashboard/DoctorsDashboard/DoctorsDashboard';
 import DoctorAppointmentsTable from '../Dashboard/DoctorsDashboard/DoctorAppointmentsTable';
 import DoctorPationts from '../Dashboard/DoctorsDashboard/DoctorPationts';
+import FeedbackViewer from '../Dashboard/ManagerDashboard/Feedbacks/FeedbackViewer';
+import UserProfile from '../UserAccountPages/userProfile';
+
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -42,11 +45,13 @@ const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
         <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
         <Route path="/dashboard" element={<Dashboard user={user}/>} />
         <Route path="/all-appointments" element={<AppointmentsPage/>} />
+       <Route path="/feedbacks" element={<FeedbackViewer/>} />
+       <Route path="/doctors" element={ <DoctorsComponent/>} />
        <Route path="/doctors" element={<DoctorsComponent/>} />
        <Route  path="/doctor-dashboard"  element={ <DoctorDashboard user={user} /> } />
        <Route path="/doctor-dashboard-table" element={<DoctorAppointmentsTable user={user}/>} />
        <Route path='/Doctor-Patients' element={<DoctorPationts doctor={user} />} />
-       <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
+        <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />
     </Box>
