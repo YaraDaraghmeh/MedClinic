@@ -2,9 +2,10 @@ import React from "react";
 import ManagerDashboard from "./ManagerDashboard/Dashboard/ManagerDashboard";
 import DoctorDashboard from "./DoctorsDashboard/DoctorsDashboard";
 import PatientDashboard from "./PatientDashboard.tsx/PatientDashboard";
+import { User } from "../../../Types";
 
 interface DashboardProps {
-  user: { role: string };
+  user: User;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ user }) => {

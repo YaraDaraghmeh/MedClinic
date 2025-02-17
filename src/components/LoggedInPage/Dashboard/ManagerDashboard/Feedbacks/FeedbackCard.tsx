@@ -5,6 +5,8 @@ import { BeatLoader } from "react-spinners";
 
 import "./FeedbackViewer.css";
 import { calculateStars } from "../Dashboard/starRating";
+import { User } from "../../../../../Types";
+import ErrorPage from "../../../../ErrorPage/ErrorPage";
 
 interface Feedback {
   id: string;
@@ -14,10 +16,7 @@ interface Feedback {
   timestamp: { stringValue: string };
 }
 
-interface User {
-  name: { stringValue: string };
-  imageUrl: { stringValue: string };
-}
+
 
 const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -39,24 +38,32 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
     fetchUser();
   }, [feedback.userEmail.stringValue]);
 
+  const stars = calculateStars(feedback.rating.doubleValue);
+
+  const handleUserClick = () => {
+    if (user) {
+      window.location.href = `/user-profile?email=${user.email.stringValue}`;
+    }
+  };
+
   if (loading)
     return (
       <div className="loading">
         <BeatLoader color="#007bff" size={10} />
       </div>
     );
-  if (error) return <div className="error">Error: {error}</div>;
-
-  const stars = calculateStars(feedback.rating.doubleValue);
+  if (error) return <ErrorPage errorMessage="An error occurred while fetching data "/>;
 
   return (
     <div className="feedback-card">
       <div className="user-info">
-        <img
-          src={user?.imageUrl?.stringValue || "https://via.placeholder.com/50"}
-          alt="User"
-          className="user-image"
-        />
+        <a onClick={handleUserClick}>
+          <img
+            src={user?.imageUrl?.stringValue || "https://via.placeholder.com/50"}
+            alt="User"
+            className="user-image"
+          />
+        </a>
         <div className="user-details">
           <h3 className="user-name">{user?.name?.stringValue || "Unknown User"}</h3>
           <p className="rating">

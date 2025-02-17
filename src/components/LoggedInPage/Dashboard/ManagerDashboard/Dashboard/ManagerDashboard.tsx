@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, Grid } from "@mui/material";
 import {
   getUsers,
   getDoctors,
@@ -17,8 +17,8 @@ import Charts from "./Charts";
 
 const ManagerDashboard: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
-  const [doctors, setDoctors] = useState<any[]>([]);
-  const [patients, setPatients] = useState<any[]>([]);
+  const [doctors, setDoctors] = useState<any[]>([]); 
+  const [patients, setPatients] = useState<any[]>([]); 
   const [appointments, setAppointments] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
   const [averageRating, setAverageRating] = useState<string>("0.0");
@@ -65,7 +65,6 @@ const ManagerDashboard: React.FC = () => {
 
     return appointments.filter(appointment => appointment.appointmentDate.stringValue === formattedToday);
   };
-  
 
   if (loading) {
     return (
@@ -94,16 +93,33 @@ const ManagerDashboard: React.FC = () => {
         Manager Dashboard
       </Typography>
 
-      {/* Key Metrics */}
-      <KeyMetrics
-        patients={patients.length}
-        doctors={doctors.length}
-        appointments={appointments.length}
-        averageRating={averageRating}
-      />
+      {/* Key Metrics and Feedback Section */}
+      <Grid container spacing={10} sx={{ marginBottom: 3 }}>
+        <Grid item xs={12} sm={6}>
+          <KeyMetrics
+            patients={patients.length}
+            doctors={doctors.length}
+            appointments={appointments.length}
+            averageRating={averageRating}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Box>
+            <Typography variant="h5" sx={{ marginBottom: 2, color: "#1976d2" }}>
+              Feedbacks
+            </Typography>
+            <RecentFeedbackTable feedback={feedback.slice(0, 5)} />
+          </Box>
+        </Grid>
+      </Grid>
 
       {/* Charts Section */}
-      <Charts doctors={doctors.length} patients={patients.length} />
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h5" sx={{ marginBottom: 2, color: "#1976d2" }}>
+          Overview Charts
+        </Typography>
+        <Charts doctors={doctors.length} patients={patients.length} />
+      </Box>
 
       {/* Today's Appointments */}
       <Box sx={{ marginBottom: 3 }}>
@@ -113,28 +129,19 @@ const ManagerDashboard: React.FC = () => {
         {todaysAppointments.length > 0 ? (
           <RecentAppointmentsTable appointments={todaysAppointments} />
         ) : (
-          <Typography 
-          variant="body1" 
-          sx={{ 
-            color: "gray", 
-            fontStyle: "italic", 
-            
-            padding: "8px", 
-            backgroundColor: "#f5f5f5", 
-            borderRadius: "8px" 
-          }}
-        >
-          No appointments for today.
-        </Typography>
-           )}
-      </Box>
-
-      {/* Recent Feedback */}
-      <Box>
-        <Typography variant="h5" sx={{ marginBottom: 2, color: "#1976d2" }}>
-          Recent Feedback
-        </Typography>
-        <RecentFeedbackTable feedback={feedback.slice(0, 5)} />
+          <Typography
+            variant="body1"
+            sx={{
+              color: "gray",
+              fontStyle: "italic",
+              padding: "8px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+            }}
+          >
+            No appointments for today.
+          </Typography>
+        )}
       </Box>
     </Box>
   );

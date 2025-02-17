@@ -13,6 +13,7 @@ import AppointmentsPage from '../Dashboard/ManagerDashboard/AllAppointments/Appo
 import AppointmentList from '../../appointment/AppointmentList';
 import DoctorsComponent from '../Dashboard/ManagerDashboard/Doctors/DoctorsComponent';
 import FeedbackViewer from '../Dashboard/ManagerDashboard/Feedbacks/FeedbackViewer';
+import UserProfile from '../UserAccountPages/userProfile';
 
 
 interface ContentProps {
@@ -43,6 +44,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
         <Route path="/all-appointments" element={<AppointmentsPage/>} />
        <Route path="/feedbacks" element={<FeedbackViewer/>} />
        <Route path="/doctors" element={ <DoctorsComponent/>} />
+       <Route path="/user-profile" element={<UserProfile/>} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
       </Routes>
       <Footer />

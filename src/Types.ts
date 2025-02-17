@@ -18,3 +18,10 @@ export interface Appointment {
   reason: { stringValue: string };
   status: { stringValue: "pending" | "confirmed" | "completed" | "canceled" };
 }
+export interface Feedback {
+  id: string;
+  userEmail: string;
+  message: { stringValue: string };
+  rating: { integerValue: number };
+  timestamp: { timestampValue: string };
+}

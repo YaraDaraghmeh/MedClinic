@@ -1,183 +1,190 @@
+/* General Styles */
 .feedback-dashboard {
-    padding: 20px;
-    min-height: 100%;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  min-height: 100%;
+  margin: 0 auto;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 32px;
+  color: #333;
+  font-weight: 700;
+}
+
+/* Sort Controls */
+.sort-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.sort-controls button {
+  padding: 10px 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.sort-controls button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #005bb5;
+}
+
+.sort-controls button:hover {
+  background-color: #e3f2fd;
+}
+
+/* Feedback Card */
+.feedback-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feedback-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info a {
+  display: flex;
+  align-items: center;
+}
+
+.user-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+  border: 3px solid #007bff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.user-image:hover {
+  transform: scale(1.05);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.rating {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-icon {
+  color: #ffc107;
+}
+
+.message {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.date {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #777;
+  text-align: right;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #005bb5;
+}
+
+.pagination button:hover {
+  background-color: #e3f2fd;
+}
+
+/* Loading and Error States */
+.loading, .error {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 20px;
+}
+
+.error {
+  color: #ff0000;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .dashboard-title {
-    text-align: left;
-    margin-bottom: 20px;
-    font-size: 28px;
-    color: #333;
-    font-weight: 600;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Sort Controls */
-  .sort-controls {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .sort-controls button {
-    padding: 8px 16px;
-    border: 1px solid #007bff;
-    border-radius: 6px;
-    background-color: #fff;
-    color: #007bff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-  }
-  
-  .sort-controls button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-  
-  .sort-controls button:hover {
-    background-color: #e3f2fd;
-  }
-  
-  /* Feedback Card */
-  .feedback-card {
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 16px; /* Smaller padding */
-    margin-bottom: 12px; /* Smaller margin */
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 600px; /* Smaller max-width */
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .feedback-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px; /* Smaller margin */
-  }
-  
-  .user-image {
-    width: 40px; /* Smaller image */
-    height: 40px; /* Smaller image */
-    border-radius: 50%;
-    margin-right: 12px;
-    object-fit: cover;
-    border: 2px solid #007bff;
-  }
-  
-  .user-details {
-    flex: 1;
-  }
-  
-  .user-name {
-    margin: 0;
-    font-size: 16px; /* Smaller font size */
-    color: #333;
-    font-weight: 600;
-  }
-  
-  .rating {
-    margin: 0;
-    font-size: 14px; /* Smaller font size */
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  .star-icon {
-    color: #ffc107;
-  }
-  
-  .message {
-    margin: 0;
-    font-size: 14px; /* Smaller font size */
-    color: #444;
-    line-height: 1.5;
-  }
-  
-  .date {
-    margin: 8px 0 0; /* Smaller margin */
-    font-size: 12px; /* Smaller font size */
-    color: #777;
-    text-align: right; /* Align date to the right */
-  }
-  
-  /* Pagination */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 20px;
-  }
-  
-  .pagination button {
-    padding: 8px 12px;
-    border: 1px solid #007bff;
-    border-radius: 6px;
-    background-color: #fff;
-    color: #007bff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 14px;
-  }
-  
-  .pagination button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-  }
-  
-  .pagination button:hover {
-    background-color: #e3f2fd;
-  }
-  
-  /* Loading and Error States */
-  .loading, .error {
-    text-align: center;
-    font-size: 18px;
-    color: #666;
-    margin-top: 20px;
-  }
-  
-  .error {
-    color: #ff0000;
-  }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .feedback-card {
-    animation: fadeIn 0.5s ease;
-  }
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   min-height: 20vh;
-  }
+}
+
+.feedback-card {
+  animation: fadeIn 0.5s ease;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20vh;
+}
