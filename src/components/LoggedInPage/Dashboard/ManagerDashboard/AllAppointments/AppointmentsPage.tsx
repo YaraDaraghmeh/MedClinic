@@ -29,7 +29,7 @@ const AppointmentsPage: React.FC = () => {
         
       
    setDoctors(getDoctors(users));
-   
+   setLoading(false);
   }, []);
 
   // Memoize filtered appointments

@@ -65,8 +65,8 @@ const AppointmentsFilters: React.FC<AppointmentsFiltersProps> = ({
           sx={{ borderRadius: "8px" }}
         >
           <MenuItem value="all">All Doctors</MenuItem>
-          {doctors.map((doctor) => (
-            <MenuItem key={doctor.email?.stringValue} value={doctor.email?.stringValue}>
+          {doctors.map((doctor,index) => (
+            <MenuItem key={index} value={doctor.email?.stringValue}>
               {doctor.name?.stringValue}
             </MenuItem>
           ))}
