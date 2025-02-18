@@ -47,38 +47,38 @@ export const DoctorsTable: React.FC<DoctorsTableProps> = ({ doctors, setDoctorTo
         <tbody>
           {currentDoctors.map((doctor) => (
             <tr
-              key={doctor.email.stringValue} // Ensure key is unique
+              key={doctor.email} 
               className="border-b border-gray-200 hover:bg-gray-50 transition duration-200"
             >
               {/* Doctor Name */}
               <td className="p-3 flex items-center gap-3 text-gray-800">
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300">
                   <img
-                    src={doctor.imageUrl?.stringValue || "/default-avatar.png"}
-                    alt={doctor.name.stringValue}
+                    src={doctor.imageUrl || "https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"}
+                    alt={doctor.name}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                   />
                 </div>
-                {doctor.name.stringValue}
+                {doctor.name}
               </td>
 
               {/* Doctor Email */}
-              <td className="p-3 text-gray-800">{doctor.email.stringValue}</td>
+              <td className="p-3 text-gray-800">{doctor.email}</td>
 
               {/* Doctor Specialization */}
-              <td className="p-3 text-gray-800">{doctor.specialization?.stringValue}</td>
+              <td className="p-3 text-gray-800">{doctor.specialization}</td>
 
               {/* Actions (Delete Button) */}
               <td className="p-3">
                 <button
                   onClick={() => {
                     setDoctorToDelete({
-                      email: doctor.email.stringValue,
-                      name: doctor.name.stringValue,
+                      email: doctor.email,
+                      name: doctor.name,
                     });
                     setdoctorObject({
-                      email: doctor.email.stringValue,
-                      name: doctor.name.stringValue, 
+                      email: doctor.email,
+                      name: doctor.name, 
                     })
                   }}
                   className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-200"

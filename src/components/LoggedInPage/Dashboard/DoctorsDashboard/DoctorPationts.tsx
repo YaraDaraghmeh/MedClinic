@@ -14,6 +14,7 @@ import {
 import { User, Appointment } from '../../../../Types';
 import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
 import { getUserByEmail } from '../../../../services/userService';
+import { useUserContext } from '../../../../hooks/UserContext';
 
 type PatientData = {
   name: string;
@@ -40,19 +41,19 @@ const PatientsTable = ({ doctor }: { doctor: User }) => {
   const [patients, setPatients] = useState<PatientData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+const {users} = useUserContext();
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError('');
         
-        if (!doctor?.email?.stringValue) {
+        if (!doctor?.email) {
           throw new Error('Doctor email not found');
         }
 
         // Get all appointments for this doctor
-        const appointments: Appointment[] = await getAppointmentsByDoctor(doctor.email.stringValue);
+        const appointments: Appointment[] = await getAppointmentsByDoctor(doctor.email);
         
         // Get unique patient emails
         const patientEmails = Array.from(
@@ -67,16 +68,16 @@ const PatientsTable = ({ doctor }: { doctor: User }) => {
         const patientsData = await Promise.all(
           patientEmails.map(async (email) => {
             try {
-              const patient = await getUserByEmail(email);
+              const patient = await getUserByEmail(users,email);
               const patientAppointments = appointments.filter(
                 a => a.patientEmail?.stringValue === email
               );
 
               return {
-                name: patient.name?.stringValue || 'Unknown',
+                name: patient.name || 'Unknown',
                 email,
-                gender: patient.gender?.stringValue || 'N/A',
-                age: calculateAge(patient.dateOfBirth?.stringValue || ''),
+                gender: patient.gender || 'N/A',
+                age: calculateAge(patient.dateOfBirth || ''),
                 totalAppointments: patientAppointments.length,
                 upcoming: patientAppointments.filter(a => 
                   ['pending', 'confirmed'].includes(a.status?.stringValue || '')
@@ -131,7 +132,7 @@ const PatientsTable = ({ doctor }: { doctor: User }) => {
   return (
     <TableContainer component={Paper} sx={{ mt: 4, boxShadow: 3 }}>
       <Typography variant="h6" sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
-        Patients of Dr. {doctor.name?.stringValue}
+        Patients of Dr. {doctor.name}
       </Typography>
       <Table>
         <TableHead>

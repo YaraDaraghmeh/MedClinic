@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, CircularProgress, Grid } from "@mui/material";
 import {
-  getUsers,
+ 
   getDoctors,
   getPatients,
 } from "../../../../../services/userService";
@@ -14,9 +14,10 @@ import RecentAppointmentsTable from "./RecentAppointmentsTable";
 import RecentFeedbackTable from "./RecentFeedbackTable";
 import KeyMetrics from "./KeyMetrics";
 import Charts from "./Charts";
+import { useUserContext } from "../../../../../hooks/UserContext";
 
 const ManagerDashboard: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
+  const {users} = useUserContext();
   const [doctors, setDoctors] = useState<any[]>([]); 
   const [patients, setPatients] = useState<any[]>([]); 
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -28,24 +29,20 @@ const ManagerDashboard: React.FC = () => {
     const fetchData = async () => {
       try {
         const [
-          usersData,
-          doctorsData,
-          patientsData,
+          
           appointmentsData,
           feedbackData,
           avgRating,
         ] = await Promise.all([
-          getUsers(),
-          getDoctors(),
-          getPatients(),
+         
           getAppointments(),
           getFeedback(),
           getAverageRating(),
         ]);
 
-        setUsers(usersData);
-        setDoctors(doctorsData);
-        setPatients(patientsData);
+       
+        setDoctors(getDoctors(users));
+        setPatients(getPatients(users));
         setAppointments(appointmentsData);
         setFeedback(feedbackData);
         setAverageRating(avgRating);

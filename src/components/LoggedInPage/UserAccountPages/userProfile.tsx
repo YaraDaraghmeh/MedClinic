@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAppointmentsByDoctor, getAppointmentsByPatient } from "../../../services/appointmentService";
 import { getUserByEmail } from "../../../services/userService";
-import { getFeedbackByEmail, getAverageRating, getFeedback, deleteFeedback } from "../../../services/feedbackService"; // Assuming you have a feedback service
-import { Appointment, User,Feedback } from "../../../Types";
+import { getFeedbackByEmail, getAverageRating } from "../../../services/feedbackService";
+import { Appointment, User, Feedback } from "../../../Types";
+import { formatDate } from "../../../functions";
 import "./UserProfile.css";
 
 const UserProfile = () => {
@@ -29,37 +30,30 @@ const UserProfile = () => {
         const userData = await getUserByEmail(email);
         setUser(userData);
 
-        // Fetch appointments based on the user role
         if (userData.role?.stringValue !== "manager") {
           let userAppointments;
           if (userData.role?.stringValue === "doctor") {
             userAppointments = await getAppointmentsByDoctor(email);
           } else if (userData.role?.stringValue === "patient") {
             userAppointments = await getAppointmentsByPatient(email);
+            const userFeedbacks = await getFeedbackByEmail(email);
+            setFeedbacks(userFeedbacks);
+            const avgRating = await getAverageRating();
+            setAverageRating(avgRating);
           }
           setAppointments(userAppointments);
         }
-
-        // Fetch feedbacks for the user
-        const userFeedbacks = await getFeedbackByEmail(email);
-        setFeedbacks(userFeedbacks);
-
-        // Get the average rating for the user
-        const avgRating = await getAverageRating();
-        setAverageRating(avgRating);
 
         setLoading(false);
       } catch (error: any) {
         setError(error.message || "An error occurred.");
         setLoading(false);
-        navigate("/error"); // Navigate to error page if something goes wrong
+        navigate("/error");
       }
     };
 
     fetchData();
   }, [location.search, navigate]);
-
-  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -67,7 +61,11 @@ const UserProfile = () => {
   return (
     <div className="user-profile">
       <div className="profile-header">
-        <img src={user!.imageUrl?.stringValue || "/default-image.png"} alt={user!.name.stringValue} className="profile-image" />
+        <img
+          src={user!.imageUrl?.stringValue || "/default-image.png"}
+          alt={user!.name.stringValue}
+          className="profile-image"
+        />
         <div className="profile-details">
           <h2>{user!.name.stringValue}</h2>
           <p>Email: {user!.email.stringValue}</p>
@@ -95,7 +93,7 @@ const UserProfile = () => {
                   <tr key={appointment.id}>
                     <td>{appointment.appointmentDate?.stringValue}</td>
                     <td>{appointment.appointmentTime?.stringValue}</td>
-                    <td style={{ color: appointment.status?.stringValue === 'completed' ? 'green' : 'red' }}>
+                    <td className={`status ${appointment.status?.stringValue}`}>
                       {appointment.status?.stringValue}
                     </td>
                   </tr>
@@ -103,7 +101,7 @@ const UserProfile = () => {
               </tbody>
             </table>
           ) : (
-            <p>No appointments found.</p>
+            <p className="no-data">No appointments found.</p>
           )}
         </div>
       )}
@@ -111,27 +109,27 @@ const UserProfile = () => {
       {user!.role?.stringValue !== "manager" && user!.role?.stringValue !== "doctor" && (
         <div className="feedback-section">
           <h3>Feedback</h3>
-          {feedbacks &&feedbacks.length > 0 ? (
+          {Array.isArray(feedbacks) && feedbacks.length > 0 ? (
             <table className="feedback-table">
               <thead>
                 <tr>
                   <th>Message</th>
                   <th>Rating</th>
-                  <th>Action</th>
+                  <th>Timestamp</th>
                 </tr>
               </thead>
               <tbody>
-                {feedbacks.map((feedback) => (
+                {feedbacks.map((feedback: Feedback) => (
                   <tr key={feedback.id}>
                     <td>{feedback.message?.stringValue}</td>
-                    <td>{feedback.rating?.integerValue}</td>
-                   
+                    <td>{feedback.rating?.doubleValue}</td>
+                    <td>{formatDate(feedback.timestamp?.stringValue)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <p>No feedback available.</p>
+            <p className="no-data">No feedback available.</p>
           )}
         </div>
       )}

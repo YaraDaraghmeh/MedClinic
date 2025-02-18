@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { getAppointments } from "../../../../../services/appointmentService";
-import { getUsers, getDoctors } from "../../../../../services/userService";
+import {  getDoctors } from "../../../../../services/userService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Typography, Box, CircularProgress, Paper } from "@mui/material";
 import AppointmentsFilters from "./AppointmentsFilters/AppointmentsFilters";
 import AppointmentsTable from "./AppointmentsTable/AppointmentsTable";
 import AppointmentsPagination from "./AppointmentsPagination/AppointmentsPagination";
+import { useUserContext } from "../../../../../hooks/UserContext";
 
 const AppointmentsPage: React.FC = () => {
   const [appointments, setAppointments] = useState<any[]>([]);
   const [filteredAppointments, setFilteredAppointments] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+ const {users} = useUserContext();
   const [doctors, setDoctors] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -24,15 +25,13 @@ const AppointmentsPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [appointmentsData, usersData, doctorsData] = await Promise.all([
-          getAppointments(),
-          getUsers(),
-          getDoctors(),
+        const [appointmentsData] = await Promise.all([
+          getAppointments()
         ]);
         setAppointments(appointmentsData);
         setFilteredAppointments(appointmentsData);
-        setUsers(usersData);
-        setDoctors(doctorsData);
+        
+        setDoctors(getDoctors(users));
       } catch (error) {
         toast.error("Failed to fetch data");
         console.error("Fetch error:", error);

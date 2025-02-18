@@ -1,9 +1,10 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Box, Avatar } from '@mui/material';
 import { getFirstTwoWords } from '../../../functions';
+import { User } from '../../../Types';
 interface HeaderProps {
   isCollapsed: boolean;
-  user: any; 
+  user: User; 
 }
 
 const Header: React.FC<HeaderProps> = ({ isCollapsed, user }) => {
@@ -31,11 +32,11 @@ const Header: React.FC<HeaderProps> = ({ isCollapsed, user }) => {
         {isCollapsed && user && (
   <Box className="collapsed-user-box">
     <Avatar
-      src={user.imageUrl.stringValue} 
-      alt={user.name.stringValue}
+      src={user.imageUrl} 
+      alt={user.name}
     /> 
     <Typography variant="body1">
-      Hello there, {getFirstTwoWords(user.name.stringValue)}
+      Hello there, {getFirstTwoWords(user.name)}
     </Typography>
   </Box>
 )}

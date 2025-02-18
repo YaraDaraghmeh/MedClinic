@@ -1,12 +1,22 @@
 export interface User {
-  email: { stringValue: string };
-  name: { stringValue: string };
-  dateOfBirth: { stringValue: string };
-  password: { stringValue: string };
-  role: { stringValue: string };
-  gender: { stringValue: string };
-  imageUrl?: { stringValue: string };
-  specialization?: { stringValue: string };
+  email:string;
+  name:string;
+  dateOfBirth:string;
+  password:string;
+  role: "doctor"|"patient"|"manager";
+  gender: string;
+  imageUrl?: string;
+  specialization?:
+  "Cardiology"|
+  "Dermatology"|
+  "Neurology"|
+  "Pediatrics"|
+  "Radiology"|  
+  "Surgery"|
+  "Oncology"|
+  "Orthopedics"|
+  "Psychiatry"|
+  "Urology";
 }
 
 export interface Appointment {
@@ -17,11 +27,11 @@ export interface Appointment {
   appointmentTime: { stringValue: string };
   reason: { stringValue: string };
   status: { stringValue: "pending" | "confirmed" | "completed" | "canceled" };
-}
-export interface Feedback {
+}export interface Feedback {
   id: string;
-  userEmail: string;
+  userEmail: { stringValue: string };
   message: { stringValue: string };
-  rating: { integerValue: number };
-  timestamp: { timestampValue: string };
+  rating: { doubleValue: number };
+  timestamp: { stringValue: string };
 }
+

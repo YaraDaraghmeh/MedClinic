@@ -1,8 +1,9 @@
 import React from "react";
 import { Tooltip, Box, Avatar, Typography } from "@mui/material";
 import { calculateAge } from "../../../../../../functions";
+import { User } from "../../../../../../Types";
 interface UserTooltipProps {
-  user: any;
+  user: User;
 }
 
 const UserTooltip: React.FC<UserTooltipProps> = ({ user }) => {
@@ -12,28 +13,28 @@ const UserTooltip: React.FC<UserTooltipProps> = ({ user }) => {
       title={
         <Box sx={{ padding: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2, marginBottom: 2 }}>
-            <Avatar src={user?.imageUrl?.stringValue} sx={{ width: 60, height: 60 }} />
+            <Avatar src={user?.imageUrl} sx={{ width: 60, height: 60 }} />
             <Box>
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                {user?.name?.stringValue || "N/A"}
+                {user?.name || "N/A"}
               </Typography>
               <Typography variant="body2">
-                {user?.email?.stringValue || "N/A"}
+                {user?.email || "N/A"}
               </Typography>
             </Box>
           </Box>
           <Typography variant="body2">
-            <strong>Age:</strong> {calculateAge(user?.dateOfBirth?.stringValue)}
+            <strong>Age:</strong> {calculateAge(user?.dateOfBirth)}
           </Typography>
           <Typography variant="body2">
-            <strong>Gender:</strong> {user?.gender?.stringValue || "N/A"}
+            <strong>Gender:</strong> {user?.gender || "N/A"}
           </Typography>
           <Typography variant="body2">
-            <strong>Role:</strong> {user?.role?.stringValue || "N/A"}
+            <strong>Role:</strong> {user?.role || "N/A"}
           </Typography>
-          {user?.specialization?.stringValue && (
+          {user?.specialization && (
             <Typography variant="body2">
-              <strong>Specialization:</strong> {user?.specialization?.stringValue}
+              <strong>Specialization:</strong> {user?.specialization}
             </Typography>
           )}
         </Box>
@@ -41,8 +42,8 @@ const UserTooltip: React.FC<UserTooltipProps> = ({ user }) => {
       arrow
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Avatar src={user?.imageUrl?.stringValue} />
-        {user?.email?.stringValue || "N/A"}
+        <Avatar src={user?.imageUrl} />
+        {user?.email || "N/A"}
       </Box>
     </Tooltip>
   );

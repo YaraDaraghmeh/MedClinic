@@ -1,21 +1,22 @@
 import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { addUser, isEmailTaken } from "../services/userService";
+import { isEmailTaken } from "../services/userService";
 import { generatePassword } from "../functions";
 import { User } from "../Types";
+import { useUserContext } from "./UserContext";
 
 export const useDoctorForm = (fetchDoctors: () => void) => {
   const [newDoctor, setNewDoctor] = useState<User>({
-    name: { stringValue: "" },
-    email: { stringValue: "" },
-    dateOfBirth: { stringValue: "" },
-    password: { stringValue: "" },
-    role: { stringValue: "doctor" },
-    gender: { stringValue: "" },
-    specialization: { stringValue: "" },
+    name: "",
+    email: "",
+    dateOfBirth: "",
+    password: "",
+    role: "doctor",
+    gender: "",
+    specialization: "Cardiology",
   });
-
+const {users,addUser} = useUserContext();
   const [autoGeneratePassword, setAutoGeneratePassword] =
     useState<boolean>(false);
 
@@ -25,7 +26,7 @@ export const useDoctorForm = (fetchDoctors: () => void) => {
 
     try {
       // Check if the email is already taken
-      const emailTaken = await isEmailTaken(newDoctor.email.stringValue);
+      const emailTaken =  isEmailTaken(users,newDoctor.email);
       if (emailTaken) {
         toast.error("Email is already taken");
         return;
@@ -34,32 +35,33 @@ export const useDoctorForm = (fetchDoctors: () => void) => {
       // Generate a password if auto-generate is enabled
       const password = autoGeneratePassword
         ? generatePassword()
-        : newDoctor.password.stringValue;
+        : newDoctor.password;
 
       // Add the new doctor
       await addUser({
-        name: newDoctor.name.stringValue,
-        email: newDoctor.email.stringValue,
-        dateOfBirth: newDoctor.dateOfBirth.stringValue,
+        name: newDoctor.name,
+        email: newDoctor.email,
+        dateOfBirth: newDoctor.dateOfBirth,
         password: password,
-        role: newDoctor.role.stringValue,
-        gender: newDoctor.gender.stringValue,
-        specialization: newDoctor.specialization?.stringValue,
-      });
+        role: newDoctor.role,
+        gender: newDoctor.gender,
+        ...(newDoctor.specialization && { specialization: newDoctor.specialization })
+    });
+    
       emailjs
         .send(
           "service_e9ciwsf",
           "template_ub71yao",
           {
-            name: newDoctor.name.stringValue,
-            email: newDoctor.email.stringValue,
+            name: newDoctor.name,
+            email: newDoctor.email,
             password: [password],
           }, 
           "ZDTmZBqFVNIof8wRQ"
         )
         .then((response) => {
           toast.success(
-            "Welcome email sent to user " + newDoctor.email.stringValue
+            "Welcome email sent to user " + newDoctor.email
           );
         })
         .catch((error) => {
@@ -70,13 +72,13 @@ export const useDoctorForm = (fetchDoctors: () => void) => {
 
       // Reset the form state
       setNewDoctor({
-        name: { stringValue: "" },
-        email: { stringValue: "" },
-        dateOfBirth: { stringValue: "" },
-        password: { stringValue: "" },
-        role: { stringValue: "doctor" },
-        gender: { stringValue: "" },
-        specialization: { stringValue: "" },
+        name: "",
+        email: "",
+        dateOfBirth:"",
+        password: "",
+        role: "doctor",
+        gender: "",
+        specialization: "Cardiology",
       });
 
       // Refresh the list of doctors

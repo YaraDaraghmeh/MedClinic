@@ -1,5 +1,6 @@
-import { console } from "inspector";
+
 import axiosInstance from "../database/axiosInstance";
+import { Feedback } from "../Types";
 
 const COLLECTION_PATH = "/feedback";
 
@@ -55,8 +56,10 @@ export const deleteFeedback = async (feedbackId: string) => {
 export const getFeedbackByEmail = async (email: string) => {
   try {
     const feedbacks = await getFeedback();
-    console.log(feedbacks);
-    return feedbacks.find((feedback: any) => feedback.email?.stringValue === email);
+    console.log("All Feedbacks:", feedbacks);
+
+    // Return all feedbacks matching the email
+    return feedbacks.filter((feedback: Feedback) => feedback.userEmail?.stringValue === email);
   } catch (error) {
     throw error;
   }

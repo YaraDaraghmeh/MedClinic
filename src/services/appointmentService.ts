@@ -73,6 +73,7 @@ export const deleteAppointment = async (appointmentId: string) => {
 export const getAppointmentsByDoctor = async (doctorEmail: string) => {
   try {
     const appointments = await getAppointments();
+    console.log(doctorEmail);
     return appointments.filter(
       (appointment: Appointment) =>
         appointment.doctorEmail?.stringValue === doctorEmail
@@ -121,6 +122,7 @@ export const isAppointmentTimeTakenForDoctor = async (
 
 export const getAppointmentsForDoctorToday = async (doctorEmail: string) => {
   try {
+    console.log(doctorEmail);
     const today = new Date();
     const formattedToday = formatDate(today);
 

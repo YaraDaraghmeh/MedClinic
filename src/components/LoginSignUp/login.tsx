@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './login.css';
-import { authenticateUser, addUser } from '../../services/userService';
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 import { useNavigate } from 'react-router-dom';  // For redirecting
-
+import { useUserContext } from '../../hooks/UserContext';
 const SignInComponent = () => {
   const [active, setActive] = useState(true);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -17,11 +16,11 @@ const SignInComponent = () => {
     imageUrl: '',
   });
   const navigate = useNavigate();  // For redirecting
- 
+  const { users, addUser, authenticateUser } = useUserContext(); // Use the context
+
   useEffect(() => {
     const user = sessionStorage.getItem('user');
     if (user) {
-     
       navigate('/error');  
     }
   }, [navigate]);
@@ -83,7 +82,7 @@ const SignInComponent = () => {
           imageUrl: formData.imageUrl || undefined,
         };
   
-        await addUser(userData);
+        await addUser(userData); // Use addUser from the context
         toast.success('User signed up successfully');
         handleToggleMode();
   
@@ -98,7 +97,7 @@ const SignInComponent = () => {
         });
       } else {
         // Sign-in logic
-        const userProfile = await authenticateUser(formData.email, formData.password);
+        const userProfile = await authenticateUser(formData.email, formData.password); // Use authenticateUser from the context
   
         if (!userProfile) {
           throw new Error('Invalid email or password');
@@ -120,9 +119,8 @@ const SignInComponent = () => {
   
         // Navigate based on user role
         const role = userProfile.role;
-        console.log(userProfile.email)  ;
+        console.log(userProfile.email);
         navigate('/');
-        
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -144,7 +142,7 @@ const SignInComponent = () => {
             <img 
               src={formData.imageUrl || defaultImage} 
               alt="User Avatar" 
-              className="user-image" 
+              className="user-image-sign" 
             />
           </div>}
           <input

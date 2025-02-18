@@ -1,15 +1,17 @@
 import emailjs from "@emailjs/browser";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { getDoctors, deleteUser } from "../services/userService";
+import { getDoctors } from "../services/userService";
 import { User } from "../Types";
 import {
   cancelAppointments,
   forwardAppointments,
   getAppointmentsByDoctor,
 } from "../services/appointmentService";
+import { useUserContext } from "./UserContext";
 
 export const useDoctors = () => {
+  const {users,deleteUser} = useUserContext();
   const [doctors, setDoctors] = useState<User[]>([]);
   const [doctorToDelete, setDoctorToDelete] = useState<{
     email: string;
@@ -29,7 +31,7 @@ export const useDoctors = () => {
   // Fetch doctors from the API
   const fetchDoctors = async () => {
     try {
-      const doctors = await getDoctors();
+      const doctors = await getDoctors(users);
       setDoctors(doctors);
     } catch (error) {
       toast.error("Failed to fetch doctors");

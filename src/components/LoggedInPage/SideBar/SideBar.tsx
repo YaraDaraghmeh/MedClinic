@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Box, IconButton, Typography, Divider, Dialog, DialogActions, DialogContent, 
-  DialogTitle, Button 
+  DialogTitle, Button, 
+  Avatar
 } from '@mui/material';
 import { 
   HomeOutlined, PeopleOutlined, ReceiptOutlined, CalendarTodayOutlined, 
@@ -10,11 +11,12 @@ import {
   EventAvailableOutlined, MedicalServicesOutlined
 } from '@mui/icons-material';
 import '../LoggedInpage.css';
+import { User } from '../../../Types';
 
 interface SidebarProps {
   isCollapsed: boolean;
   toggleSidebar: () => void;
-  user: any;
+  user: User;
   onLogout: () => void;
 }
 
@@ -70,20 +72,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
           fontWeight: 600,
         }}
       >
-        {user?.role?.stringValue ? `${user.role.stringValue} Dashboard` : 'Dashboard'}
+        {user?.role ? `${user.role} Dashboard` : 'Dashboard'}
       </Typography>
 
       {/* Profile Image and Info */}
       {!isCollapsed && user && (
         <Box sx={{ textAlign: 'center', marginBottom: '20px' }}>
-          <img
-            src={user.imageUrl?.stringValue || '/path/to/default-profile-image.jpg'}
-            className="userImage"
-            alt="Profile"
-            style={{ borderRadius: '50%', width: '80px', height: '80px' }}
-          />
+       <Avatar
+  src={user.imageUrl}
+  alt={user.name}
+ className="userImage"
+  sx={{
+    borderRadius: "50%",
+    width: 80,
+    height: 80,
+    border: "2px solid #e5e7eb",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  }}
+/>
+
           <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', marginTop: '5px', fontWeight: '200' }}>
-            {user.name?.stringValue || 'User'}
+            {user.name || 'User'}  
           </Typography>
         </Box>
       )}
@@ -102,7 +111,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
       </div>
 
       {/* Role-Based Navigation */}
-      {user?.role?.stringValue === 'manager' && (
+      {user?.role === 'manager' && (
         <div className="sidebar-links">
           <Link
             to="/doctors"
@@ -125,7 +134,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
         </div>
       )}
 
-      {user?.role?.stringValue === 'doctor' && (
+      {user?.role === 'doctor' && (
         <div className="sidebar-links">
           <Link  to="/doctor-dashboard" state={{ user }}  className="sidebar-link">
             <EventAvailableOutlined className="sidebar-icon" />  {!isCollapsed && "Statics and Facts"}
@@ -151,7 +160,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
         </div>
       )}
 
-      {user?.role?.stringValue === 'patient' && (
+      {user?.role === 'patient' && (
         <div className="sidebar-links">
           <Link
             to="/make-appointment"

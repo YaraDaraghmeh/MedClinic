@@ -3,6 +3,7 @@ import './App.css'
 import Preloader from './components/loader/Preloader'
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'; // Correct import
+import { UserProvider } from './hooks/UserContext';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -16,9 +17,10 @@ function App() {
   
   return (
     <>
+      <UserProvider>
       <Router>
         {loading ? <Preloader /> : <Main />}
-      </Router>
+      </Router></UserProvider>
     </>
   );
 }

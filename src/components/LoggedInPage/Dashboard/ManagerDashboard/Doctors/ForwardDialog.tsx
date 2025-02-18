@@ -11,6 +11,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+import { User } from "../../../../../Types";
 
 interface ForwardDialogProps {
   open: boolean;
@@ -18,11 +19,7 @@ interface ForwardDialogProps {
   onForward: () => void;
   newDoctorEmail: string;
   setNewDoctorEmail: (email: string) => void;
-  doctors: Array<{
-    email: { stringValue: string };
-    name: { stringValue: string };
-    specialization?: { stringValue: string };
-  }>;
+  doctors:User[];
 }
 
 export const ForwardDialog: React.FC<ForwardDialogProps> = ({
@@ -38,17 +35,14 @@ export const ForwardDialog: React.FC<ForwardDialogProps> = ({
   console.log("New Doctor Email:", newDoctorEmail);
 
   // Function to format doctor names with specializations (if duplicates exist)
-  const formatDoctorName = (doctor: {
-    name: { stringValue: string };
-    specialization?: { stringValue: string };
-  }) => {
+  const formatDoctorName = (doctor: User )=> {
     const duplicateNames = doctors.filter(
-      (d) => d.name.stringValue === doctor.name.stringValue
+      (d) => d.name === doctor.name
     ).length;
-    if (duplicateNames > 1 && doctor.specialization?.stringValue) {
-      return `${doctor.name.stringValue} - ${doctor.specialization.stringValue}`;
+    if (duplicateNames > 1 && doctor.specialization) {
+      return `${doctor.name} - ${doctor.specialization}`;
     }
-    return doctor.name.stringValue;
+    return doctor.name;
   };
 
   return (
@@ -100,8 +94,8 @@ export const ForwardDialog: React.FC<ForwardDialogProps> = ({
           >
             {doctors.map((doctor) => (
               <MenuItem
-                key={doctor.email.stringValue}
-                value={doctor.email.stringValue}
+                key={doctor.email}
+                value={doctor.email}
               >
                 {formatDoctorName(doctor)}
               </MenuItem>

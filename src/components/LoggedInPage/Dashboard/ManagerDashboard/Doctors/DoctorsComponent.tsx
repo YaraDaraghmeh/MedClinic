@@ -42,8 +42,8 @@ const DoctorsComponent: React.FC = () => {
   // Filter doctors based on the search term
   const filteredDoctors = doctors.filter(
     (doctor) =>
-      doctor.name?.stringValue.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.email?.stringValue.toLowerCase().includes(searchTerm.toLowerCase())
+      doctor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

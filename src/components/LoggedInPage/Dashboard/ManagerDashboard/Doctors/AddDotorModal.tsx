@@ -53,11 +53,11 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
 
     // Validate required fields
     if (
-      !newDoctor.name?.stringValue ||
-      !newDoctor.email?.stringValue ||
-      !newDoctor.dateOfBirth?.stringValue ||
-      (!autoGeneratePassword && !newDoctor.password?.stringValue) ||
-      !newDoctor.specialization?.stringValue
+      !newDoctor.name ||
+      !newDoctor.email ||
+      !newDoctor.dateOfBirth ||
+      (!autoGeneratePassword && !newDoctor.password) ||
+      !newDoctor.specialization
     ) {
       toast.error("Please fill in all required fields.");
       return;
@@ -108,11 +108,11 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             label="Name"
             variant="outlined"
             fullWidth
-            value={newDoctor.name?.stringValue || ""}
+            value={newDoctor.name || ""}
             onChange={(e) =>
               setNewDoctor({
                 ...newDoctor,
-                name: { stringValue: e.target.value },
+                name: e.target.value,
               })
             }
             required
@@ -126,11 +126,11 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             label="Email"
             variant="outlined"
             fullWidth
-            value={newDoctor.email?.stringValue || ""}
+            value={newDoctor.email || ""}
             onChange={(e) =>
               setNewDoctor({
                 ...newDoctor,
-                email: { stringValue: e.target.value },
+                email: e.target.value,
               })
             }
             required
@@ -145,11 +145,11 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             type="date"
             variant="outlined"
             fullWidth
-            value={newDoctor.dateOfBirth?.stringValue || ""}
+            value={newDoctor.dateOfBirth || ""}
             onChange={(e) =>
               setNewDoctor({
                 ...newDoctor,
-                dateOfBirth: { stringValue: e.target.value },
+                dateOfBirth: e.target.value,
               })
             }
             required
@@ -181,11 +181,11 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
               type="password"
               variant="outlined"
               fullWidth
-              value={newDoctor.password?.stringValue || ""}
+              value={newDoctor.password || ""}
               onChange={(e) =>
                 setNewDoctor({
                   ...newDoctor,
-                  password: { stringValue: e.target.value },
+                  password: e.target.value,
                 })
               }
               required
@@ -196,16 +196,20 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
           )}
 
           {/* Specialization Dropdown */}
-          <FormControl fullWidth required sx={{ marginBottom: "1.5rem !important" }}>
+          <FormControl
+            fullWidth
+            required
+            sx={{ marginBottom: "1.5rem !important" }}
+          >
             <InputLabel sx={{ background: "white" }}>Specialization</InputLabel>
             <Select
-              value={newDoctor.specialization?.stringValue || ""}
-              onChange={(e) =>
-                setNewDoctor({
-                  ...newDoctor,
-                  specialization: { stringValue: e.target.value },
-                })
-              }
+             value={newDoctor.specialization || ""}
+             onChange={(e) =>
+               setNewDoctor({
+                 ...newDoctor,
+                 specialization: e.target.value,
+               })
+             }
               displayEmpty
               variant="outlined"
               MenuProps={{

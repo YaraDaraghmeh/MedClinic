@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import StatisticsCards from '../DoctorsDashboard/StaticsCards';
-import BarChartComponent from './BarChartComponent';
 import PieChartComponent from './PieChartComponent';
 import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
-import { Appointment } from '../../../../Types';
+import { Appointment, User } from '../../../../Types';
+import LineChartComponent from './BarChartComponent';
+import TodaysAppointments from './TodaysAppointments';
 
 type ChartData = {
   day: string;
@@ -16,23 +17,59 @@ type StatusData = {
   value: number;
 }[];
 
-interface DoctorDashboardProps {
-  user: any;
-}
-
-const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ user }) => {
+const DoctorDashboard: React.FC = () => {
   const [appointmentData, setAppointmentData] = useState<ChartData>([]);
   const [statusData, setStatusData] = useState<StatusData>([]);
+  const [user, setUser] = useState<User | null>(null);
 
-  
+  // Single useEffect to handle both user and appointment data fetching
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch user from session storage
+      const userFromSession = sessionStorage.getItem('user');
+      if (userFromSession) {
+        const parsedUser = JSON.parse(userFromSession);
+        setUser(parsedUser);
+
+        // Fetch appointments only if user email is available
+        if (parsedUser.email?.stringValue) {
+          try {
+            const appointments: Appointment[] = await getAppointmentsByDoctor(parsedUser.email.stringValue);
+            console.log("Fetched Appointments:", appointments);
+
+            if (appointments.length === 0) {
+              console.warn("No appointments were returned from getAppointmentsByDoctor");
+            }
+
+            // Process and set appointment data
+            const processedAppointmentsPerDay = processAppointmentsPerDay(appointments);
+            const processedAppointmentStatus = processAppointmentStatus(appointments);
+
+            setAppointmentData(processedAppointmentsPerDay);
+            setStatusData(processedAppointmentStatus);
+          } catch (error) {
+            console.error("Error fetching appointments:", error);
+            setAppointmentData([]);
+            setStatusData([]);
+          }
+        } else {
+          console.error("User email is missing or undefined");
+        }
+      } else {
+        console.error("User not found in session storage");
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
   const processAppointmentsPerDay = (appointments: Appointment[]): ChartData => {
     const groupedData: Record<string, number> = {};
 
     appointments.forEach((appointment) => {
       const rawDate = appointment.appointmentDate;
       if (rawDate && rawDate.stringValue) {
-        console.log("Processing date:", rawDate.stringValue);
-        const formattedDate = rawDate.stringValue.slice(0, 5);
+        const formattedDate = rawDate.stringValue.slice(0, 5); // Extract "DD-MM"
         groupedData[formattedDate] = (groupedData[formattedDate] || 0) + 1;
       }
     });
@@ -41,7 +78,6 @@ const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ user }) => {
       day,
       appointments: count,
     }));
-    console.log("Processed Chart Data:", chartData);
     return chartData;
   };
 
@@ -54,7 +90,6 @@ const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ user }) => {
 
     appointments.forEach((appointment) => {
       const status = appointment.status?.stringValue?.toLowerCase();
-      console.log("Processing status:", status);
       if (status && statusCounts.hasOwnProperty(status)) {
         statusCounts[status]++;
       }
@@ -64,33 +99,8 @@ const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ user }) => {
       name,
       value,
     }));
-    console.log("Processed Status Data:", statusArr);
     return statusArr;
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user || !user.email) {
-        console.error("User prop is missing or user.email is undefined");
-        return;
-      }
-      try {
-        const appointments: Appointment[] = await getAppointmentsByDoctor(user.email);
-        console.log("Fetched Appointments:", appointments);
-        if (appointments.length === 0) {
-          console.warn("No appointments were returned from getAppointmentsByDoctor");
-        }
-        setAppointmentData(processAppointmentsPerDay(appointments));
-        setStatusData(processAppointmentStatus(appointments));
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
-        setAppointmentData([]);
-        setStatusData([]);
-      }
-    };
-
-    fetchData();
-  }, [user]);
 
   return (
     <Box sx={{ padding: '20px' }}>
@@ -102,11 +112,16 @@ const DoctorDashboard: React.FC<DoctorDashboardProps> = ({ user }) => {
 
       <Box sx={{ display: 'flex', gap: '20px', mt: 4, flexDirection: 'row' }}>
         <Box sx={{ flex: 1 }}>
-          <BarChartComponent data={appointmentData} />
+          <LineChartComponent data={appointmentData} />
         </Box>
         <Box sx={{ flex: 1 }}>
           <PieChartComponent data={statusData} colors={['#52c41a', '#faad14', '#f5222d']} />
         </Box>
+      </Box>
+
+      {/* Add TodaysAppointments component */}
+      <Box sx={{ mt: 4 }}>
+        <TodaysAppointments  />
       </Box>
     </Box>
   );
