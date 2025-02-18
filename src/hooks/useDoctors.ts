@@ -4,13 +4,14 @@ import { toast } from "react-toastify";
 import { getDoctors } from "../services/userService";
 import { User } from "../Types";
 import {
-  cancelAppointments,
-  forwardAppointments,
+ 
   getAppointmentsByDoctor,
 } from "../services/appointmentService";
 import { useUserContext } from "./UserContext";
+import { useAppointmentsContext } from "./AppointmentContext";
 
 export const useDoctors = () => {
+  const {cancelAllAppointments,forwardAppointments,appointments} = useAppointmentsContext();
   const {users,deleteUser} = useUserContext();
   const [doctors, setDoctors] = useState<User[]>([]);
   const [doctorToDelete, setDoctorToDelete] = useState<{
@@ -51,13 +52,13 @@ export const useDoctors = () => {
       await deleteUser(doctorToDelete.email);
 
       // Check if the doctor has appointments
-      const appointments = await getAppointmentsByDoctor(doctorToDelete.email);
-      if (appointments.length > 0) {
+      const appointments1 = await getAppointmentsByDoctor(appointments,doctorToDelete.email);
+      if (appointments1.length > 0) {
         // Open the forward dialog if there are appointments
         setOpenForwardDialog(true);
       } else {
         // Cancel appointments if there are no appointments to forward
-        await cancelAppointments(doctorToDelete.email);
+        await cancelAllAppointments(doctorToDelete.email);
         emailjs
   .send(
     "service_3v825nj", 

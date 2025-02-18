@@ -6,12 +6,16 @@ import { getFeedbackByEmail, getAverageRating } from "../../../services/feedback
 import { Appointment, User, Feedback } from "../../../Types";
 import { formatDate } from "../../../functions";
 import "./UserProfile.css";
+import { useUserContext } from "../../../hooks/UserContext";
+import { useAppointmentsContext } from "../../../hooks/AppointmentContext";
 
 const UserProfile = () => {
+  const {users} = useUserContext();
+  const {appointments}= useAppointmentsContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointmentsbyUser, setAppointmentsbyUser] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
@@ -27,21 +31,21 @@ const UserProfile = () => {
           throw new Error("No email provided in the URL");
         }
 
-        const userData = await getUserByEmail(email);
+        const userData = await getUserByEmail(users,email);
         setUser(userData);
 
-        if (userData.role?.stringValue !== "manager") {
+        if (userData.role !== "manager") {
           let userAppointments;
-          if (userData.role?.stringValue === "doctor") {
-            userAppointments = await getAppointmentsByDoctor(email);
-          } else if (userData.role?.stringValue === "patient") {
-            userAppointments = await getAppointmentsByPatient(email);
+          if (userData.role === "doctor") {
+            userAppointments = await getAppointmentsByDoctor(appointments,email);
+          } else if (userData.role === "patient") {
+            userAppointments = await getAppointmentsByPatient(appointments,email);
             const userFeedbacks = await getFeedbackByEmail(email);
             setFeedbacks(userFeedbacks);
             const avgRating = await getAverageRating();
             setAverageRating(avgRating);
           }
-          setAppointments(userAppointments);
+          setAppointmentsbyUser(userAppointments!);
         }
 
         setLoading(false);
@@ -62,24 +66,24 @@ const UserProfile = () => {
     <div className="user-profile">
       <div className="profile-header">
         <img
-          src={user!.imageUrl?.stringValue || "/default-image.png"}
-          alt={user!.name.stringValue}
+          src={user!.imageUrl || "/default-image.png"}
+          alt={user!.name}
           className="profile-image"
         />
         <div className="profile-details">
-          <h2>{user!.name.stringValue}</h2>
-          <p>Email: {user!.email.stringValue}</p>
-          <p>Gender: {user!.gender.stringValue}</p>
-          <p>Role: {user!.role?.stringValue}</p>
-          <p>Date of Birth: {user!.dateOfBirth.stringValue}</p>
+          <h2>{user!.name}</h2>
+          <p>Email: {user!.email}</p>
+          <p>Gender: {user!.gender}</p>
+          <p>Role: {user!.role}</p>
+          <p>Date of Birth: {user!.dateOfBirth}</p>
           <p>Average Rating: {averageRating}</p>
         </div>
       </div>
 
-      {user!.role?.stringValue !== "manager" && (
+      {user!.role !== "manager" && (
         <div className="appointments-section">
           <h3>Appointments</h3>
-          {appointments.length > 0 ? (
+          {appointmentsbyUser.length > 0 ? (
             <table className="appointments-table">
               <thead>
                 <tr>
@@ -89,12 +93,12 @@ const UserProfile = () => {
                 </tr>
               </thead>
               <tbody>
-                {appointments.map((appointment) => (
+                {appointmentsbyUser.map((appointment) => (
                   <tr key={appointment.id}>
-                    <td>{appointment.appointmentDate?.stringValue}</td>
-                    <td>{appointment.appointmentTime?.stringValue}</td>
-                    <td className={`status ${appointment.status?.stringValue}`}>
-                      {appointment.status?.stringValue}
+                    <td>{appointment.appointmentDate}</td>
+                    <td>{appointment.appointmentTime}</td>
+                    <td className={`status ${appointment.status}`}>
+                      {appointment.status}
                     </td>
                   </tr>
                 ))}
@@ -106,7 +110,7 @@ const UserProfile = () => {
         </div>
       )}
 
-      {user!.role?.stringValue !== "manager" && user!.role?.stringValue !== "doctor" && (
+      {user!.role !== "manager" && user!.role !== "doctor" && (
         <div className="feedback-section">
           <h3>Feedback</h3>
           {Array.isArray(feedbacks) && feedbacks.length > 0 ? (

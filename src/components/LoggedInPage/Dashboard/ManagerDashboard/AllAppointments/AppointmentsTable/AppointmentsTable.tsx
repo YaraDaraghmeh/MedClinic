@@ -13,26 +13,23 @@ import {
   Box,
 } from "@mui/material";
 import UserTooltip from "../UserTooltip/UserTooltip";
+import { Appointment, User } from "../../../../../../Types";
+import { useUserContext } from "../../../../../../hooks/UserContext";
+import { getUserByEmail } from "../../../../../../services/userService";
 
 interface AppointmentsTableProps {
-  currentItems: any[];
-  users: any[];
-  doctors: any[];
+  currentItems: Appointment[];
+  doctors: User[];
   indexOfFirstItem: number;
 }
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   currentItems,
-  users,
   doctors,
   indexOfFirstItem,
 }) => {
-  const getUserByEmail = (email: string) => {
-    const user = users.find((user) => user.email?.stringValue === email);
-    const doctor = doctors.find((doctor) => doctor.email?.stringValue === email);
-    return user || doctor;
-  };
-
+ 
+const {users} = useUserContext();
   return (
     <TableContainer
       component={Paper}
@@ -61,8 +58,8 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
             </TableRow>
           ) : (
             currentItems.map((appointment, index) => {
-              const patient = getUserByEmail(appointment.patientEmail?.stringValue);
-              const doctor = getUserByEmail(appointment.doctorEmail?.stringValue);
+              const patient = getUserByEmail(users,appointment.patientEmail);
+              const doctor = getUserByEmail(users,appointment.doctorEmail);
 
               return (
                 <TableRow
@@ -79,23 +76,23 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
                   <TableCell>
                     <UserTooltip user={doctor} />
                   </TableCell>
-                  <TableCell>{appointment.appointmentDate?.stringValue || "N/A"}</TableCell>
-                  <TableCell>{appointment.appointmentTime?.stringValue || "N/A"}</TableCell>
-                  <TableCell>{appointment.reason?.stringValue || "N/A"}</TableCell>
+                  <TableCell>{appointment.appointmentDate || "N/A"}</TableCell>
+                  <TableCell>{appointment.appointmentTime || "N/A"}</TableCell>
+                  <TableCell>{appointment.reason || "N/A"}</TableCell>
                   <TableCell
                     sx={{
                       color:
-                        appointment.status?.stringValue === "pending"
+                        appointment.status === "pending"
                           ? "#ff9800"
-                          : appointment.status?.stringValue === "confirmed"
+                          : appointment.status === "confirmed"
                           ? "#4caf50"
-                          : appointment.status?.stringValue === "completed"
+                          : appointment.status === "completed"
                           ? "#2196f3"
                           : "#f44336",
                       fontWeight: "bold",
                     }}
                   >
-                    {appointment.status?.stringValue || "N/A"}
+                    {appointment.status || "N/A"}
                   </TableCell>
                 </TableRow>
               );

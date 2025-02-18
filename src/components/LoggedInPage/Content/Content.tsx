@@ -1,39 +1,39 @@
-import React from 'react';
-import { Box } from '@mui/material';
-import { Routes, Route } from 'react-router-dom';
-import { About } from '../../AboutPage/about';
-import Services from '../../ServicesPage/Services';
-import SignInComponent from '../../LoginSignUp/login';
-import ErrorPage from '../../ErrorPage/ErrorPage';
-import ContactPage from '../../ContactPage/ContactPage';
-import HomePage from '../../HomePage/HomePage';
-import Footer from '../../Footer/Footer';
-import Dashboard from '../Dashboard/Dashboard';
-import AppointmentsPage from '../Dashboard/ManagerDashboard/AllAppointments/AppointmentsPage';
-import AppointmentList from '../../appointment/AppointmentList';
-import DoctorsComponent from '../Dashboard/ManagerDashboard/Doctors/DoctorsComponent';
-import DoctorDashboard from '../Dashboard/DoctorsDashboard/DoctorsDashboard';
-import DoctorAppointmentsTable from '../Dashboard/DoctorsDashboard/DoctorAppointmentsTable';
-import DoctorPationts from '../Dashboard/DoctorsDashboard/DoctorPationts';
-import FeedbackViewer from '../Dashboard/ManagerDashboard/Feedbacks/FeedbackViewer';
-import UserProfile from '../UserAccountPages/userProfile';
-
+import React from "react";
+import { Box } from "@mui/material";
+import { Routes, Route } from "react-router-dom";
+import { About } from "../../AboutPage/about";
+import Services from "../../ServicesPage/Services";
+import SignInComponent from "../../LoginSignUp/login";
+import ErrorPage from "../../ErrorPage/ErrorPage";
+import ContactPage from "../../ContactPage/ContactPage";
+import HomePage from "../../HomePage/HomePage";
+import Footer from "../../Footer/Footer";
+import Dashboard from "../Dashboard/Dashboard";
+import AppointmentsPage from "../Dashboard/ManagerDashboard/AllAppointments/AppointmentsPage";
+import AppointmentList from "../../appointment/AppointmentList";
+import DoctorsComponent from "../Dashboard/ManagerDashboard/Doctors/DoctorsComponent";
+import DoctorDashboard from "../Dashboard/DoctorsDashboard/DoctorsDashboard";
+import DoctorAppointmentsTable from "../Dashboard/DoctorsDashboard/DoctorAppointmentsTable";
+import DoctorPationts from "../Dashboard/DoctorsDashboard/DoctorPationts";
+import FeedbackViewer from "../Dashboard/ManagerDashboard/Feedbacks/FeedbackViewer";
+import UserProfile from "../UserAccountPages/userProfile";
+import { User } from "../../../Types";
 
 interface ContentProps {
   isCollapsed: boolean;
-  user: any;
+  user: User;
 }
 
-const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
+const Content: React.FC<ContentProps> = ({ isCollapsed, user }) => {
   return (
     <Box
       sx={{
-        marginLeft: isCollapsed ? '60px' : '250px',
-        marginTop: '64px',
-        transition: 'margin-left 0.3s',
+        marginLeft: isCollapsed ? "60px" : "250px",
+        marginTop: "64px",
+        transition: "margin-left 0.3s",
         flexGrow: 1,
-        padding: '1px',
-        fontFamily: 'Poppins, sans-serif',
+        padding: "1px",
+        fontFamily: "Poppins, sans-serif",
       }}
     >
       <Routes>
@@ -42,16 +42,33 @@ const Content: React.FC<ContentProps> = ({ isCollapsed,user }) => {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<SignInComponent />} />
-        <Route path="/error" element={<ErrorPage errorMessage="You Don't have access to this page" />} />
-        <Route path="/dashboard" element={<Dashboard user={user}/>} />
-        <Route path="/all-appointments" element={<AppointmentsPage/>} />
-       <Route path="/feedbacks" element={<FeedbackViewer/>} />
-       <Route path="/doctors" element={ <DoctorsComponent/>} />
-       <Route path="/doctors" element={<DoctorsComponent/>} />
-       <Route  path="/doctor-dashboard"  element={ <DoctorDashboard user={user} /> } />
-       <Route path="/doctor-dashboard-table" element={<DoctorAppointmentsTable user={user}/>} />
-       <Route path='/Doctor-Patients' element={<DoctorPationts doctor={user} />} />
-        <Route path="*" element={<ErrorPage errorMessage="Page not found!" />} />
+        <Route
+          path="/error"
+          element={
+            <ErrorPage errorMessage="You Don't have access to this page" />
+          }
+        />
+        <Route path="/dashboard" element={<Dashboard user={user} />} />
+        <Route path="/all-appointments" element={<AppointmentsPage />} />
+        <Route path="/feedbacks" element={<FeedbackViewer />} />
+        <Route path="/doctors" element={<DoctorsComponent />} />
+        <Route path="/doctors" element={<DoctorsComponent />} />
+        <Route
+          path="/doctor-dashboard"
+          element={<DoctorDashboard  />}
+        />
+        <Route
+          path="/doctor-dashboard-table"
+          element={<DoctorAppointmentsTable user={user} />}
+        />
+        <Route
+          path="/Doctor-Patients"
+          element={<DoctorPationts doctor={user} />}
+        />
+        <Route
+          path="*"
+          element={<ErrorPage errorMessage="Page not found!" />}
+        />
       </Routes>
       <Footer />
     </Box>

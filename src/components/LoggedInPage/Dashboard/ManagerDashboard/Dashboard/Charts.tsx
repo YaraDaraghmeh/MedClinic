@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { getAppointments } from "../../../../../services/appointmentService";
 import AppointmentsOverTimeChart from "./AppointmentsOverTimeChart";
 import UsersByRoleChart from "./UsersByRoleChart";
+import { useAppointmentsContext } from "../../../../../hooks/AppointmentContext";
 
 interface ChartsProps {
   doctors: number;
@@ -10,28 +10,14 @@ interface ChartsProps {
 }
 
 const Charts: React.FC<ChartsProps> = ({ doctors, patients }) => {
-  const [appointments, setAppointments] = useState<any[]>([]);
-
-  // Fetch appointments data on component mount
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const data = await getAppointments();
-        setAppointments(data);
-      } catch (error) {
-        console.error("Failed to fetch appointments:", error);
-      }
-    };
-
-    fetchAppointments();
-  }, []);
-
+ const {appointments}= useAppointmentsContext();
+  
   // Process appointments data for the line chart
   const processAppointmentsData = () => {
     const monthlyAppointments = [0, 0, 0, 0, 0, 0, 0];
 
     appointments.forEach((appointment) => {
-      const date = appointment.appointmentDate?.stringValue;
+      const date = appointment.appointmentDate;
       if (date) {
         const month = parseInt(date.split("-")[1], 10) - 1;
         if (month >= 0 && month < 7) {

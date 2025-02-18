@@ -9,7 +9,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ user }) => {
-  switch (user.role?.stringValue) {
+  switch (user.role) {
     case "manager":
       return <ManagerDashboard />;
     case "doctor":

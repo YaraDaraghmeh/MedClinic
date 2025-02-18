@@ -10,19 +10,14 @@ import {
 import { getAppointmentsForDoctorToday } from "../../../../services/appointmentService";
 import { Appointment, User } from "../../../../Types";
 import ErrorPage from "../../../ErrorPage/ErrorPage";
+import { useAppointmentsContext } from "../../../../hooks/AppointmentContext";
 
 
 
 const TodaysAppointments: React.FC = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [todayappointments, settodayAppointments] = useState<Appointment[]>([]);
     const [user,setUser]= useState<User|null>(null);
-  // Function to format the date as "DD-MM-YYYY"
-  const formatDate = (date: Date): string => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
+  const {appointments} = useAppointmentsContext();
 
   // Fetch today's appointments
   useEffect(() => {
@@ -32,9 +27,9 @@ const TodaysAppointments: React.FC = () => {
           const parsedUser = JSON.parse(userFromSession);
         
           setUser(parsedUser);
-          const todaysAppointments =await getAppointmentsForDoctorToday(parsedUser!.email.stringValue);
+          const todaysAppointments =await getAppointmentsForDoctorToday(appointments,parsedUser!.email.stringValue);
 
-          setAppointments(todaysAppointments);
+          settodayAppointments(todaysAppointments);
         } else {
           console.error("User not found in session storage");
           return <ErrorPage />;
@@ -45,7 +40,7 @@ const TodaysAppointments: React.FC = () => {
      
       } catch (error) {
         console.error("Error fetching today's appointments:", error);
-        setAppointments([]);
+        settodayAppointments([]);
       }
     };
 
@@ -67,13 +62,13 @@ const TodaysAppointments: React.FC = () => {
       >
         Today's Appointments
       </Typography>
-      {appointments.length === 0 ? (
+      {todayappointments.length === 0 ? (
         <Typography variant="body1" sx={{ color: "#666" }}>
           No appointments scheduled for today.
         </Typography>
       ) : (
         <List>
-          {appointments.map((appointment, index) => (
+          {todayappointments.map((appointment, index) => (
             <React.Fragment key={index}>
               <ListItem
                 sx={{
@@ -84,11 +79,11 @@ const TodaysAppointments: React.FC = () => {
                 }}
               >
                 <ListItemText
-                  primary={`Patient: ${appointment.patientEmail?.stringValue || "N/A"}`}
-                  secondary={`Time: ${appointment.appointmentTime?.stringValue || "N/A"} | Status: ${appointment.status?.stringValue || "N/A"}`}
+                  primary={`Patient: ${appointment.patientEmail || "N/A"}`}
+                  secondary={`Time: ${appointment.appointmentTime || "N/A"} | Status: ${appointment.status || "N/A"}`}
                 />
               </ListItem>
-              {index < appointments.length - 1 && <Divider />}
+              {index < todayappointments.length - 1 && <Divider />}
             </React.Fragment>
           ))}
         </List>

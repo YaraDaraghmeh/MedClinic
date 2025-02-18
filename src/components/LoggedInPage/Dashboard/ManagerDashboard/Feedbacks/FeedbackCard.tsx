@@ -7,6 +7,7 @@ import "./FeedbackViewer.css";
 import { calculateStars } from "../Dashboard/starRating";
 import { User } from "../../../../../Types";
 import ErrorPage from "../../../../ErrorPage/ErrorPage";
+import { useUserContext } from "../../../../../hooks/UserContext";
 
 interface Feedback {
   id: string;
@@ -20,13 +21,14 @@ interface Feedback {
 
 const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
   const [user, setUser] = useState<User | null>(null);
+  const {users} = useUserContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserByEmail(feedback.userEmail.stringValue);
+        const userData = await getUserByEmail(users,feedback.userEmail.stringValue);
         setUser(userData);
         setLoading(false);
       } catch (err) {
@@ -42,7 +44,7 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
 
   const handleUserClick = () => {
     if (user) {
-      window.location.href = `/user-profile?email=${user.email.stringValue}`;
+      window.location.href = `/user-profile?email=${user.email}`;
     }
   };
 
@@ -59,13 +61,13 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
       <div className="user-info">
         <a onClick={handleUserClick}>
           <img
-            src={user?.imageUrl?.stringValue || "https://via.placeholder.com/50"}
+            src={user?.imageUrl || "https://via.placeholder.com/50"}
             alt="User"
             className="user-image"
           />
         </a>
         <div className="user-details">
-          <h3 className="user-name">{user?.name?.stringValue || "Unknown User"}</h3>
+          <h3 className="user-name">{user?.name || "Unknown User"}</h3>
           <p className="rating">
             <FaStar className="star-icon" /> {stars} / 5
           </p>

@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { getAppointments } from "../../../../../services/appointmentService";
-import {  getDoctors } from "../../../../../services/userService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Typography, Box, CircularProgress, Paper } from "@mui/material";
@@ -8,12 +6,15 @@ import AppointmentsFilters from "./AppointmentsFilters/AppointmentsFilters";
 import AppointmentsTable from "./AppointmentsTable/AppointmentsTable";
 import AppointmentsPagination from "./AppointmentsPagination/AppointmentsPagination";
 import { useUserContext } from "../../../../../hooks/UserContext";
+import { useAppointmentsContext } from "../../../../../hooks/AppointmentContext";
+import { User } from "../../../../../Types";
+import { getDoctors } from "../../../../../services/userService";
 
 const AppointmentsPage: React.FC = () => {
-  const [appointments, setAppointments] = useState<any[]>([]);
+ const {appointments}= useAppointmentsContext();
   const [filteredAppointments, setFilteredAppointments] = useState<any[]>([]);
  const {users} = useUserContext();
-  const [doctors, setDoctors] = useState<any[]>([]);
+  const [doctors, setDoctors] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [doctorFilter, setDoctorFilter] = useState("all");
@@ -23,24 +24,12 @@ const AppointmentsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [appointmentsData] = await Promise.all([
-          getAppointments()
-        ]);
-        setAppointments(appointmentsData);
-        setFilteredAppointments(appointmentsData);
+     
+        setFilteredAppointments(appointments);
         
-        setDoctors(getDoctors(users));
-      } catch (error) {
-        toast.error("Failed to fetch data");
-        console.error("Fetch error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+      
+   setDoctors(getDoctors(users));
+   
   }, []);
 
   // Memoize filtered appointments
@@ -50,27 +39,27 @@ const AppointmentsPage: React.FC = () => {
     if (searchTerm) {
       filtered = filtered.filter(
         (appointment) =>
-          appointment.patientEmail?.stringValue?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          appointment.doctorEmail?.stringValue?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          appointment.reason?.stringValue?.toLowerCase().includes(searchTerm.toLowerCase())
+          appointment.patientEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          appointment.doctorEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          appointment.reason?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     if (statusFilter !== "all") {
       filtered = filtered.filter(
-        (appointment) => appointment.status?.stringValue === statusFilter
+        (appointment) => appointment.status === statusFilter
       );
     }
 
     if (doctorFilter !== "all") {
       filtered = filtered.filter(
-        (appointment) => appointment.doctorEmail?.stringValue === doctorFilter
+        (appointment) => appointment.doctorEmail === doctorFilter
       );
     }
 
     filtered.sort((a, b) => {
-      const dateA = a.appointmentDate?.stringValue || "";
-      const dateB = b.appointmentDate?.stringValue || "";
+      const dateA = a.appointmentDate || "";
+      const dateB = b.appointmentDate || "";
       return sortOrder === "asc" ? dateA.localeCompare(dateB) : dateB.localeCompare(dateA);
     });
 
@@ -119,7 +108,6 @@ const AppointmentsPage: React.FC = () => {
         <>
           <AppointmentsTable
             currentItems={currentItems}
-            users={users}
             doctors={doctors}
             indexOfFirstItem={indexOfFirstItem}
           />

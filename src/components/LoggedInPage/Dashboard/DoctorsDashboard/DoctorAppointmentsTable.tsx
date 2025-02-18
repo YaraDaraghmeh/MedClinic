@@ -1,34 +1,34 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Table, Tag, Space, Button, Typography, Modal, Form, Input, DatePicker, TimePicker, Select, Row, Col } from 'antd';
 import moment from 'moment';
-import { getAppointmentsByDoctor, deleteAppointment, createAppointment } from '../../../../services/appointmentService';
-import { Appointment } from '../../../../Types';
+import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
+import { Appointment, User } from '../../../../Types';
+import { useAppointmentsContext } from '../../../../hooks/AppointmentContext';
 
 interface DoctorAppointmentsTableProps {
-  user: any;
+  user: User;
 }
 
 const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user }) => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const {appointments,addAppointment,deleteAppointment}= useAppointmentsContext();
+  const [appointmentsbydoc, setAppointmentsbydoc] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
-
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
   // Editing states
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
   const [form] = Form.useForm();
 
-  const doctorEmail = user?.email?.stringValue;
+  const doctorEmail = user?.email;
 
   useEffect(() => {
     const loadAppointments = async () => {
       if (!doctorEmail) return; 
       try {
-        const data = await getAppointmentsByDoctor(doctorEmail);
-        setAppointments(data);
+        const data =  getAppointmentsByDoctor(appointments,doctorEmail);
+        setAppointmentsbydoc(data);
       } catch (error) {
         console.error('Error fetching appointments:', error);
       } finally {
@@ -42,7 +42,7 @@ const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user 
   const handleDelete = async (appointmentId: string) => {
     try {
       await deleteAppointment(appointmentId);
-      setAppointments(prev => prev.filter(appt => appt.id !== appointmentId));
+      setAppointmentsbydoc(prev => prev.filter(appt => appt.id !== appointmentId));
     } catch (error) {
       console.error('Error deleting appointment:', error);
     }
@@ -50,13 +50,13 @@ const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user 
 
   // Filtering logic
   const filteredAppointments = useMemo(() => {
-    let filtered = appointments;
+    let filtered = appointmentsbydoc;
 
     if (searchTerm) {
       filtered = filtered.filter(appt => {
-        const patientEmail = appt.patientEmail.stringValue.toLowerCase();
-        const date = appt.appointmentDate.stringValue.toLowerCase();
-        const time = appt.appointmentTime.stringValue.toLowerCase();
+        const patientEmail = appt.patientEmail.toLowerCase();
+        const date = appt.appointmentDate.toLowerCase();
+        const time = appt.appointmentTime.toLowerCase();
         return (
           patientEmail.includes(searchTerm.toLowerCase()) ||
           date.includes(searchTerm.toLowerCase()) ||
@@ -66,26 +66,26 @@ const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user 
     }
 
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(appt => appt.status.stringValue === statusFilter);
+      filtered = filtered.filter(appt => appt.status === statusFilter);
     }
 
     filtered.sort((a, b) => {
-      const dateA = a.appointmentDate.stringValue;
-      const dateB = b.appointmentDate.stringValue;
+      const dateA = a.appointmentDate;
+      const dateB = b.appointmentDate;
       return sortOrder === 'asc'
         ? dateA.localeCompare(dateB)
         : dateB.localeCompare(dateA);
     });
 
     return filtered;
-  }, [appointments, searchTerm, statusFilter, sortOrder]);
+  }, [appointmentsbydoc, searchTerm, statusFilter, sortOrder]);
 
   const openEditModal = (appointment: Appointment) => {
     setEditingAppointment(appointment);
     form.setFieldsValue({
-      appointmentDate: moment(appointment.appointmentDate.stringValue, 'DD-MM-YYYY'),
-      appointmentTime: moment(appointment.appointmentTime.stringValue, 'HH:mm'),
-      status: appointment.status.stringValue,
+      appointmentDate: moment(appointment.appointmentDate, 'DD-MM-YYYY'),
+      appointmentTime: moment(appointment.appointmentTime, 'HH:mm'),
+      status: appointment.status,
     });
   };
 
@@ -100,18 +100,18 @@ const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user 
       
       const newAppointmentData = {
         doctorEmail: doctorEmail,
-        patientEmail: editingAppointment!.patientEmail.stringValue,
+        patientEmail: editingAppointment!.patientEmail,
         appointmentDate: values.appointmentDate.toDate(),
         appointmentTime: values.appointmentTime.format("HH:mm"),
-        reason: editingAppointment!.reason.stringValue,
+        reason: editingAppointment!.reason,
         status: values.status,
       };
 
-      await createAppointment(newAppointmentData);
+      await addAppointment(newAppointmentData);
       
       // Refresh the appointments list
-      const updatedAppointments = await getAppointmentsByDoctor(doctorEmail);
-      setAppointments(updatedAppointments);
+      const updatedAppointments = await getAppointmentsByDoctor(appointments,doctorEmail);
+      setAppointmentsbydoc(updatedAppointments);
 
       setEditingAppointment(null);
       form.resetFields();

@@ -6,6 +6,7 @@ import { getAppointmentsByDoctor } from '../../../../services/appointmentService
 import { Appointment, User } from '../../../../Types';
 import LineChartComponent from './BarChartComponent';
 import TodaysAppointments from './TodaysAppointments';
+import { useAppointmentsContext } from '../../../../hooks/AppointmentContext';
 
 type ChartData = {
   day: string;
@@ -21,7 +22,7 @@ const DoctorDashboard: React.FC = () => {
   const [appointmentData, setAppointmentData] = useState<ChartData>([]);
   const [statusData, setStatusData] = useState<StatusData>([]);
   const [user, setUser] = useState<User | null>(null);
-
+const {appointments}= useAppointmentsContext();
   // Single useEffect to handle both user and appointment data fetching
   useEffect(() => {
     const fetchData = async () => {
@@ -34,12 +35,8 @@ const DoctorDashboard: React.FC = () => {
         // Fetch appointments only if user email is available
         if (parsedUser.email?.stringValue) {
           try {
-            const appointments: Appointment[] = await getAppointmentsByDoctor(parsedUser.email.stringValue);
-            console.log("Fetched Appointments:", appointments);
-
-            if (appointments.length === 0) {
-              console.warn("No appointments were returned from getAppointmentsByDoctor");
-            }
+            
+           
 
             // Process and set appointment data
             const processedAppointmentsPerDay = processAppointmentsPerDay(appointments);
@@ -68,8 +65,8 @@ const DoctorDashboard: React.FC = () => {
 
     appointments.forEach((appointment) => {
       const rawDate = appointment.appointmentDate;
-      if (rawDate && rawDate.stringValue) {
-        const formattedDate = rawDate.stringValue.slice(0, 5); // Extract "DD-MM"
+      if (rawDate && rawDate) {
+        const formattedDate = rawDate.slice(0, 5); // Extract "DD-MM"
         groupedData[formattedDate] = (groupedData[formattedDate] || 0) + 1;
       }
     });
@@ -89,7 +86,7 @@ const DoctorDashboard: React.FC = () => {
     };
 
     appointments.forEach((appointment) => {
-      const status = appointment.status?.stringValue?.toLowerCase();
+      const status = appointment.status?.toLowerCase();
       if (status && statusCounts.hasOwnProperty(status)) {
         statusCounts[status]++;
       }

@@ -5,7 +5,6 @@ import {
   getDoctors,
   getPatients,
 } from "../../../../../services/userService";
-import { getAppointments } from "../../../../../services/appointmentService";
 import {
   getFeedback,
   getAverageRating,
@@ -15,12 +14,13 @@ import RecentFeedbackTable from "./RecentFeedbackTable";
 import KeyMetrics from "./KeyMetrics";
 import Charts from "./Charts";
 import { useUserContext } from "../../../../../hooks/UserContext";
+import { useAppointmentsContext } from "../../../../../hooks/AppointmentContext";
 
 const ManagerDashboard: React.FC = () => {
   const {users} = useUserContext();
   const [doctors, setDoctors] = useState<any[]>([]); 
   const [patients, setPatients] = useState<any[]>([]); 
-  const [appointments, setAppointments] = useState<any[]>([]);
+  const {appointments}= useAppointmentsContext();
   const [feedback, setFeedback] = useState<any[]>([]);
   const [averageRating, setAverageRating] = useState<string>("0.0");
   const [loading, setLoading] = useState(true);
@@ -30,12 +30,12 @@ const ManagerDashboard: React.FC = () => {
       try {
         const [
           
-          appointmentsData,
+          
           feedbackData,
           avgRating,
         ] = await Promise.all([
          
-          getAppointments(),
+          
           getFeedback(),
           getAverageRating(),
         ]);
@@ -43,7 +43,7 @@ const ManagerDashboard: React.FC = () => {
        
         setDoctors(getDoctors(users));
         setPatients(getPatients(users));
-        setAppointments(appointmentsData);
+       
         setFeedback(feedbackData);
         setAverageRating(avgRating);
       } catch (error) {
@@ -60,7 +60,7 @@ const ManagerDashboard: React.FC = () => {
     const today = new Date();
     const formattedToday = `${String(today.getDate()).padStart(2, "0")}-${String(today.getMonth() + 1).padStart(2, "0")}-${today.getFullYear()}`;
 
-    return appointments.filter(appointment => appointment.appointmentDate.stringValue === formattedToday);
+    return appointments.filter(appointment => appointment.appointmentDate === formattedToday);
   };
 
   if (loading) {

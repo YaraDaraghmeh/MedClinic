@@ -15,6 +15,7 @@ import { User, Appointment } from '../../../../Types';
 import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
 import { getUserByEmail } from '../../../../services/userService';
 import { useUserContext } from '../../../../hooks/UserContext';
+import { useAppointmentsContext } from '../../../../hooks/AppointmentContext';
 
 type PatientData = {
   name: string;
@@ -41,6 +42,7 @@ const PatientsTable = ({ doctor }: { doctor: User }) => {
   const [patients, setPatients] = useState<PatientData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const {appointments}= useAppointmentsContext();
 const {users} = useUserContext();
   useEffect(() => {
     const fetchData = async () => {
@@ -51,15 +53,11 @@ const {users} = useUserContext();
         if (!doctor?.email) {
           throw new Error('Doctor email not found');
         }
-
-        // Get all appointments for this doctor
-        const appointments: Appointment[] = await getAppointmentsByDoctor(doctor.email);
-        
         // Get unique patient emails
         const patientEmails = Array.from(
           new Set(
             appointments
-              .map(a => a.patientEmail?.stringValue)
+              .map(a => a.patientEmail)
               .filter(Boolean) as string[]
           )
         );
@@ -70,7 +68,7 @@ const {users} = useUserContext();
             try {
               const patient = await getUserByEmail(users,email);
               const patientAppointments = appointments.filter(
-                a => a.patientEmail?.stringValue === email
+                a => a.patientEmail === email
               );
 
               return {
@@ -80,10 +78,10 @@ const {users} = useUserContext();
                 age: calculateAge(patient.dateOfBirth || ''),
                 totalAppointments: patientAppointments.length,
                 upcoming: patientAppointments.filter(a => 
-                  ['pending', 'confirmed'].includes(a.status?.stringValue || '')
+                  ['pending', 'confirmed'].includes(a.status || '')
                 ).length,
                 completed: patientAppointments.filter(a => 
-                  a.status?.stringValue === 'completed'
+                  a.status === 'completed'
                 ).length
               };
             } catch (error) {
