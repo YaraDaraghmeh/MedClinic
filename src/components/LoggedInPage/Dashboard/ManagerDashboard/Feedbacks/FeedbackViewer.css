@@ -1,0 +1,197 @@
+/* General Styles */
+.feedback-dashboard {
+  padding: 20px;
+  min-height: 100%;
+  margin: 0 auto;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 32px;
+  color: #333;
+  font-weight: 700;
+}
+
+/* Sort Controls */
+.sort-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.sort-controls button {
+  padding: 10px 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.sort-controls button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #005bb5;
+}
+
+.sort-controls button:hover {
+  background-color: #e3f2fd;
+}
+
+/* Feedback Card - Post Style */
+.feedback-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+.feedback-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* User Info Section */
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-info a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.user-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+  border: 2px solid #007bff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.user-image:hover {
+  transform: scale(1.1);
+}
+
+.user-details1 {
+  flex: 1;
+}
+
+.user-name1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.rating {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-icon {
+  color: #ffc107;
+}
+
+/* Feedback Message */
+.message {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+/* Date Section */
+.date {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #777;
+  text-align: right;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #005bb5;
+}
+
+.pagination button:hover {
+  background-color: #e3f2fd;
+}
+
+/* Loading and Error States */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20vh;
+}
+
+.error {
+  text-align: center;
+  font-size: 18px;
+  color: #ff0000;
+  margin-top: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feedback-card {
+  animation: fadeIn 0.5s ease;
+}

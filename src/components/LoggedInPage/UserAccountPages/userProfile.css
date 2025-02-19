@@ -1,0 +1,160 @@
+.user-profile {
+  font-family: 'Poppins', sans-serif;
+
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  border: 3px solid #1a73e8; 
+}
+
+.profile-details h2 {
+  margin: 0;
+  font-size: 1.8em;
+  color: #1a73e8;
+}
+
+.profile-details p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 0.95em;
+}
+
+.appointments-section,
+.feedback-section {
+  margin-top: 30px;
+}
+
+.appointments-section h3,
+.feedback-section h3 {
+  font-size: 1.5em;
+  color: #1a73e8; 
+  margin-bottom: 15px;
+}
+
+.appointments-table,
+.feedback-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.appointments-table th,
+.feedback-table th,
+.appointments-table td,
+.feedback-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+
+}
+.appointments-table,
+.feedback-table
+{
+  margin-left: 2%;
+max-width:1000px;
+}
+.appointments-table th,
+.feedback-table th {
+  background-color: #1a73e8; /* Hospital blue */
+  color: #ffffff; /* White text for headers */
+  font-weight: 600;
+}
+.manager-fun-section {
+  text-align: center;
+  margin-top: 20px;
+  padding: 80px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.manager-fun-section h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.manager-fun-section p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.funny-gif {
+  width: 250px;
+  height: auto;
+  border-radius: 10px;
+  justify-self: center;
+}
+
+.appointments-table td,
+.feedback-table td {
+  color: #333;
+}
+
+.appointments-table tr:nth-child(even),
+.feedback-table tr:nth-child(even) {
+  background-color: #f0f8ff;
+}
+
+.appointments-table tr:hover,
+.feedback-table tr:hover {
+  background-color: #e3f2fd;
+}
+
+.status {
+  font-weight: 600;
+  text-transform: capitalize;
+ 
+
+}
+
+.status.completed {
+  background-color: #4caf50; 
+  color: #ffffff;
+}
+
+.status.pending {
+  background-color: #ff9800; 
+  color: #ffffff;
+}
+
+.status.canceled {
+  background-color: #f44336; 
+  color: #ffffff;
+}
+
+.error {
+  color: #f44336;
+  font-size: 1.1em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.no-data {
+  color: #777;
+  font-style: italic;
+  text-align: center;
+  margin-top: 20px;
+}

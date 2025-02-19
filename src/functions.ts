@@ -2,26 +2,37 @@ export const getFirstTwoWords = (name: string) => {
     const words = name.split(" "); 
     return words.slice(0, 2).join(" "); 
   };
- // Function to calculate age from date of birth in yyyymmdd format
- export const calculateAge = (dob: string): number => {
-  if (typeof dob !== 'string') {
-    console.error('Invalid date of birth format');
-    return 0;
+  
+  export const calculateAge = (dateOfBirth: string) => {
+    if (!dateOfBirth) return "N/A";
+    const dob = new Date(dateOfBirth);
+    const diff = Date.now() - dob.getTime();
+    const ageDate = new Date(diff);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+  export const calculateStars = (rating: number): number => {
+    return parseFloat(((rating / 10) * 5).toFixed(1));
+  };
+
+export const generatePassword = () => {
+  const length = 10; // Password length
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
   }
+  return password;
+};
 
-  const year = parseInt(dob.substring(0, 4), 10);
-  const month = parseInt(dob.substring(4, 6), 10) - 1; // JavaScript months are 0-indexed
-  const day = parseInt(dob.substring(6, 8), 10);
-
-  const birthDate = new Date(year, month, day);
-  const today = new Date();
-
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-
-  return age;
+export const formatDate = (isoString: string) => {
+  return new Date(isoString).toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    
+  });
 };

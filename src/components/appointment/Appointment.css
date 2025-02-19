@@ -532,39 +532,3 @@
     padding: 6px;
   }
 }
-
-/* Pagination Styles */
-.pagination {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  /* text-align: center; */
-  gap: 0.5rem;
-  margin: 2rem 0;
-}
-
-.pagination button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.3s;
-}
-
-.pagination button:hover:not(:disabled) {
-  background: white;
-  color: #0FBF00;
-  border-color: #0FBF00;
-}
-
-.pagination button.active {
-  background: #0FBF00;
-  color: white;
-  border-color: #0FBF00;
-}
-
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}

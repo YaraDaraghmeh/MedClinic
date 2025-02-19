@@ -50,7 +50,7 @@ const DoctorsPage: React.FC = () => {
       {loading ? (
         <div className="loading">loading</div>
       ) : doctors.length === 0 ? (
-        <div className="no-data">ther is no doctors</div>
+        <div className="no-data">there is no doctors</div>
       ) : (
         <div className="doctors-grid">
           {doctors.map((doctor) => (
