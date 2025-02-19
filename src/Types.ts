@@ -29,9 +29,9 @@ export interface Appointment {
   status:  "pending" | "confirmed" | "completed" | "canceled" ;
 }export interface Feedback {
   id: string;
-  userEmail: { stringValue: string };
-  message: { stringValue: string };
-  rating: { doubleValue: number };
-  timestamp: { stringValue: string };
+  userEmail:  string ;
+  message: string ;
+  rating:number ;
+  timestamp: string ;
 }
 

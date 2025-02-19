@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom"; // Correct import
 import { UserProvider } from "./hooks/UserContext";
 import { AppointmentsProvider } from "./hooks/AppointmentContext";
+import { FeedbackProvider } from "./hooks/FeedbackContext";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,7 +21,9 @@ function App() {
     <>
       <UserProvider>
         <AppointmentsProvider>
-          <Router>{loading ? <Preloader /> : <Main />}</Router>
+          <FeedbackProvider>
+            <Router>{loading ? <Preloader /> : <Main />}</Router>
+          </FeedbackProvider>
         </AppointmentsProvider>
       </UserProvider>
     </>

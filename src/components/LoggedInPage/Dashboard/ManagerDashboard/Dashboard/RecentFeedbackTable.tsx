@@ -3,9 +3,10 @@ import { Card, CardContent, Typography, Box } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import StarRating, { calculateStars } from "./starRating";
+import { Feedback } from "../../../../../Types";
 
 interface RecentFeedbackTableProps {
-  feedback: any[];
+  feedback: Feedback[];
 }
 
 const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) => {
@@ -103,12 +104,12 @@ const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) =
                     fontSize: "1.2rem",
                   }}
                 >
-                  {feedback[currentIndex]?.userEmail?.stringValue || "Anonymous"}
+                  {feedback[currentIndex]?.userEmail || "Anonymous"}
                 </Typography>
 
                 {/* Rating (Stars + Numeric Value) */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
-                  <StarRating rating={feedback[currentIndex].rating.doubleValue} />
+                  <StarRating rating={feedback[currentIndex].rating} />
                   <Typography
                     variant="body2"
                     sx={{
@@ -120,7 +121,7 @@ const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) =
                       borderRadius: "8px",
                     }}
                   >
-                    {calculateStars(feedback[currentIndex]?.rating?.doubleValue) || 0} / 5 ⭐
+                    {calculateStars(feedback[currentIndex]?.rating) || 0} / 5 ⭐
                   </Typography>
                 </Box>
 
@@ -137,7 +138,7 @@ const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) =
                     borderRadius: "10px",
                   }}
                 >
-                  {feedback[currentIndex]?.message?.stringValue || "No message provided."}
+                  {feedback[currentIndex]?.message || "No message provided."}
                 </Typography>
               </CardContent>
 
@@ -154,7 +155,7 @@ const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) =
                   borderRadius: "6px",
                 }}
               >
-                {formatTimestamp(feedback[currentIndex]?.timestamp?.stringValue)}
+                {formatTimestamp(feedback[currentIndex]?.timestamp)}
               </Typography>
             </Card>
           </motion.div>

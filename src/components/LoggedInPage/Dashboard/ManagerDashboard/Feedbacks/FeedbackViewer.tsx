@@ -1,45 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getFeedback } from "../../../../../services/feedbackService";
 import { FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
 import { BeatLoader, ClipLoader } from "react-spinners";
 
 import "./FeedbackViewer.css";
 import FeedbackCard from "./FeedbackCard";
+import { Feedback } from "../../../../../Types";
+import { useFeedback } from "../../../../../hooks/FeedbackContext";
 
-interface Feedback {
-  id: string;
-  userEmail: { stringValue: string };
-  message: { stringValue: string };
-  rating: { doubleValue: number };
-  timestamp: { stringValue: string };
-}
+
 
 const FeedbackViewer: React.FC = () => {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(5);
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
-
-  useEffect(() => {
-    const fetchFeedback = async () => {
-      try {
-        const feedbackData = await getFeedback();
-        setFeedbacks(feedbackData);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch feedback data.");
-        setLoading(false);
-      }
-    };
-
-    fetchFeedback();
-  }, []);
-
+const {feedbacks}= useFeedback();
+ 
   const sortedFeedbacks = [...feedbacks].sort((a, b) => {
-    const dateA = new Date(a.timestamp.stringValue).getTime();
-    const dateB = new Date(b.timestamp.stringValue).getTime();
+    const dateA = new Date(a.timestamp).getTime();
+    const dateB = new Date(b.timestamp).getTime();
     return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
   });
 
@@ -53,14 +31,6 @@ const FeedbackViewer: React.FC = () => {
     setSortOrder(order);
     setCurrentPage(1);
   };
-
-  if (loading)
-    return (
-      <div className="loading">
-        <ClipLoader color="#007bff" size={35} />
-      </div>
-    );
-  if (error) return <div className="error">Error: {error}</div>;
 
   return (
     <div className="feedback-dashboard">

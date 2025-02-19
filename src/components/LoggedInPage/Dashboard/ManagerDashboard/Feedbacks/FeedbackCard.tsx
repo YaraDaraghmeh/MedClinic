@@ -5,17 +5,10 @@ import { BeatLoader } from "react-spinners";
 
 import "./FeedbackViewer.css";
 import { calculateStars } from "../Dashboard/starRating";
-import { User } from "../../../../../Types";
+import { Feedback, User } from "../../../../../Types";
 import ErrorPage from "../../../../ErrorPage/ErrorPage";
 import { useUserContext } from "../../../../../hooks/UserContext";
 
-interface Feedback {
-  id: string;
-  userEmail: { stringValue: string };
-  message: { stringValue: string };
-  rating: { doubleValue: number };
-  timestamp: { stringValue: string };
-}
 
 
 
@@ -28,7 +21,7 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserByEmail(users,feedback.userEmail.stringValue);
+        const userData = await getUserByEmail(users,feedback.userEmail);
         setUser(userData);
         setLoading(false);
       } catch (err) {
@@ -38,9 +31,9 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
     };
 
     fetchUser();
-  }, [feedback.userEmail.stringValue]);
+  }, [feedback.userEmail]);
 
-  const stars = calculateStars(feedback.rating.doubleValue);
+  const stars = calculateStars(feedback.rating);
 
   const handleUserClick = () => {
     if (user) {
@@ -73,9 +66,9 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
           </p>
         </div>
       </div>
-      <p className="message">{feedback.message.stringValue}</p>
+      <p className="message">{feedback.message}</p>
       <p className="date">
-        {new Date(feedback.timestamp.stringValue).toLocaleDateString("en-US", {
+        {new Date(feedback.timestamp).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",

@@ -79,7 +79,7 @@ const SignInComponent = () => {
           password: formData.password,
           role: 'patient', // Default role for new users
           gender: formData.gender,
-          imageUrl: formData.imageUrl || undefined,
+          imageUrl: formData.imageUrl || defaultImage,
         };
   
         await addUser(userData); // Use addUser from the context

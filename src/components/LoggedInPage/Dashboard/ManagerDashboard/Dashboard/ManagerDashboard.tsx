@@ -6,7 +6,6 @@ import {
   getPatients,
 } from "../../../../../services/userService";
 import {
-  getFeedback,
   getAverageRating,
 } from "../../../../../services/feedbackService";
 import RecentAppointmentsTable from "./RecentAppointmentsTable";
@@ -15,36 +14,37 @@ import KeyMetrics from "./KeyMetrics";
 import Charts from "./Charts";
 import { useUserContext } from "../../../../../hooks/UserContext";
 import { useAppointmentsContext } from "../../../../../hooks/AppointmentContext";
+import { Feedback } from "../../../../../Types";
+import { useFeedback } from "../../../../../hooks/FeedbackContext";
 
 const ManagerDashboard: React.FC = () => {
   const {users} = useUserContext();
   const [doctors, setDoctors] = useState<any[]>([]); 
   const [patients, setPatients] = useState<any[]>([]); 
   const {appointments}= useAppointmentsContext();
-  const [feedback, setFeedback] = useState<any[]>([]);
   const [averageRating, setAverageRating] = useState<string>("0.0");
   const [loading, setLoading] = useState(true);
-
+const {feedbacks} = useFeedback();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
           
           
-          feedbackData,
+         
           avgRating,
         ] = await Promise.all([
          
           
-          getFeedback(),
-          getAverageRating(),
+         
+          getAverageRating(feedbacks),
         ]);
 
        
         setDoctors(getDoctors(users));
         setPatients(getPatients(users));
        
-        setFeedback(feedbackData);
+        
         setAverageRating(avgRating);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -105,7 +105,7 @@ const ManagerDashboard: React.FC = () => {
             <Typography variant="h5" sx={{ marginBottom: 2, color: "#1976d2" }}>
               Feedbacks
             </Typography>
-            <RecentFeedbackTable feedback={feedback.slice(0, 5)} />
+            <RecentFeedbackTable feedback={feedbacks.slice(0, 5)} />
           </Box>
         </Grid>
       </Grid>

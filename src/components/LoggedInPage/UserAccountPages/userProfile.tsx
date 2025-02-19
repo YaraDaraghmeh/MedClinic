@@ -8,17 +8,19 @@ import { formatDate } from "../../../functions";
 import "./UserProfile.css";
 import { useUserContext } from "../../../hooks/UserContext";
 import { useAppointmentsContext } from "../../../hooks/AppointmentContext";
+import { useFeedback } from "../../../hooks/FeedbackContext";
 
 const UserProfile = () => {
   const {users} = useUserContext();
   const {appointments}= useAppointmentsContext();
+ const {feedbacks} = useFeedback();
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [appointmentsbyUser, setAppointmentsbyUser] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [userfeedbacks, setuserFeedbacks] = useState<Feedback[]>([]);
   const [averageRating, setAverageRating] = useState<string>("0.0");
 
   useEffect(() => {
@@ -40,9 +42,9 @@ const UserProfile = () => {
             userAppointments = await getAppointmentsByDoctor(appointments,email);
           } else if (userData.role === "patient") {
             userAppointments = await getAppointmentsByPatient(appointments,email);
-            const userFeedbacks = await getFeedbackByEmail(email);
-            setFeedbacks(userFeedbacks);
-            const avgRating = await getAverageRating();
+            const userFeedbacks = await getFeedbackByEmail(feedbacks,email);
+            setuserFeedbacks(userFeedbacks);
+            const avgRating = await getAverageRating(feedbacks);
             setAverageRating(avgRating);
           }
           setAppointmentsbyUser(userAppointments!);
@@ -125,9 +127,9 @@ const UserProfile = () => {
               <tbody>
                 {feedbacks.map((feedback: Feedback) => (
                   <tr key={feedback.id}>
-                    <td>{feedback.message?.stringValue}</td>
-                    <td>{feedback.rating?.doubleValue}</td>
-                    <td>{formatDate(feedback.timestamp?.stringValue)}</td>
+                    <td>{feedback.message}</td>
+                    <td>{feedback.rating}</td>
+                    <td>{formatDate(feedback.timestamp)}</td>
                   </tr>
                 ))}
               </tbody>

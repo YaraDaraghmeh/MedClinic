@@ -45,22 +45,25 @@
   background-color: #e3f2fd;
 }
 
-/* Feedback Card */
+/* Feedback Card - Post Style */
 .feedback-card {
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
   background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  max-width: 600px;
+  margin: 0 auto 20px;
 }
 
 .feedback-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* User Info Section */
 .user-info {
   display: flex;
   align-items: center;
@@ -70,6 +73,8 @@
 .user-info a {
   display: flex;
   align-items: center;
+  text-decoration: none;
+  color: inherit;
 }
 
 .user-image {
@@ -78,13 +83,13 @@
   border-radius: 50%;
   margin-right: 15px;
   object-fit: cover;
-  border: 3px solid #007bff;
+  border: 2px solid #007bff;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
 
 .user-image:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .user-details {
@@ -111,13 +116,19 @@
   color: #ffc107;
 }
 
+/* Feedback Message */
 .message {
   font-size: 16px;
   color: #444;
   line-height: 1.6;
-  margin-top: 15px;
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
 }
 
+/* Date Section */
 .date {
   margin-top: 10px;
   font-size: 14px;
@@ -155,15 +166,18 @@
 }
 
 /* Loading and Error States */
-.loading, .error {
-  text-align: center;
-  font-size: 18px;
-  color: #666;
-  margin-top: 20px;
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20vh;
 }
 
 .error {
+  text-align: center;
+  font-size: 18px;
   color: #ff0000;
+  margin-top: 20px;
 }
 
 /* Animations */
@@ -180,11 +194,4 @@
 
 .feedback-card {
   animation: fadeIn 0.5s ease;
-}
-
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 20vh;
 }
