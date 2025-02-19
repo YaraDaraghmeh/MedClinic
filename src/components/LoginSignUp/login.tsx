@@ -13,7 +13,7 @@ const SignInComponent = () => {
 
   useEffect(() => {
     if (loggedInUser) {
-      toast.warning("you are already logged in 😡");
+        navigate('/dashboard');
     }
   },[loggedInUser,navigate]);
   const defaultImage = 'https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg';
