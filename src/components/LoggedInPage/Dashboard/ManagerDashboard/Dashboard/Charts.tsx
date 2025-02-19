@@ -14,25 +14,30 @@ const Charts: React.FC<ChartsProps> = ({ doctors, patients }) => {
   
   // Process appointments data for the line chart
   const processAppointmentsData = () => {
-    const monthlyAppointments = [0, 0, 0, 0, 0, 0, 0];
-
+    const yearlyData: { [year: string]: number[] } = {}; // Store data for each year
+  
     appointments.forEach((appointment) => {
       const date = appointment.appointmentDate;
       if (date) {
-        const month = parseInt(date.split("-")[1], 10) - 1;
-        if (month >= 0 && month < 7) {
-          monthlyAppointments[month]++; // Increment count for the month
+        const parsedDate = new Date(date);
+        const year = parsedDate.getFullYear(); // Extract year
+        const month = parsedDate.getMonth(); // Extract month (0-11)
+  
+        if (!yearlyData[year]) {
+          yearlyData[year] = Array(12).fill(0); // Initialize with 12 months
         }
+        yearlyData[year][month]++; // Increment count for that month
       }
     });
-
-    return monthlyAppointments;
+  
+    return yearlyData;
   };
+  
 
   return (
     <Grid container spacing={3} sx={{ marginBottom: 3 }}>
       <Grid item xs={12} md={6}>
-        <AppointmentsOverTimeChart data={processAppointmentsData()} />
+        <AppointmentsOverTimeChart />
       </Grid>
       <Grid item xs={12} md={6}>
         <UsersByRoleChart doctors={doctors} patients={patients} />

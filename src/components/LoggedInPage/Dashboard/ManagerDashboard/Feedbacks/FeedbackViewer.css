@@ -92,11 +92,11 @@
   transform: scale(1.1);
 }
 
-.user-details {
+.user-details1 {
   flex: 1;
 }
 
-.user-name {
+.user-name1 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;

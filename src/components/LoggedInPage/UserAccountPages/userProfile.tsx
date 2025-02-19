@@ -9,6 +9,7 @@ import "./UserProfile.css";
 import { useUserContext } from "../../../hooks/UserContext";
 import { useAppointmentsContext } from "../../../hooks/AppointmentContext";
 import { useFeedback } from "../../../hooks/FeedbackContext";
+import ErrorPage from "../../ErrorPage/ErrorPage";
 
 const UserProfile = () => {
   const {users} = useUserContext();
@@ -62,7 +63,7 @@ const UserProfile = () => {
   }, [location.search, navigate]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (error) return <ErrorPage errorMessage={error} />;
 
   return (
     <div className="user-profile">

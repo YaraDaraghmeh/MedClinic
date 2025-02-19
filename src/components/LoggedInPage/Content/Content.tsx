@@ -53,6 +53,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed, user }) => {
         <Route path="/feedbacks" element={<FeedbackViewer />} />
         <Route path="/doctors" element={<DoctorsComponent />} />
         <Route path="/doctors" element={<DoctorsComponent />} />
+        <Route path="/user-profile" element={<UserProfile />} />
         <Route
           path="/doctor-dashboard"
           element={<DoctorDashboard  />}

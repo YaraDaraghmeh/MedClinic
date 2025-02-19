@@ -22,7 +22,9 @@ function App() {
       <UserProvider>
         <AppointmentsProvider>
           <FeedbackProvider>
-            <Router>{loading ? <Preloader /> : <Main />}</Router>
+            <UserProvider>
+              <Router>{loading ? <Preloader /> : <Main />}</Router>
+            </UserProvider>
           </FeedbackProvider>
         </AppointmentsProvider>
       </UserProvider>

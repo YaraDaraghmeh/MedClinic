@@ -59,8 +59,8 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
             className="user-image"
           />
         </a>
-        <div className="user-details">
-          <h3 className="user-name">{user?.name || "Unknown User"}</h3>
+        <div className="user-details1">
+          <h3 className="user-name1">{user?.name || "Unknown User"}</h3>
           <p className="rating">
             <FaStar className="star-icon" /> {stars} / 5
           </p>
