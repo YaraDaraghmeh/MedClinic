@@ -22,9 +22,11 @@ const LoggedInPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const handleLogout = () => {
+   
     logout();
-    setUser(null);
+    setUser(null); 
     navigate("/");
+    
   };
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
