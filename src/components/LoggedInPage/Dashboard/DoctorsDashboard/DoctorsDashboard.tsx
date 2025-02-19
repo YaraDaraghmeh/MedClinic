@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import StatisticsCards from '../DoctorsDashboard/StaticsCards';
-import PieChartComponent from './PieChartComponent';
-import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
-import { Appointment, User } from '../../../../Types';
-import LineChartComponent from './BarChartComponent';
-import TodaysAppointments from './TodaysAppointments';
-import { useAppointmentsContext } from '../../../../hooks/AppointmentContext';
+import React, { useEffect, useState } from "react";
+import { Box } from "@mui/material";
+import StatisticsCards from "../DoctorsDashboard/StaticsCards";
+import PieChartComponent from "./PieChartComponent";
+import LineChartComponent from "./BarChartComponent";
+import TodaysAppointments from "./TodaysAppointments";
+import { useAppointmentsContext } from "../../../../hooks/AppointmentContext";
+import { Appointment, User } from "../../../../Types";
 
 type ChartData = {
   day: string;
@@ -22,63 +21,64 @@ const DoctorDashboard: React.FC = () => {
   const [appointmentData, setAppointmentData] = useState<ChartData>([]);
   const [statusData, setStatusData] = useState<StatusData>([]);
   const [user, setUser] = useState<User | null>(null);
-const {appointments}= useAppointmentsContext();
-  // Single useEffect to handle both user and appointment data fetching
+  const { appointments } = useAppointmentsContext();
+
   useEffect(() => {
-    const fetchData = async () => {
-      // Fetch user from session storage
-      const userFromSession = sessionStorage.getItem('user');
-      if (userFromSession) {
-        const parsedUser = JSON.parse(userFromSession);
-        setUser(parsedUser);
+    // Fetch user from session storage
+    const userFromSession = sessionStorage.getItem("user");
+    if (userFromSession) {
+      const parsedUser = JSON.parse(userFromSession);
+      setUser(parsedUser);
+    } else {
+      console.error("⚠️ User not found in session storage");
+      return;
+    }
 
-        // Fetch appointments only if user email is available
-        if (parsedUser.email?.stringValue) {
-          try {
-            
-           
+    if (appointments.length === 0) {
+      console.warn("⚠️ No appointments available, skipping processing...");
+      return;
+    }
 
-            // Process and set appointment data
-            const processedAppointmentsPerDay = processAppointmentsPerDay(appointments);
-            const processedAppointmentStatus = processAppointmentStatus(appointments);
+    try {
+      // Process and set appointment data
+      const processedAppointmentsPerDay =
+        processAppointmentsPerDay(appointments);
+      const processedAppointmentStatus = processAppointmentStatus(appointments);
 
-            setAppointmentData(processedAppointmentsPerDay);
-            setStatusData(processedAppointmentStatus);
-          } catch (error) {
-            console.error("Error fetching appointments:", error);
-            setAppointmentData([]);
-            setStatusData([]);
-          }
-        } else {
-          console.error("User email is missing or undefined");
-        }
-      } else {
-        console.error("User not found in session storage");
-      }
-    };
+      setAppointmentData(processedAppointmentsPerDay);
+      setStatusData(processedAppointmentStatus);
+    } catch (error) {
+      setAppointmentData([]);
+      setStatusData([]);
+    }
+  }, [appointments]); // ✅ Now updates when `appointments` change
 
-    fetchData();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  // ✅ Fixed processing functions to ensure valid data
 
-  const processAppointmentsPerDay = (appointments: Appointment[]): ChartData => {
+  const processAppointmentsPerDay = (
+    appointments: Appointment[]
+  ): ChartData => {
     const groupedData: Record<string, number> = {};
 
     appointments.forEach((appointment) => {
       const rawDate = appointment.appointmentDate;
-      if (rawDate && rawDate) {
+      if (rawDate) {
         const formattedDate = rawDate.slice(0, 5); // Extract "DD-MM"
         groupedData[formattedDate] = (groupedData[formattedDate] || 0) + 1;
+      } else {
+        console.warn("⚠️ Missing appointmentDate for:", appointment);
       }
     });
 
-    const chartData = Object.entries(groupedData).map(([day, count]) => ({
+    return Object.entries(groupedData).map(([day, count]) => ({
       day,
       appointments: count,
     }));
-    return chartData;
   };
 
-  const processAppointmentStatus = (appointments: Appointment[]): StatusData => {
+  const processAppointmentStatus = (
+    appointments: Appointment[]
+  ): StatusData => {
     const statusCounts: Record<string, number> = {
       pending: 0,
       confirmed: 0,
@@ -89,36 +89,40 @@ const {appointments}= useAppointmentsContext();
       const status = appointment.status?.toLowerCase();
       if (status && statusCounts.hasOwnProperty(status)) {
         statusCounts[status]++;
+      } else {
+        console.warn("⚠️ Unknown status in appointment:", appointment);
       }
     });
 
-    const statusArr = Object.entries(statusCounts).map(([name, value]) => ({
+    return Object.entries(statusCounts).map(([name, value]) => ({
       name,
       value,
     }));
-    return statusArr;
   };
 
   return (
-    <Box sx={{ padding: '20px' }}>
-      <StatisticsCards 
+    <Box sx={{ padding: "20px" }}>
+      <StatisticsCards
         total={appointmentData.reduce((sum, day) => sum + day.appointments, 0)}
-        pending={statusData.find(s => s.name === 'pending')?.value || 0}
-        confirmed={statusData.find(s => s.name === 'confirmed')?.value || 0}
+        pending={statusData.find((s) => s.name === "pending")?.value || 0}
+        confirmed={statusData.find((s) => s.name === "confirmed")?.value || 0}
       />
 
-      <Box sx={{ display: 'flex', gap: '20px', mt: 4, flexDirection: 'row' }}>
+      <Box sx={{ display: "flex", gap: "20px", mt: 4, flexDirection: "row" }}>
         <Box sx={{ flex: 1 }}>
           <LineChartComponent data={appointmentData} />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <PieChartComponent data={statusData} colors={['#52c41a', '#faad14', '#f5222d']} />
+          <PieChartComponent
+            data={statusData}
+            colors={["#52c41a", "#faad14", "#f5222d"]}
+          />
         </Box>
       </Box>
 
       {/* Add TodaysAppointments component */}
       <Box sx={{ mt: 4 }}>
-        <TodaysAppointments  />
+        <TodaysAppointments />
       </Box>
     </Box>
   );

@@ -15,8 +15,7 @@
   margin-bottom: 20px;
   font-size: 16px;
   transition: background 0.3s ease;
-  border-radius: 4px; /* Optional: Add border-radius for rounded corners */
-}
+  border-radius: 4px; }
 
 .sidebar-link:hover {
   background-color: #34495e;
@@ -84,7 +83,7 @@
 }
 
 .collapsed-user-box img:hover {
-  transform: scale(1.05); /* Slight zoom effect */
+  transform: scale(1.05); 
 }
 
 .collapsed-user-box p {
@@ -97,6 +96,6 @@
 }
 
 .collapsed-user-box:hover p {
-  color: #1565c0; /* Dark blue text on hover */
+  color: #1565c0; 
 }
 

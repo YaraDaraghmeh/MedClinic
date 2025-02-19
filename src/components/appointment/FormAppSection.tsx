@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getDoctors } from '../../services/userService'; 
-import { createAppointment } from '../../services/appointmentService';
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 import './Appointment.css';
 import { calculateAge } from '../../functions';
+import { useAppointmentsContext } from '../../hooks/AppointmentContext';
+import { useUserContext } from '../../hooks/UserContext';
 
 interface IAppointmentForm {
   patientName: string;
@@ -34,14 +35,15 @@ const AppointmentForm: React.FC = () => {
   const [formData, setFormData] = useState<IAppointmentForm>(INITIAL_STATE);
   const [confirmation, setConfirmation] = useState(false);
   const [doctors, setDoctors] = useState<any[]>([]);
-
+const {addAppointment}= useAppointmentsContext();
+const {users}= useUserContext();
  
 
   // Fetch doctors when the component mounts
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const doctorsData = await getDoctors();
+        const doctorsData = await getDoctors(users);
         setDoctors(doctorsData);
       } catch (error) {
         toast.error("Failed to fetch doctor list. Please try again later.");
@@ -55,16 +57,15 @@ const AppointmentForm: React.FC = () => {
       console.log(userData);
 
       // Ensure the dateOfBirth is in the expected format
-      const dob = userData.dateOfBirth.stringValue;
+      const dob = userData.dateOfBirth;
       //console.log(dob)
       const age = calculateAge(dob);
       //console.log(age);
       setFormData({
         ...formData,
-        patientName: userData.name.stringValue,
-        patientContact: userData.email.stringValue,
-        patientAge: age,
-        patientGender: userData.gender.stringValue,
+        patientName: userData.name,
+        patientContact: userData.email,
+        patientGender: userData.gender,
       });
     }
   }, []);
@@ -117,9 +118,9 @@ const AppointmentForm: React.FC = () => {
       const [hour, minute] = formData.time.split(":");
       appointmentDate.setHours(parseInt(hour), parseInt(minute));
 
-      const response = await createAppointment({
+      const response = await addAppointment({
         doctorEmail: formData.doctorEmail, 
-        patientEmail: userData.email.stringValue,
+        patientEmail: userData.email,
         appointmentDate: appointmentDate, 
         appointmentTime: formData.time,
         reason: formData.symptoms,
@@ -155,8 +156,8 @@ const AppointmentForm: React.FC = () => {
         <select name="doctorEmail" value={formData.doctorEmail} onChange={handleChange} required>
           <option value="">Select</option>
           {doctors.map((doctor) => (
-            <option key={doctor.email.stringValue} value={doctor.email.stringValue}>
-              {doctor.name.stringValue}
+            <option key={doctor.email} value={doctor.email}>
+              {doctor.name}
             </option>
           ))}
         </select>

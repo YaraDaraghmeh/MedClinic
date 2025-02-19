@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteAppointment, getAppointmentsByPatient } from "../../services/appointmentService";
+import {  getAppointmentsByPatient } from "../../services/appointmentService";
 import { getDoctors } from "../../services/userService";
 import { Appointment, AppointmentStatus } from "../../types/appointment.types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Appointment.css";
+import { useAppointmentsContext } from "../../hooks/AppointmentContext";
+import { useUserContext } from "../../hooks/UserContext";
 
 const AppointmentsPage: React.FC = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [myAppointments, setMyAppointments] = useState<Appointment[]>([]);
   const [doctors, setDoctors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const {appointments}= useAppointmentsContext();
+  const {users} = useUserContext();
   const navigate = useNavigate();
-
+const {deleteAppointment}=useAppointmentsContext();
   const user = sessionStorage.getItem("user");
   const patientEmail = user ? JSON.parse(user).email.stringValue : "";
 
@@ -26,8 +30,8 @@ const AppointmentsPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const [fetchedAppointments, doctorsData] = await Promise.all([
-          getAppointmentsByPatient(patientEmail),
-          getDoctors(),
+          getAppointmentsByPatient(appointments,patientEmail),
+          getDoctors(users),
         ]);
 
         const formattedAppointments: Appointment[] = fetchedAppointments.map((appointment: any) => {
@@ -54,7 +58,7 @@ const AppointmentsPage: React.FC = () => {
           };
         });
 
-        setAppointments(formattedAppointments);
+        setMyAppointments(formattedAppointments);
         setDoctors(doctorsData);
       } catch (error) {
         console.error("Fetch error:", error);
@@ -77,7 +81,7 @@ const AppointmentsPage: React.FC = () => {
       const response = await deleteAppointment(appointmentId);
       if (response.success) {
         toast.success(response.message);
-        setAppointments((prevAppointments) =>
+        setMyAppointments((prevAppointments) =>
           prevAppointments.filter((app) => app.id !== appointmentId)
         );
       }
@@ -108,7 +112,7 @@ const AppointmentsPage: React.FC = () => {
         </div>
         <div className="appointment-count">
           <h2>Total Appointments</h2>
-          <p>{appointments.length}</p>
+          <p>{myAppointments.length}</p>
         </div>
       </div>
 
@@ -118,11 +122,11 @@ const AppointmentsPage: React.FC = () => {
 
         {loading ? (
           <p>Loading...</p>
-        ) : appointments.length === 0 ? (
+        ) : myAppointments.length === 0 ? (
           <p>No appointments found</p>
         ) : (
           <div className="appointments-list">
-            {appointments.map((appointment) => (
+            {myAppointments.map((appointment) => (
               <div key={appointment.id} className="appointment-card">
                 <div className="appointment-details">
                   <p className="doc">Doctor: {getDoctorName(appointment.doctorId!)}</p>

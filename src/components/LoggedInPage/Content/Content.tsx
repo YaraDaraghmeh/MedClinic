@@ -18,6 +18,10 @@ import DoctorPationts from "../Dashboard/DoctorsDashboard/DoctorPationts";
 import FeedbackViewer from "../Dashboard/ManagerDashboard/Feedbacks/FeedbackViewer";
 import UserProfile from "../UserAccountPages/userProfile";
 import { User } from "../../../Types";
+import FormAppSection from "../../appointment/FormAppSection";
+import TodaysAppointments from "../Dashboard/DoctorsDashboard/TodaysAppointments";
+import AppointmentsPage1 from "../../appointment/AppointmentsPage";
+import ShowDoctors from "../../appointment/ShowDoctors";
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -60,16 +64,26 @@ const Content: React.FC<ContentProps> = ({ isCollapsed, user }) => {
         />
         <Route
           path="/doctor-dashboard-table"
-          element={<DoctorAppointmentsTable user={user} />}
+          element={<DoctorAppointmentsTable />}
         />
+        <Route path="make-appointment"  element={<FormAppSection/>}/>
         <Route
           path="/Doctor-Patients"
           element={<DoctorPationts doctor={user} />}
-        />
+        /> <Route
+        path="/my-appointmentss"
+        element={<AppointmentsPage1/>}
+      /> <Route
+      path="/show-doctors"
+      element={<ShowDoctors/>}
+    />
+      <Route path= "/todays-patients" element={<TodaysAppointments/>} />
+      <Route path="/all-appointmentsD" element={<DoctorAppointmentsTable />} />
         <Route
           path="*"
           element={<ErrorPage errorMessage="Page not found!" />}
         />
+         
       </Routes>
       <Footer />
     </Box>

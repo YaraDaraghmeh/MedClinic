@@ -1,36 +1,22 @@
-
 import React, { useEffect, useState } from 'react';
-import { getDoctors } from '../../services/userService'
+import { getDoctors } from '../../services/userService';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './doctor.css'; 
-
-interface Doctor {
-  id: string;
-  name: string;
-  email: string;
-  specialization?: string;
-  imageUrl: string;
-}
+import { useUserContext } from '../../hooks/UserContext';
+import { User } from '../../Types';
 
 const DoctorsPage: React.FC = () => {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [doctors, setDoctors] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const { users } = useUserContext();
   
   const fetchDoctors = async () => {
     try {
-      const response = await getDoctors();
-      const formattedDoctors: Doctor[] = response.map((doc: any) => ({
-        id: doc.id,
-        name: doc.name.stringValue,
-        email: doc.email.stringValue,
-        specialization: doc.specialization?.stringValue,
-        imageUrl: doc.imageUrl.stringValue
-      }));
-      setDoctors(formattedDoctors);
+      const response = await getDoctors(users);
+      setDoctors(response);
     } catch (error) {
-      toast.error('failed to load doctors');
+      toast.error('Failed to load doctors');
     } finally {
       setLoading(false);
     }
@@ -41,30 +27,28 @@ const DoctorsPage: React.FC = () => {
   }, []);
 
   return (
-
     <div className="doctors-container">
-      <h1> Doctors</h1>
-       
+      <h1>Doctors</h1>
       <ToastContainer position="top-left" />
 
       {loading ? (
-        <div className="loading">loading</div>
+        <div className="loading">Loading...</div>
       ) : doctors.length === 0 ? (
-        <div className="no-data">there is no doctors</div>
+        <div className="no-data">There are no doctors available</div>
       ) : (
         <div className="doctors-grid">
           {doctors.map((doctor) => (
-            <div key={doctor.id} className="doctor-card">
+            <div key={doctor.email} className="doctor-card">
               <img 
-                src={doctor.imageUrl} 
+                src={doctor.imageUrl || '/default-doctor.png'} 
                 alt={doctor.name} 
                 className="doctor-image"
               />
               <div className="doctor-info">
                 <p className="specialization">
-                  * {doctor.specialization || 'general'}
+                  {doctor.specialization || 'General Practitioner'}
                 </p>
-                <h2>Dr.{doctor.name}</h2>
+                <h2>Dr. {doctor.name}</h2>
                 <p className="email">{doctor.email}</p>
               </div>
             </div>

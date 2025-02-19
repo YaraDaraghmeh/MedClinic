@@ -147,8 +147,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
             <EventAvailableOutlined className="sidebar-icon" /> {!isCollapsed && "Today's Patients"}
           </Link>
           <Link
-            to="/all-appointments"
-            className={`sidebar-link ${isActive('/all-appointments') ? 'active' : ''}`}
+            to="/all-appointmentsD"
+            className={`sidebar-link ${isActive('/all-appointmentsD') ? 'active' : ''}`}
           >
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'All Appointments'}
           </Link>
@@ -176,7 +176,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
             <PeopleOutlined className="sidebar-icon" /> {!isCollapsed && 'Show Doctors'}
           </Link>
           <Link
-            to="/my-appointments"
+            to="/my-appointmentss"
             className={`sidebar-link ${isActive('/my-appointments') ? 'active' : ''}`}
           >
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'My Appointments'}

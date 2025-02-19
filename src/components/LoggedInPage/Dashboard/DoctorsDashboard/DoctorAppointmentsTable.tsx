@@ -2,15 +2,15 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Table, Tag, Space, Button, Typography, Modal, Form, Input, DatePicker, TimePicker, Select, Row, Col } from 'antd';
 import moment from 'moment';
 import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
-import { Appointment, User } from '../../../../Types';
+import { Appointment } from '../../../../Types';
 import { useAppointmentsContext } from '../../../../hooks/AppointmentContext';
+import { useLoggedInUser } from '../../../../hooks/LoggedinUserContext';
 
-interface DoctorAppointmentsTableProps {
-  user: User;
-}
 
-const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user }) => {
-  const {appointments,addAppointment,deleteAppointment}= useAppointmentsContext();
+
+const DoctorAppointmentsTable: React.FC = () => {
+  const {loggedInUser}= useLoggedInUser();
+  const {appointments,updateAppointment,deleteAppointment}= useAppointmentsContext();
   const [appointmentsbydoc, setAppointmentsbydoc] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   // Filter states
@@ -21,7 +21,7 @@ const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user 
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
   const [form] = Form.useForm();
 
-  const doctorEmail = user?.email;
+  const doctorEmail = loggedInUser?.email;
 
   useEffect(() => {
     const loadAppointments = async () => {
@@ -91,47 +91,45 @@ const DoctorAppointmentsTable: React.FC<DoctorAppointmentsTableProps> = ({ user 
 
   const handleEditSubmit = async () => {
     try {
-      const values = await form.validateFields();
+      const values = await form.validateFields(); // Validate form inputs
       
-      // Delete the old appointment
-      await deleteAppointment(editingAppointment!.id);
-
-      // Create a new appointment with updated data
-      
-      const newAppointmentData = {
-        doctorEmail: doctorEmail,
+      // Prepare the updated data object
+      const updatedData = {
+        doctorEmail: doctorEmail!, // Ensure the logged-in user's email is passed
         patientEmail: editingAppointment!.patientEmail,
-        appointmentDate: values.appointmentDate.toDate(),
-        appointmentTime: values.appointmentTime.format("HH:mm"),
+        appointmentDate: values.appointmentDate.format('YYYY-MM-DD'), // Format to match Firestore
+        appointmentTime: values.appointmentTime.format('HH:mm'), // Format to match Firestore
         reason: editingAppointment!.reason,
         status: values.status,
       };
-
-      await addAppointment(newAppointmentData);
-      
-      // Refresh the appointments list
-      const updatedAppointments = await getAppointmentsByDoctor(appointments,doctorEmail);
+  
+      // Update the appointment using the context's method
+      await updateAppointment(editingAppointment!.id, updatedData);
+  
+      // Refresh the appointments list after updating
+      const updatedAppointments = getAppointmentsByDoctor(appointments, doctorEmail!);
       setAppointmentsbydoc(updatedAppointments);
-
+  
+      // Reset editing state and form
       setEditingAppointment(null);
       form.resetFields();
     } catch (error) {
       console.error('Error updating appointment:', error);
     }
   };
-
+  
   const handleCancelEdit = () => {
     setEditingAppointment(null);
     form.resetFields();
   };
 
   const columns = [
-    { title: 'Patient', dataIndex: ['patientEmail', 'stringValue'], key: 'patient' },
-    { title: 'Date', dataIndex: ['appointmentDate', 'stringValue'], key: 'date' },
-    { title: 'Time', dataIndex: ['appointmentTime', 'stringValue'], key: 'time' },
+    { title: 'Patient', dataIndex: ['patientEmail'], key: 'patient' },
+    { title: 'Date', dataIndex: ['appointmentDate'], key: 'date' },
+    { title: 'Time', dataIndex: ['appointmentTime'], key: 'time' },
     {
       title: 'Status',
-      dataIndex: ['status', 'stringValue'],
+      dataIndex: ['status'],
       key: 'status',
       render: (status: string) => (
         <Tag color={status === 'confirmed' ? 'green' : status === 'pending' ? 'gold' : 'red'}>

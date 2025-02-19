@@ -22,7 +22,7 @@ const LoggedInPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const handleLogout = () => {
-   
+  
     logout();
     setUser(null); 
     navigate("/");
