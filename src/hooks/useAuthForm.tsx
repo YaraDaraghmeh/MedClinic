@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { useUserContext } from './UserContext'; 
 import { toast } from 'react-toastify';
-
+import { useNavigate } from 'react-router-dom';
+import { useLoggedInUser } from './LoggedinUserContext';
 const useAuth = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -15,7 +16,8 @@ const useAuth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [active, setActive] = useState(true);
   const { addUser, authenticateUser } = useUserContext();
-
+  const {login}= useLoggedInUser();
+  let navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
@@ -62,7 +64,7 @@ const useAuth = () => {
           password: formData.password,
           role: 'patient',
           gender: formData.gender,
-          imageUrl: formData.imageUrl || 'default_image_url',
+          imageUrl: formData.imageUrl || 'https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg',
         };
 
         await addUser(userData);
@@ -85,9 +87,9 @@ const useAuth = () => {
         if (!userProfile) {
           throw new Error('Invalid email or password');
         }
-
-        sessionStorage.setItem('user', JSON.stringify(userProfile));
+       login(userProfile);
         toast.success('User logged in successfully');
+        navigate('/dashboard');
         setFormData({
           email: '',
           password: '',
@@ -96,6 +98,7 @@ const useAuth = () => {
           gender: '',
           imageUrl: '',
         });
+     
       } catch (error: any) {
         toast.error(error.message);
       }

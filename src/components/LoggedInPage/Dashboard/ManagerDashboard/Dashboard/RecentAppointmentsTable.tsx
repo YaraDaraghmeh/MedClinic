@@ -9,9 +9,10 @@ import {
   Paper,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import { Appointment } from "../../../../../Types";
 
 interface RecentAppointmentsTableProps {
-  appointments: any[];
+  appointments: Appointment[];
 }
 
 const RecentAppointmentsTable: React.FC<RecentAppointmentsTableProps> = ({
@@ -95,7 +96,7 @@ const RecentAppointmentsTable: React.FC<RecentAppointmentsTableProps> = ({
                   color: "#333",
                 }}
               >
-                {appointment.patientEmail?.stringValue || "N/A"}
+                {appointment.patientEmail || "N/A"}
               </TableCell>
               <TableCell
                 sx={{
@@ -104,7 +105,7 @@ const RecentAppointmentsTable: React.FC<RecentAppointmentsTableProps> = ({
                   color: "#333",
                 }}
               >
-                {appointment.doctorEmail?.stringValue || "N/A"}
+                {appointment.doctorEmail || "N/A"}
               </TableCell>
               <TableCell
                 sx={{
@@ -113,7 +114,7 @@ const RecentAppointmentsTable: React.FC<RecentAppointmentsTableProps> = ({
                   color: "#333",
                 }}
               >
-                {appointment.appointmentDate?.stringValue || "N/A"}
+                {appointment.appointmentDate || "N/A"}
               </TableCell>
               <TableCell
                 sx={{
@@ -122,7 +123,7 @@ const RecentAppointmentsTable: React.FC<RecentAppointmentsTableProps> = ({
                   color: "#333",
                 }}
               >
-                {appointment.appointmentTime?.stringValue || "N/A"}
+                {appointment.appointmentTime || "N/A"}
               </TableCell>
               <TableCell
                 sx={{
@@ -131,7 +132,7 @@ const RecentAppointmentsTable: React.FC<RecentAppointmentsTableProps> = ({
                   color: "#333",
                 }}
               >
-                {appointment.status?.stringValue || "N/A"}
+                {appointment.status || "N/A"}
               </TableCell>
             </motion.tr>
           ))}

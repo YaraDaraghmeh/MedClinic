@@ -4,18 +4,18 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import { useNavigate } from 'react-router-dom';  
 import useAuth from '../../hooks/useAuthForm';
+import { useLoggedInUser } from '../../hooks/LoggedinUserContext';
 
 const SignInComponent = () => {
   const { formData, isSignUp, active, handleChange, handleSubmit, handleToggleMode } = useAuth();
-  const navigate = useNavigate();  
+  const {loggedInUser}= useLoggedInUser();
+    const navigate = useNavigate();  
 
   useEffect(() => {
-    const user = sessionStorage.getItem('user');
-    if (user) {
-      navigate('/error');  
+    if (loggedInUser) {
+      toast.warning("you are already logged in 😡");
     }
-  }, [navigate]);
-
+  },[loggedInUser,navigate]);
   const defaultImage = 'https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg';
 
   return (

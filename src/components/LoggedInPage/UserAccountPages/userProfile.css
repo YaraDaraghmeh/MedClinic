@@ -81,6 +81,32 @@ max-width:1000px;
   color: #ffffff; /* White text for headers */
   font-weight: 600;
 }
+.manager-fun-section {
+  text-align: center;
+  margin-top: 20px;
+  padding: 80px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.manager-fun-section h3 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.manager-fun-section p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.funny-gif {
+  width: 250px;
+  height: auto;
+  border-radius: 10px;
+  justify-self: center;
+}
 
 .appointments-table td,
 .feedback-table td {

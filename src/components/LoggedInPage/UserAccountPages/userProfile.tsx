@@ -10,6 +10,8 @@ import { useUserContext } from "../../../hooks/UserContext";
 import { useAppointmentsContext } from "../../../hooks/AppointmentContext";
 import { useFeedback } from "../../../hooks/FeedbackContext";
 import ErrorPage from "../../ErrorPage/ErrorPage";
+import { useLoggedInUser } from "../../../hooks/LoggedinUserContext";
+
 
 const UserProfile = () => {
   const {users} = useUserContext();
@@ -23,8 +25,13 @@ const UserProfile = () => {
   const [error, setError] = useState<string>("");
   const [userfeedbacks, setuserFeedbacks] = useState<Feedback[]>([]);
   const [averageRating, setAverageRating] = useState<string>("0.0");
+const {loggedInUser}= useLoggedInUser();
 
   useEffect(() => {
+    if(!loggedInUser){
+navigate("/");
+return;
+    }
     const fetchData = async () => {
       try {
         const queryParams = new URLSearchParams(location.search);
@@ -79,7 +86,7 @@ const UserProfile = () => {
           <p>Gender: {user!.gender}</p>
           <p>Role: {user!.role}</p>
           <p>Date of Birth: {user!.dateOfBirth}</p>
-          <p>Average Rating: {averageRating}</p>
+        {loggedInUser?.role=='patient'&&  <p>Average Rating: {averageRating}</p>}
         </div>
       </div>
 
@@ -112,6 +119,17 @@ const UserProfile = () => {
           )}
         </div>
       )}
+{loggedInUser!.role === "manager" && (
+  <div className="manager-fun-section">
+    <h3>Hey Manager!</h3>
+    <p>Relax, boss! Everything is under control... (probably) 😎</p>
+    <img 
+      src="https://media3.giphy.com/media/VbnUQpnihPSIgIXuZv/200w.gif?cid=6c09b9529k6caewwt0grbqmm7jg72tu7f9hx7tixd7n2nxhn&ep=v1_gifs_search&rid=200w.gif&ct=g" 
+      alt="Funny manager gif"
+      className="funny-gif"
+    />
+  </div>
+)}
 
       {user!.role !== "manager" && user!.role !== "doctor" && (
         <div className="feedback-section">
