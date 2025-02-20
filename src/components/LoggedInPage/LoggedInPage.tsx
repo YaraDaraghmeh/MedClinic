@@ -17,7 +17,7 @@ import Main from "../main/main";
 import { useLoggedInUser } from "../../hooks/LoggedinUserContext";
 
 const LoggedInPage: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
  const {loggedInUser}= useLoggedInUser();
   
 useEffect(()=>{
