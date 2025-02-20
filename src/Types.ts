@@ -27,6 +27,8 @@ export interface Appointment {
   appointmentTime: string ;
   reason:  string ;
   status:  "pending" | "confirmed" | "completed" | "canceled" ;
+  note?: string;
+  documents?: string[];
 }export interface Feedback {
   id: string;
   userEmail:  string ;

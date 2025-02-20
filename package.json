@@ -12,6 +12,7 @@
     "email": "email dev --dir src/emails "
   },
   "dependencies": {
+    "@ant-design/icons": "^5.6.1",
     "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",

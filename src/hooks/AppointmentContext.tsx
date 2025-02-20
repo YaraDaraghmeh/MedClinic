@@ -23,6 +23,8 @@ interface AppointmentsContextType {
       appointmentTime: string;
       reason: string;
       status: "pending" | "confirmed" | "completed" | "canceled";
+      note?:string;
+      documents?:string[]
     }>
   ) => Promise<void>;
   deleteAppointment: (id: string) => Promise<void>;

@@ -138,9 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
 
       {loggedInUser?.role === 'doctor' && (
         <div className="sidebar-links">
-          <Link  to="/doctor-dashboard" state={{ loggedInUser }}  className="sidebar-link">
-            <EventAvailableOutlined className="sidebar-icon" />  {!isCollapsed && "Statics and Facts"}
-         </Link>
+         
           <Link
             to="/todays-patients"
             className={`sidebar-link ${isActive('/todays-patients') ? 'active' : ''}`}

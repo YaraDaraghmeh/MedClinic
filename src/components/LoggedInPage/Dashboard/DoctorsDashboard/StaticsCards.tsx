@@ -12,16 +12,21 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ title, value, gradientFrom, gradientTo, icon }) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center bg-gradient-to-r ${gradientFrom} ${gradientTo} rounded-xl shadow-lg p-6 text-white relative hover:shadow-xl transition-shadow duration-300`}
+    className={`  !flex !flex-col !items-center !justify-center !bg-gradient-to-r ${gradientFrom} ${gradientTo} !rounded-2xl !p-6 text-white relative hover:shadow-2xl transition-all duration-300`}
     >
-      <div className="absolute top-4 right-4 text-white opacity-80 hover:opacity-100 transition-opacity duration-300">
-        {icon}
-      </div>
-      <h3 className="text-lg font-medium">{title}</h3>
-      <p className="text-4xl font-bold mt-2">{value}</p>
+  <div className="absolute top-2 right-2 text-white opacity-95 hover:opacity-100 transition-opacity duration-300 !text-4xl">
+  {icon}
+</div>
+
+      <h3 className="!text-2xl !font-bold !mt-4">{title}</h3>
+      <p className="!text-4xl
+      
+       !font-extrabold !mt-3 ">{value}</p>
     </div>
   );
 };
+
+
 
 interface StatisticsCardsProps {
   total: number;
@@ -31,27 +36,27 @@ interface StatisticsCardsProps {
 
 const StatisticsCards: React.FC<StatisticsCardsProps> = ({ total, pending, confirmed }) => {
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="flex flex-wrap gap-4 justify-center">
       <StatCard
         title="Total Appointments"
         value={total}
         gradientFrom="from-blue-500"
         gradientTo="to-blue-600"
-        icon={<BsFillPeopleFill size={32} />}
+        icon={<BsFillPeopleFill size={24} />}
       />
       <StatCard
         title="Pending Appointments"
         value={pending}
         gradientFrom="from-yellow-400"
         gradientTo="to-yellow-500"
-        icon={<BsClockHistory size={32} />}
+        icon={<BsClockHistory size={24} />}
       />
       <StatCard
         title="Confirmed Appointments"
         value={confirmed}
         gradientFrom="from-green-400"
         gradientTo="to-green-500"
-        icon={<BsCheckCircleFill size={32} />}
+        icon={<BsCheckCircleFill size={24} />}
       />
     </div>
   );

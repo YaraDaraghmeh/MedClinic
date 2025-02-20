@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
-  Paper,
-  Typography,
-  CircularProgress,
-  Box
-} from '@mui/material';
 import { User, Appointment } from '../../../../Types';
 import { getAppointmentsByDoctor } from '../../../../services/appointmentService';
 import { getUserByEmail } from '../../../../services/userService';
 import { useUserContext } from '../../../../hooks/UserContext';
 import { useAppointmentsContext } from '../../../../hooks/AppointmentContext';
+import { CircularProgress, Box, Typography } from '@mui/material';
+import { FaUser } from 'react-icons/fa'; // For the profile icon
 
 type PatientData = {
   name: string;
@@ -42,22 +32,24 @@ const PatientsTable = ({ doctor }: { doctor: User }) => {
   const [patients, setPatients] = useState<PatientData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const {appointments}= useAppointmentsContext();
-const {users} = useUserContext();
+  const { appointments } = useAppointmentsContext();
+  const { users } = useUserContext();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError('');
-        
+
         if (!doctor?.email) {
           throw new Error('Doctor email not found');
         }
+
         // Get unique patient emails
         const patientEmails = Array.from(
           new Set(
             appointments
-              .map(a => a.patientEmail)
+              .map((a) => a.patientEmail)
               .filter(Boolean) as string[]
           )
         );
@@ -66,9 +58,9 @@ const {users} = useUserContext();
         const patientsData = await Promise.all(
           patientEmails.map(async (email) => {
             try {
-              const patient = await getUserByEmail(users,email);
+              const patient = await getUserByEmail(users, email);
               const patientAppointments = appointments.filter(
-                a => a.patientEmail === email
+                (a) => a.patientEmail === email
               );
 
               return {
@@ -77,12 +69,12 @@ const {users} = useUserContext();
                 gender: patient.gender || 'N/A',
                 age: calculateAge(patient.dateOfBirth || ''),
                 totalAppointments: patientAppointments.length,
-                upcoming: patientAppointments.filter(a => 
+                upcoming: patientAppointments.filter((a) =>
                   ['pending', 'confirmed'].includes(a.status || '')
                 ).length,
-                completed: patientAppointments.filter(a => 
-                  a.status === 'completed'
-                ).length
+                completed: patientAppointments.filter(
+                  (a) => a.status === 'completed'
+                ).length,
               };
             } catch (error) {
               console.error(`Error fetching patient ${email}:`, error);
@@ -128,37 +120,45 @@ const {users} = useUserContext();
   }
 
   return (
-    <TableContainer component={Paper} sx={{ mt: 4, boxShadow: 3 }}>
-      <Typography variant="h6" sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
-        Patients of Dr. {doctor.name}
-      </Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Gender</TableCell>
-            <TableCell>Age</TableCell>
-            <TableCell>Total Appointments</TableCell>
-            <TableCell>Upcoming</TableCell>
-            <TableCell>Completed</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+    <div className="mx-2 !my-8 shadow-lg !rounded-lg !bg-white min-h-[400px]">
+      <div className="bg-blue-400 p-4 !rounded-t-lg">
+        <Typography variant="h6" className="text-white font-semibold">
+          Patients of Dr. {doctor.name}
+        </Typography>
+      </div>
+      <table className="  !border-collapse">
+        <thead className="bg-gray-100 !text-gray-600">
+          <tr>
+            <th className="p-2 text-left">Name</th>
+            <th className="p-2 text-left">Email</th>
+            <th className="p-2 text-left">Gender</th>
+            <th className="p-2 text-left">Age</th>
+            <th className="p-2 text-left">Total Appointments</th>
+            <th className="p-2 text-left">Upcoming</th>
+            <th className="p-2 text-left">Completed</th>
+          </tr>
+        </thead>
+        <tbody>
           {patients.map((patient) => (
-            <TableRow key={patient.email}>
-              <TableCell>{patient.name}</TableCell>
-              <TableCell>{patient.email}</TableCell>
-              <TableCell>{patient.gender}</TableCell>
-              <TableCell>{patient.age}</TableCell>
-              <TableCell>{patient.totalAppointments}</TableCell>
-              <TableCell>{patient.upcoming}</TableCell>
-              <TableCell>{patient.completed}</TableCell>
-            </TableRow>
+            <tr
+              key={patient.email}
+              className="hover:bg-gray-50 cursor-pointer"
+              onClick={() => window.location.href = `/user-profile?email=${patient.email}`}
+            >
+              <td className="p-2 flex items-center">
+                <FaUser className="mr-2" /> {patient.name}
+              </td>
+              <td className="p-2">{patient.email}</td>
+              <td className="p-2">{patient.gender}</td>
+              <td className="p-2">{patient.age}</td>
+              <td className="p-2">{patient.totalAppointments}</td>
+              <td className="p-2">{patient.upcoming}</td>
+              <td className="p-2">{patient.completed}</td>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </tbody>
+      </table>
+    </div>
   );
 };
 
