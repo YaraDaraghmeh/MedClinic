@@ -43,18 +43,46 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch appointments and listen for real-time updates
   useEffect(() => {
-    const appointmentsCollection = collection(db, "appointments"); // Reference to the "appointments" collection
-
-    const unsubscribe = onSnapshot(appointmentsCollection, (snapshot) => {
+    const appointmentsCollection = collection(db, "appointments");
+  
+    const unsubscribe = onSnapshot(appointmentsCollection, async (snapshot) => {
       const fetchedAppointments = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as unknown as Appointment[];
+  
       setAppointments(fetchedAppointments);
+  
+      // Get today's date in UTC format without time
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+  
+      // Find appointments that have passed their date and are not canceled
+      const batch = writeBatch(db);
+      let hasUpdates = false;
+  
+      fetchedAppointments.forEach((appointment) => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        if (
+          appointmentDate < today &&
+          appointment.status !== "canceled" &&
+          appointment.status !== "completed"
+        ) {
+          const appointmentDoc = doc(db, "appointments", appointment.id);
+          batch.update(appointmentDoc, { status: "canceled" });
+          hasUpdates = true;
+        }
+      });
+  
+      // Commit the batch update if there are changes
+      if (hasUpdates) {
+        await batch.commit();
+      }
     });
-
+  
     return () => unsubscribe();
   }, []);
+  
 
   // Add a new appointment
   const addAppointment = async (appointmentData: {

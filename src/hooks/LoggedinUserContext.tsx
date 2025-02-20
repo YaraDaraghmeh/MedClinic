@@ -22,20 +22,20 @@ export const LoggedInUserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Save loggedUser to sessionStorage when it changes
   useEffect(() => {
-    if (loggedUser) {
-      sessionStorage.setItem("user", JSON.stringify(loggedUser));
-    } else {
-      sessionStorage.removeItem("user");
-    }
-  }, [loggedUser]);
+    const storedUser= sessionStorage.getItem("user")
+    if (storedUser) {
+      setLoggedUser(JSON.parse(storedUser)) } 
+  }, []);
 
   // Function to log in the user
   const login = (userData: User) => {
+
     setLoggedUser(userData);
   };
 
   // Function to log out the user
   const logout = () => {
+    sessionStorage.removeItem("user");
     setLoggedUser(null);
   };
 
