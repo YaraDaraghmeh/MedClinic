@@ -5,13 +5,13 @@ import { useAppointmentsContext } from "../../../../hooks/AppointmentContext";
 import { useFeedback } from "../../../../hooks/FeedbackContext";
 import { useLoggedInUser } from "../../../../hooks/LoggedinUserContext";
 import { Appointment } from "../../../../Types";
-import "./PatientDashboard.css";
 import AppointmentsChart from "./Dashboard/AppointmentsChart";
 import DashboardHeader from "./Dashboard/DashboardHeader";
 import FeedbackModal from "./Dashboard/FeedbackModal";
 import FeedbackSection from "./Dashboard/FeedbackSection";
 import StatsGrid from "./Dashboard/StatsGrid";
 import UpcomingAppointments from "./Dashboard/UpcomingAppointments";
+import './PatientDashboared.css';
 
 
 const PatientDashboard: React.FC = () => {
