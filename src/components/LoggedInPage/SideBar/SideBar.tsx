@@ -146,7 +146,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
             <EventAvailableOutlined className="sidebar-icon" /> {!isCollapsed && "Today's Patients"}
           </Link>
           <Link
-            to="/all-appointmentsD"
+            to="/doctor-dashboard-table"
             className={`sidebar-link ${isActive('/all-appointmentsD') ? 'active' : ''}`}
           >
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'All Appointments'}
@@ -154,7 +154,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           <Link to="/Doctor-Patients" className="sidebar-link">
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'Patients List'}
           </Link>
-          <Link to="/doctor-dashboard-table" className="sidebar-link">
+          <Link to="/DoctorsReports" className="sidebar-link">
             <ReceiptOutlined className="sidebar-icon" /> {!isCollapsed && 'Reports'}
           </Link>
         </div>

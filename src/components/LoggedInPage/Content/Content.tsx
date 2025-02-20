@@ -25,6 +25,7 @@ import ShowDoctors from "../../appointment/ShowDoctors";
 import { useLoggedInUser } from "../../../hooks/LoggedinUserContext";
 import { useUserContext } from "../../../hooks/UserContext";
 import { getDoctors } from "../../../services/userService";
+import Reports from "../Dashboard/DoctorsDashboard/Reports";
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -32,7 +33,7 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
   const { loggedInUser } = useLoggedInUser();
-  const {users}= useUserContext();
+  const { users } = useUserContext();
   return (
     <Box
       sx={{
@@ -63,27 +64,16 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
         <Route path="/doctors" element={<DoctorsComponent />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
-        <Route
-          path="/doctor-dashboard-table"
-          element={<DoctorAppointmentsTable />}
-        />
+        <Route path="/doctor-dashboard-table" element={<DoctorAppointmentsTable />}/>
         <Route path="make-appointment" element={<FormAppSection doctors={getDoctors(users)} />} />
-        <Route
-          path="/Doctor-Patients"
-          element={<DoctorPationts doctor={loggedInUser!} />}
-        />{" "}
+        <Route path="/Doctor-Patients" element={<DoctorPationts doctor={loggedInUser!} />}/>
         <Route path="/my-appointmentss" element={<AppointmentsPage1 />} />{" "}
         <Route path="/show-doctors" element={<ShowDoctors />} />
         <Route path="/todays-patients" element={<TodaysAppointments />} />
-        <Route
-          path="/all-appointmentsD"
-          element={<DoctorAppointmentsTable />}
-        />
-        <Route
-          path="*"
-          element={<ErrorPage errorMessage="Page not found!" />}
-        />
+        <Route path="/DoctorsReports"element={<Reports />} />
+        <Route path="*" element={<ErrorPage errorMessage="Page not found!" />}/>
       </Routes>
+
       <Footer />
     </Box>
   );
