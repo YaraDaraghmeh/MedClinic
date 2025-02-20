@@ -3,13 +3,13 @@ import ManagerDashboard from "./ManagerDashboard/Dashboard/ManagerDashboard";
 import DoctorDashboard from "./DoctorsDashboard/DoctorsDashboard";
 import PatientDashboard from "./PatientDashboard.tsx/PatientDashboard";
 import { User } from "../../../Types";
+import { useLoggedInUser } from "../../../hooks/LoggedinUserContext";
 
-interface DashboardProps {
-  user: User;
-}
 
-const Dashboard: React.FC<DashboardProps> = ({ user }) => {
-  switch (user.role) {
+
+const Dashboard: React.FC = () => {
+  const {loggedInUser}=useLoggedInUser();
+  switch (loggedInUser?.role) {
     case "manager":
       return <ManagerDashboard />;
     case "doctor":

@@ -13,24 +13,25 @@ import {
 import LogoutDialog from '../LogoutDialog/LogoutDialog'; 
 import '../LoggedInpage.css';
 import { User } from '../../../Types';
+import { useLoggedInUser } from '../../../hooks/LoggedinUserContext';
+import LoggedInPage from '../LoggedInPage';
 
 interface SidebarProps {
   isCollapsed: boolean;
   toggleSidebar: () => void;
-  user: User;
-  onLogout: () => void;
+ 
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onLogout }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
 
+  const {logout,loggedInUser}= useLoggedInUser();
+
   const handleLogout = () => {
     // Clear user data from storage
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
-
+   logout();
     // Close the confirmation dialog
     setOpenLogoutDialog(false);
 
@@ -73,15 +74,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
           fontWeight: 600,
         }}
       >
-        {user?.role ? `${user.role} Dashboard` : 'Dashboard'}
+        {loggedInUser?.role ? `${loggedInUser.role} Dashboard` : 'Dashboard'}
       </Typography>
 
       {/* Profile Image and Info */}
-      {!isCollapsed && user && (
+      {!isCollapsed && loggedInUser && (
         <Box sx={{ textAlign: 'center', marginBottom: '20px' }}>
        <Avatar
-  src={user.imageUrl}
-  alt={user.name}
+  src={loggedInUser.imageUrl}
+  alt={loggedInUser.name}
  className="userImage"
   sx={{
     borderRadius: "50%",
@@ -93,7 +94,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
 />
 
           <Typography variant="body2" sx={{ fontFamily: 'Poppins, sans-serif', marginTop: '5px', fontWeight: '200' }}>
-            {user.name || 'User'}  
+            {loggedInUser.name || 'User'}  
           </Typography>
         </Box>
       )}
@@ -112,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
       </div>
 
       {/* Role-Based Navigation */}
-      {user?.role === 'manager' && (
+      {loggedInUser?.role === 'manager' && (
         <div className="sidebar-links">
           <Link
             to="/doctors"
@@ -135,9 +136,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
         </div>
       )}
 
-      {user?.role === 'doctor' && (
+      {loggedInUser?.role === 'doctor' && (
         <div className="sidebar-links">
-          <Link  to="/doctor-dashboard" state={{ user }}  className="sidebar-link">
+          <Link  to="/doctor-dashboard" state={{ loggedInUser }}  className="sidebar-link">
             <EventAvailableOutlined className="sidebar-icon" />  {!isCollapsed && "Statics and Facts"}
          </Link>
           <Link
@@ -161,7 +162,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, user, onL
         </div>
       )}
 
-      {user?.role === 'patient' && (
+      {loggedInUser?.role === 'patient' && (
         <div className="sidebar-links">
           <Link
             to="/make-appointment"

@@ -2,12 +2,14 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Box, Avatar } from '@mui/material';
 import { getFirstTwoWords } from '../../../functions';
 import { User } from '../../../Types';
+import { useLoggedInUser } from '../../../hooks/LoggedinUserContext';
 interface HeaderProps {
   isCollapsed: boolean;
-  user: User; 
+ 
 }
 
-const Header: React.FC<HeaderProps> = ({ isCollapsed, user }) => {
+const Header: React.FC<HeaderProps> = ({ isCollapsed }) => {
+ const {loggedInUser}= useLoggedInUser();
   return (
     <AppBar
       position="fixed"
@@ -29,14 +31,14 @@ const Header: React.FC<HeaderProps> = ({ isCollapsed, user }) => {
         </Typography>
 
         {/* Show User Image and Username when Sidebar is Collapsed */}
-        {isCollapsed && user && (
+        {isCollapsed && loggedInUser && (
   <Box className="collapsed-user-box">
     <Avatar
-      src={user.imageUrl} 
-      alt={user.name}
+      src={loggedInUser.imageUrl} 
+      alt={getFirstTwoWords(loggedInUser.name)}
     /> 
     <Typography variant="body1">
-      Hello there, {getFirstTwoWords(user.name)}
+      Hello there, {getFirstTwoWords(getFirstTwoWords(loggedInUser.name))}
     </Typography>
   </Box>
 )}

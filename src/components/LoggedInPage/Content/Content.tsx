@@ -22,13 +22,14 @@ import FormAppSection from "../../appointment/FormAppSection";
 import TodaysAppointments from "../Dashboard/DoctorsDashboard/TodaysAppointments";
 import AppointmentsPage1 from "../../appointment/AppointmentsPage";
 import ShowDoctors from "../../appointment/ShowDoctors";
+import { useLoggedInUser } from "../../../hooks/LoggedinUserContext";
 
 interface ContentProps {
   isCollapsed: boolean;
-  user: User;
 }
 
-const Content: React.FC<ContentProps> = ({ isCollapsed, user }) => {
+const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
+  const { loggedInUser } = useLoggedInUser();
   return (
     <Box
       sx={{
@@ -52,38 +53,33 @@ const Content: React.FC<ContentProps> = ({ isCollapsed, user }) => {
             <ErrorPage errorMessage="You Don't have access to this page" />
           }
         />
-        <Route path="/dashboard" element={<Dashboard user={user} />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/all-appointments" element={<AppointmentsPage />} />
         <Route path="/feedbacks" element={<FeedbackViewer />} />
         <Route path="/doctors" element={<DoctorsComponent />} />
         <Route path="/doctors" element={<DoctorsComponent />} />
         <Route path="/user-profile" element={<UserProfile />} />
-        <Route
-          path="/doctor-dashboard"
-          element={<DoctorDashboard  />}
-        />
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route
           path="/doctor-dashboard-table"
           element={<DoctorAppointmentsTable />}
         />
-        <Route path="make-appointment"  element={<FormAppSection/>}/>
+        <Route path="make-appointment" element={<FormAppSection />} />
         <Route
           path="/Doctor-Patients"
-          element={<DoctorPationts doctor={user} />}
-        /> <Route
-        path="/my-appointmentss"
-        element={<AppointmentsPage1/>}
-      /> <Route
-      path="/show-doctors"
-      element={<ShowDoctors/>}
-    />
-      <Route path= "/todays-patients" element={<TodaysAppointments/>} />
-      <Route path="/all-appointmentsD" element={<DoctorAppointmentsTable />} />
+          element={<DoctorPationts doctor={loggedInUser!} />}
+        />{" "}
+        <Route path="/my-appointmentss" element={<AppointmentsPage1 />} />{" "}
+        <Route path="/show-doctors" element={<ShowDoctors />} />
+        <Route path="/todays-patients" element={<TodaysAppointments />} />
+        <Route
+          path="/all-appointmentsD"
+          element={<DoctorAppointmentsTable />}
+        />
         <Route
           path="*"
           element={<ErrorPage errorMessage="Page not found!" />}
         />
-         
       </Routes>
       <Footer />
     </Box>

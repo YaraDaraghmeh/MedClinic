@@ -119,7 +119,7 @@ return;
           )}
         </div>
       )}
-{loggedInUser!.role === "manager" && (
+{loggedInUser!.role === "manager"&& user?.email===loggedInUser?.email && (
   <div className="manager-fun-section">
     <h3>Hey Manager!</h3>
     <p>Relax, boss! Everything is under control... (probably) 😎</p>
