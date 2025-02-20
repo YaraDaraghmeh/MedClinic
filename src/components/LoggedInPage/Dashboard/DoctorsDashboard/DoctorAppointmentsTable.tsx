@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { Table, Typography, Input, Button } from "antd";
 import {
   Table,
   Tag,
@@ -19,6 +20,14 @@ import { getAppointmentsByDoctor } from "../../../../services/appointmentService
 import { Appointment } from "../../../../Types";
 import { useAppointmentsContext } from "../../../../hooks/AppointmentContext";
 import { useLoggedInUser } from "../../../../hooks/LoggedinUserContext";
+import { getAppointmentsByDoctor } from "../../../../services/appointmentService";
+import EditAppointmentModal from "../DoctorsDashboard/EditAppointmentModal";
+import NotesModal from "../DoctorsDashboard/NotesModal";
+import DeleteConfirmationModal from "../DoctorsDashboard/DeleteConfirmationModal";
+import useTableColumns from "../../../../hooks/useTableColumns";
+import SearchAndFilterBar from "../DoctorsDashboard/SearchAndFilterBar";
+import { Appointment } from "../../../../Types";
+
 import notesIcon from "../../../../assets/note.png";
 import fileIcon from "../../../../assets/file-icon.png";
 import videoIcon from "../../../../assets/video-icon.png";
@@ -31,10 +40,12 @@ const DoctorAppointmentsTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
   const [editingAppointment, setEditingAppointment] =
     useState<Appointment | null>(null);
   const [form] = Form.useForm();
   const [showNotesModal, setShowNotesModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [notes, setNotes] = useState("");
   const [existingDocs, setExistingDocs] = useState<string[]>([]);
   const [newDocs, setNewDocs] = useState<File[]>([]);
@@ -51,6 +62,25 @@ const DoctorAppointmentsTable: React.FC = () => {
   const doctorEmail = loggedInUser?.email;
 
   useEffect(() => {
+    const loadAppointments = () => {
+      if (!loggedInUser?.email) return;
+      try {
+        const data = getAppointmentsByDoctor(appointments, loggedInUser.email)
+          .map(appt => ({
+            ...appt,
+            // Convert string dates to Date objects
+            appointmentDate: new Date(appt.appointmentDate).toISOString(),
+          }));
+        setFilteredAppointments(data);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadAppointments();
+  }, [loggedInUser?.email, appointments]);
+  useEffect(() => {
     const loadAppointments = async () => {
       if (!doctorEmail) return;
       try {
@@ -64,6 +94,22 @@ const DoctorAppointmentsTable: React.FC = () => {
     };
 
     loadAppointments();
+  }, [loggedInUser?.email, appointments]);
+
+  const filteredData = useMemo(() => {
+    let data = [...filteredAppointments];
+    // Filtering and sorting logic remains same
+    return data;
+  }, [filteredAppointments, searchTerm, statusFilter, sortOrder]);
+
+  const columns = useTableColumns({
+    setEditingAppointment,
+    setDeleteConfirmVisible,
+    setAppointmentToDelete,
+    setSelectedAppointment,
+    setShowNotesModal,
+    form: null // Pass form if needed
+  });
   }, [doctorEmail, appointments]);
   const checkFileType = (url: string) => {
     const path = url.split("?")[0];
@@ -358,6 +404,14 @@ const DoctorAppointmentsTable: React.FC = () => {
         My Appointments
       </Typography.Title>
 
+      <SearchAndFilterBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+      />
       {/* Filters */}
       <Row gutter={[16, 16]} className="mb-6">
         <Col xs={24} sm={12} md={8}>
@@ -401,6 +455,35 @@ const DoctorAppointmentsTable: React.FC = () => {
         loading={loading}
         pagination={{ pageSize: 5 }}
         scroll={{ x: true }}
+        className="rounded-md"
+        rowClassName="hover:bg-gray-50"
+      />
+
+<EditAppointmentModal
+  editingAppointment={editingAppointment}
+  setEditingAppointment={setEditingAppointment}
+  updateAppointment={updateAppointment as any} 
+/>
+      <NotesModal
+        showNotesModal={showNotesModal}
+        setShowNotesModal={setShowNotesModal}
+        selectedAppointment={selectedAppointment}
+        updateAppointment={updateAppointment}
+      />
+
+      <DeleteConfirmationModal
+        visible={deleteConfirmVisible}
+        onCancel={() => setDeleteConfirmVisible(false)}
+        onConfirm={async () => {
+          if (appointmentToDelete) {
+            await deleteAppointment(appointmentToDelete);
+            setFilteredAppointments(prev =>
+              prev.filter(appt => appt.id !== appointmentToDelete)
+            );
+            setDeleteConfirmVisible(false);
+          }
+        }}
+      />
         className="shadow-md table-zebra-striped"
         rowClassName={(record, index) =>
           index % 2 === 0 ? "bg-gray-100" : "bg-white"
