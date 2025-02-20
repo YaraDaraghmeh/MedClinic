@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Preloader from "../loader/Preloader";
 import LoggedInPage from "../LoggedInPage/LoggedInPage";
+import { useLoggedInUser } from "../../hooks/LoggedinUserContext";
 
 // Lazy loaded components
 const Services = React.lazy(() => import("../ServicesPage/Services"));
@@ -14,24 +15,11 @@ const SignInComponent = React.lazy(() => import("../LoginSignUp/login"));
 const ErrorPage = React.lazy(() => import("../ErrorPage/ErrorPage"));
 
 const Main: React.FC = () => {
+  const {loggedInUser}= useLoggedInUser();
   const location = useLocation();
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch user data from sessionStorage when the route changes
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
-  }, [location.pathname]);
-
-  // Show nothing while loading user state to prevent flickering
-  if (loading) return null;
-
+  
   // If the user is logged in, show the LoggedInPage
-  if (user) return <LoggedInPage />;
+  if (loggedInUser) return <LoggedInPage />;
 
   // If user is not logged in, render the public pages (header, footer, etc.)
   return (

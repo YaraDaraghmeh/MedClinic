@@ -29,9 +29,10 @@ export const LoggedInUserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Function to log in the user
   const login = (userData: User) => {
+    
 
-    setLoggedUser(userData);
-  };
+sessionStorage.setItem("user", JSON.stringify(userData));
+setLoggedUser(userData); };
 
   // Function to log out the user
   const logout = () => {
