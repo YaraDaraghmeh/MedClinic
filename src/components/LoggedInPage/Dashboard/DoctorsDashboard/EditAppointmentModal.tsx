@@ -22,21 +22,21 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
     try {
       const values = await form.validateFields();
       if (!editingAppointment || !loggedInUser) return;
-
-      // Convert moment objects to proper Date and string formats
+  
       const updatedData: Partial<Appointment> = {
         ...editingAppointment,
-        appointmentDate: values.appointmentDate.toDate(), // Convert moment to Date
+        appointmentDate: values.appointmentDate.format('YYYY-MM-DD'),
         appointmentTime: values.appointmentTime.format('HH:mm'),
         status: values.status
       };
-
+  
       await updateAppointment(editingAppointment.id, updatedData);
       setEditingAppointment(null);
       form.resetFields();
     } catch (error) {
       console.error("Error updating appointment:", error);
     }
+  
   };
 
   return (
@@ -59,7 +59,7 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
         layout="vertical"
         initialValues={{
           appointmentDate: editingAppointment?.appointmentDate 
-            ? moment(editingAppointment.appointmentDate)
+            ? moment(editingAppointment.appointmentDate, 'YYYY-MM-DD')
             : null,
           appointmentTime: editingAppointment?.appointmentTime 
             ? moment(editingAppointment.appointmentTime, 'HH:mm')

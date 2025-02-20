@@ -26,25 +26,7 @@ const DoctorAppointmentsTable: React.FC = () => {
   const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadAppointments = () => {
-      if (!loggedInUser?.email) return;
-      try {
-        const data = getAppointmentsByDoctor(appointments, loggedInUser.email)
-          .map(appt => ({
-            ...appt,
-            // Convert string dates to Date objects
-            appointmentDate: new Date(appt.appointmentDate).toISOString(),
-          }));
-        setFilteredAppointments(data);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadAppointments();
-  }, [loggedInUser?.email, appointments]);
+  
   useEffect(() => {
     const loadAppointments = () => {
       if (!loggedInUser?.email) return;

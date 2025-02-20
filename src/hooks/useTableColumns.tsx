@@ -16,9 +16,25 @@ const useTableColumns = (props: any) => {
     {
       title: 'Date & Time',
       key: 'datetime',
-      render: (record: Appointment) => (
-        <DateTimeCell appointmentDate={record.appointmentDate} appointmentTime={record.appointmentTime} />
-      )
+      render: (record: Appointment) => {
+        const appointmentDate = moment(record.appointmentDate, 'YYYY-MM-DD');
+        const appointmentTime = moment(record.appointmentTime, 'HH:mm');
+        
+        return (
+          <div className="flex flex-col">
+            <span className="font-semibold text-blue-600">
+              {appointmentDate.isValid() 
+                ? appointmentDate.format('DD MMM YYYY')
+                : 'Invalid Date'}
+            </span>
+            <span className="text-sm text-blue-600">
+              {appointmentTime.isValid()
+                ? appointmentTime.format('h:mm A')
+                : 'Invalid Time'}
+            </span>
+          </div>
+        );
+      }
     },
     {
       title: 'Status',
