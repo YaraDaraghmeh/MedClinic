@@ -23,6 +23,8 @@ import TodaysAppointments from "../Dashboard/DoctorsDashboard/TodaysAppointments
 import AppointmentsPage1 from "../../appointment/AppointmentsPage";
 import ShowDoctors from "../../appointment/ShowDoctors";
 import { useLoggedInUser } from "../../../hooks/LoggedinUserContext";
+import { useUserContext } from "../../../hooks/UserContext";
+import { getDoctors } from "../../../services/userService";
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -30,6 +32,7 @@ interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
   const { loggedInUser } = useLoggedInUser();
+  const {users}= useUserContext();
   return (
     <Box
       sx={{
@@ -64,7 +67,7 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
           path="/doctor-dashboard-table"
           element={<DoctorAppointmentsTable />}
         />
-        <Route path="make-appointment" element={<FormAppSection />} />
+        <Route path="make-appointment" element={<FormAppSection doctors={getDoctors(users)} />} />
         <Route
           path="/Doctor-Patients"
           element={<DoctorPationts doctor={loggedInUser!} />}
