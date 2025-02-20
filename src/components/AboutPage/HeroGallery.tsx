@@ -1,4 +1,4 @@
-export const HeroGallery = () => (
+ const HeroGallery = () => (
     <div className="flex items-center space-x-6 lg:space-x-8">
       {/* First Column */}
       <div className="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
@@ -62,3 +62,4 @@ export const HeroGallery = () => (
       </div>
     </div>
   );
+  export default HeroGallery;

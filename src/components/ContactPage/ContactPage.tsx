@@ -33,7 +33,7 @@ const ContactPage: React.FC = () => {
 
   return (
     <section className="contact-section">
-      <h2>Contact Us</h2>
+      <h2 className="!text-white">Contact Us</h2>
       <p>Feel free to reach out to us for any inquiries.</p>
 
       {/* Flex Container for Map and Contact Info */}

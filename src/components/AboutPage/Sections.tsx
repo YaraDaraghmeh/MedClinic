@@ -1,10 +1,8 @@
-import React from 'react';
+import React from "react";
 import { BsHeartPulse } from "react-icons/bs";
-import { FaRegEye } from "react-icons/fa";
-import { FaUserMd } from "react-icons/fa";
+import { FaRegEye, FaUserMd } from "react-icons/fa";
 import { FaTooth } from "react-icons/fa6";
-import { GiLoveInjection } from "react-icons/gi";
-import { GiStomach } from "react-icons/gi";
+import { GiLoveInjection, GiStomach } from "react-icons/gi";
 import { PiBrain } from "react-icons/pi";
 
 interface ServiceItem {
@@ -15,69 +13,36 @@ interface ServiceItem {
 
 const CategoriesGrid = () => {
   const services: ServiceItem[] = [
-    {
-      icon: <BsHeartPulse className="text-white text-3xl" />,
-      title: "Cardiology",
-      bgColor: "bg-blue-500"
-    },
-    {
-      icon: <FaRegEye className="text-white text-3xl" />,
-      title: "Ophthalmology",
-      bgColor: "bg-green-500"
-    },
-    {
-      icon: <FaUserMd className="text-white text-3xl" />,
-      title: "Gynecology",
-      bgColor: "bg-purple-500"
-    },
-    {
-      icon: <FaTooth className="text-white text-3xl" />,
-      title: "Dental Care",
-      bgColor: "bg-yellow-500"
-    },
-    {
-      icon: <GiLoveInjection className="text-white text-3xl" />,
-      title: "Plastic Surgery",
-      bgColor: "bg-red-500"
-    },
-    {
-      icon: <GiStomach className="text-white text-3xl" />,
-      title: "Pediatrics",
-      bgColor: "bg-teal-500"
-    },
-    {
-      icon: <PiBrain className="text-white text-3xl" />,
-      title: "Gastrology",
-      bgColor: "bg-orange-500"
-    },
-    {
-      icon: <PiBrain className="text-white text-3xl" />,
-      title: "Neurology",
-      bgColor: "bg-indigo-500"
-    }
+    { icon: <BsHeartPulse />, title: "Cardiology", bgColor: "!bg-blue-500" },
+    { icon: <FaRegEye />, title: "Ophthalmology", bgColor: "!bg-green-500" },
+    { icon: <FaUserMd />, title: "Gynecology", bgColor: "!bg-purple-500" },
+    { icon: <FaTooth />, title: "Dental Care", bgColor: "!bg-yellow-500" },
+    { icon: <GiLoveInjection />, title: "Plastic Surgery", bgColor: "!bg-red-500" },
+    { icon: <GiStomach />, title: "Pediatrics", bgColor: "!bg-teal-500" },
+    { icon: <PiBrain />, title: "Gastrology", bgColor: "!bg-orange-500" },
+    { icon: <PiBrain />, title: "Neurology", bgColor: "!bg-indigo-500" },
   ];
 
   return (
-    <div>
-      <section className="text-center py-16 bg-gray-100">
-        <h2 className="text-3xl md:text-4xl font-bold !text-gray-800 mb-4">
-          Our All Services
-        </h2>
-        <p className="text-lg md:text-xl !text-gray-600 max-w-3xl mx-auto">
-          We offer a wide range of expert medical services to cater to all your
-          health needs, ensuring the best care for every patient.
+    <div className="!bg-gray-200 !py-16">
+      {/* Header Section */}
+      <section className="!text-center !mb-10 !px-6">
+        <h2 className="!text-4xl !font-bold !text-gray-800 !mb-3">Our Services</h2>
+        <p className="!text-lg !text-gray-600 !max-w-3xl !mx-auto">
+          We offer a wide range of expert medical services to cater to all your health needs, ensuring the best care for every patient.
         </p>
       </section>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 sm:gap-2 md:grid-cols-4 md:gap-6 py-8 px-4">
+      {/* Services Grid */}
+      <section className="!grid !grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-4 !gap-6 !px-6 md:!px-12">
         {services.map((service, index) => (
-          <div key={index} className="text-center">
-            <div className={`flex items-center justify-center w-20 h-20 ${service.bgColor} rounded-full mx-auto mb-4`}>
-              <div className="text-white">
-                {service.icon}
-              </div>
+          <div key={index} className="!flex !flex-col !items-center !text-center !transition-transform !duration-300 hover:!scale-105">
+            {/* Icon Container */}
+            <div className={`!flex !items-center !justify-center !w-20 !h-20 ${service.bgColor} !rounded-2xl !shadow-lg`}>
+              <span className="!text-white !text-4xl">{service.icon}</span>
             </div>
-            <h3 className="font-semibold text-lg text-gray-800">{service.title}</h3>
+            {/* Title */}
+            <h3 className="!mt-4 !text-xl !font-semibold !text-gray-800">{service.title}</h3>
           </div>
         ))}
       </section>
@@ -86,4 +51,3 @@ const CategoriesGrid = () => {
 };
 
 export default CategoriesGrid;
-

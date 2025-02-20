@@ -49,11 +49,14 @@ function Services() {
                         </svg>
                     </div>
                 </section>
-                <section className="py-16 bg-white">
-                    <div className="container mx-auto px-8 max-w-5xl">
-                        <CategoriesGrid />
-                        </div>
-                        </section>
+                <section className="py-16 bg-gray-200">
+    <div className=" mx-auto px-4 sm:px-6 md:px-8 min-w-screen max-w-4xl">
+        <CategoriesGrid />
+    </div>
+</section>
+
+
+
             </main>
         </>
     );

@@ -20,7 +20,7 @@ export const StatisticsCard = ({
       <div className="flex justify-center items-center mb-4">
         <Icon className="text-4xl text-gray-600" />
       </div>
-      <h3 className="text-4xl font-semibold text-gray-800">
+      <h3 className="text-4xl font-semibold !text-gray-800">
         {animatedNumber}
         {suffix}
       </h3>
