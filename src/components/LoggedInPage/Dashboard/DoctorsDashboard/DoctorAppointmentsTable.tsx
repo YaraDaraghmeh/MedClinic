@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Table, Typography, Input, Button } from "antd";
+import { Table, Typography } from "antd";
 import { useAppointmentsContext } from "../../../../hooks/AppointmentContext";
 import { useLoggedInUser } from "../../../../hooks/LoggedinUserContext";
 import { getAppointmentsByDoctor } from "../../../../services/appointmentService";
@@ -9,12 +9,11 @@ import DeleteConfirmationModal from "../DoctorsDashboard/DeleteConfirmationModal
 import useTableColumns from "../../../../hooks/useTableColumns";
 import SearchAndFilterBar from "../DoctorsDashboard/SearchAndFilterBar";
 import { Appointment } from "../../../../Types";
+import moment from "moment";
 
 const DoctorAppointmentsTable: React.FC = () => {
   const { loggedInUser } = useLoggedInUser();
-  const { appointments, updateAppointment, deleteAppointment } =
-    useAppointmentsContext();
-  const [appointmentsbydoc, setAppointmentsbydoc] = useState<Appointment[]>([]);
+  const { appointments, updateAppointment, deleteAppointment } = useAppointmentsContext();
   const [loading, setLoading] = useState(true);
   const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,7 +25,6 @@ const DoctorAppointmentsTable: React.FC = () => {
   const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState<string | null>(null);
 
-  
   useEffect(() => {
     const loadAppointments = () => {
       if (!loggedInUser?.email) return;
@@ -44,7 +42,34 @@ const DoctorAppointmentsTable: React.FC = () => {
 
   const filteredData = useMemo(() => {
     let data = [...filteredAppointments];
-    // Filtering and sorting logic remains same
+
+    // Search filter
+    if (searchTerm) {
+      const lowerSearch = searchTerm.toLowerCase();
+      data = data.filter(appt => {
+        const dateString = moment(appt.appointmentDate).format("DD/MM/YYYY");
+        const timeString = moment(appt.appointmentTime, "HH:mm").format("hh:mm A");
+        
+        return (
+          appt.patientEmail.toLowerCase().includes(lowerSearch) ||
+          dateString.includes(lowerSearch) ||
+          timeString.toLowerCase().includes(lowerSearch)
+        );
+      });
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      data = data.filter(appt => appt.status.toLowerCase() === statusFilter.toLowerCase());
+    }
+
+    // Date sorting
+    data.sort((a, b) => {
+      const dateA = moment(a.appointmentDate);
+      const dateB = moment(b.appointmentDate);
+      return sortOrder === "asc" ? dateA.diff(dateB) : dateB.diff(dateA);
+    });
+
     return data;
   }, [filteredAppointments, searchTerm, statusFilter, sortOrder]);
 
@@ -54,7 +79,7 @@ const DoctorAppointmentsTable: React.FC = () => {
     setAppointmentToDelete,
     setSelectedAppointment,
     setShowNotesModal,
-    form: null // Pass form if needed
+    form: null
   });
 
   return (
@@ -79,7 +104,7 @@ const DoctorAppointmentsTable: React.FC = () => {
 
       <Table
         columns={columns}
-        dataSource={filteredAppointments}
+        dataSource={filteredData} 
         rowKey="id"
         loading={loading}
         pagination={{ pageSize: 5 }}
@@ -88,11 +113,12 @@ const DoctorAppointmentsTable: React.FC = () => {
         rowClassName="hover:bg-gray-50"
       />
 
-<EditAppointmentModal
-  editingAppointment={editingAppointment}
-  setEditingAppointment={setEditingAppointment}
-  updateAppointment={updateAppointment as any} 
-/>
+      <EditAppointmentModal
+        editingAppointment={editingAppointment}
+        setEditingAppointment={setEditingAppointment}
+        updateAppointment={updateAppointment as any}
+      />
+
       <NotesModal
         showNotesModal={showNotesModal}
         setShowNotesModal={setShowNotesModal}
