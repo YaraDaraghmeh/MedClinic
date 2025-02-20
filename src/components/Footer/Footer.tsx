@@ -12,7 +12,7 @@ const Footer2: React.FC = () => {
             </p>
           </div>
           <div>
-            <h3 className="!text-lg !font-medium !text-gray-100">Quick Links</h3>
+            <h3 className="!text-lg !font-medium !text-gray-100 ">Quick Links</h3>
             <ul className="!mt-3 !space-y-2 !text-sm">
               <li><a href="/" className="!text-gray-400 hover:!text-white !transition">Home</a></li>
               <li><a href="/about" className="!text-gray-400 hover:!text-white !transition">About Us</a></li>
