@@ -12,6 +12,7 @@ import FeedbackSection from "./Dashboard/FeedbackSection";
 import StatsGrid from "./Dashboard/StatsGrid";
 import UpcomingAppointments from "./Dashboard/UpcomingAppointments";
 import './PatientDashboared.css';
+import { toast, ToastContainer } from "react-toastify";
 
 
 const PatientDashboard: React.FC = () => {
@@ -31,6 +32,7 @@ const PatientDashboard: React.FC = () => {
   }, [loggedInUser, appointments]);
 
   const handleFeedbackSubmit = async (e: React.FormEvent) => {
+    try{
     e.preventDefault();
     if (loggedInUser) {
       await submitFeedback({
@@ -38,8 +40,11 @@ const PatientDashboard: React.FC = () => {
         message: newFeedback.message,
         rating: newFeedback.rating,
       });
+      toast.success("Thanks for sharing your thoughts! Your feedback helps us deliver a better experience.");
       setNewFeedback({ message: '', rating: 5 });
       setShowFeedbackModal(false);
+    }}catch(error){
+      toast.error("Something went wrong. Please try again later.");
     }
   };
 
@@ -81,6 +86,7 @@ const PatientDashboard: React.FC = () => {
           feedback={newFeedback}
           setFeedback={setNewFeedback}
         />
+        <ToastContainer position="bottom-left"/>
       </div>
     </motion.div>
   );
