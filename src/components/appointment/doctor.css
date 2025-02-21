@@ -4,14 +4,14 @@
   padding: 30px;
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #faf3e0;
+  background-color: #f4f7fb; /* Light blue background for a calm feel */
 }
 
 /* Heading Styles */
 h1 {
   text-align: center;
   font-size: 42px;
-  color: #4a4a4a;
+  color: #2d2d2d; /* Darker, more professional color */
   margin-bottom: 40px;
   font-weight: 600;
 }
@@ -36,7 +36,7 @@ h1 {
 }
 
 .book-now-btn {
-  background-color: #ff6f61;
+  background-color: #007bff; /* Calm blue color */
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
@@ -46,7 +46,7 @@ h1 {
 }
 
 .book-now-btn:hover {
-  background-color: #ff4a3d;
+  background-color: #0056b3; /* Darker blue for hover */
   transform: translateY(-2px);
 }
 
@@ -74,7 +74,7 @@ h1 {
 
 .doctor-image {
   width: 100%;
-height:200px;
+  height: 200px;
   object-fit: cover;
 }
 
@@ -90,7 +90,7 @@ height:200px;
 
 h2 {
   font-size: 22px;
-  color: #4a4a4a;
+  color: #2d2d2d; /* Darker, professional text color */
   margin: 10px 0;
 }
 
@@ -125,7 +125,7 @@ h2 {
 
 .modal-container h2 {
   font-size: 26px;
-  color: #4a4a4a;
+  color: #2d2d2d;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -141,7 +141,7 @@ h2 {
   width: 100%;
   margin-top: 20px;
   padding: 14px 0;
-  background-color: #ff6f61;
+  background-color: #007bff;
   color: white;
   text-align: center;
   font-size: 18px;
@@ -150,7 +150,7 @@ h2 {
 }
 
 .modal-container .book-now-btn:hover {
-  background-color: #ff4a3d;
+  background-color: #0056b3;
 }
 
 /* Close Button */
@@ -167,8 +167,10 @@ h2 {
 }
 
 .close-modal-btn:hover {
-  color: #4a4a4a;
+  color: #2d2d2d;
 }
+
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;

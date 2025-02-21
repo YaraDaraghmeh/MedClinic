@@ -1,0 +1,18 @@
+
+.my-appointments {
+    padding: 20px;
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    font-family: "Poppins", sans-serif;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .no-appointments {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 20px;
+  }

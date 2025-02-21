@@ -1,6 +1,20 @@
-import React, { createContext, useContext, ReactNode, useState, useEffect } from "react";
-import { db } from '../database/firebase';
-import { collection, onSnapshot, doc, updateDoc, writeBatch, setDoc, deleteDoc } from "firebase/firestore";
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from "react";
+import { db } from "../database/firebase";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  updateDoc,
+  writeBatch,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { Appointment } from "../Types";
 
 // Define the context type
@@ -25,17 +39,23 @@ interface AppointmentsContextType {
       status: "pending" | "confirmed" | "completed" | "canceled";
       note?: string;
       documents?: string[];
+      readNote?: boolean;
     }>
   ) => Promise<void>;
   deleteAppointment: (id: string) => Promise<void>;
   getAppointmentsByDoctor: (doctorEmail: string) => Appointment[];
   getAppointmentsByPatient: (patientEmail: string) => Appointment[];
-  forwardAppointments: (oldDoctorEmail: string, newDoctorEmail: string) => Promise<void>;
+  forwardAppointments: (
+    oldDoctorEmail: string,
+    newDoctorEmail: string
+  ) => Promise<void>;
   cancelAllAppointments: (doctorEmail: string) => Promise<void>;
 }
 
 // Create the context
-const AppointmentsContext = createContext<AppointmentsContextType | undefined>(undefined);
+const AppointmentsContext = createContext<AppointmentsContextType | undefined>(
+  undefined
+);
 
 // Create the provider component
 export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
@@ -44,19 +64,21 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
   // Fetch appointments and listen for real-time updates
   useEffect(() => {
     const appointmentsCollection = collection(db, "appointments");
-  
+
     const unsubscribe = onSnapshot(appointmentsCollection, async (snapshot) => {
       const fetchedAppointments = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as unknown as Appointment[];
-  
+
       setAppointments(fetchedAppointments);
 
       const today = new Date();
-      const formattedToday = `${today.getDate().toString().padStart(2, '0')}-${(today.getMonth() + 1)
+      const formattedToday = `${today.getDate().toString().padStart(2, "0")}-${(
+        today.getMonth() + 1
+      )
         .toString()
-        .padStart(2, '0')}-${today.getFullYear()}`;
+        .padStart(2, "0")}-${today.getFullYear()}`;
 
       // Find appointments that have passed their date and are not canceled
       const batch = writeBatch(db);
@@ -124,11 +146,16 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
       appointmentTime: string;
       reason: string;
       status: "pending" | "confirmed" | "completed" | "canceled";
+      readNote?: boolean;
     }>
   ) => {
     try {
+      const dataToUpdate = {
+        ...updatedData,
+        readNote: updatedData.readNote ?? false,
+      };
       const appointmentDoc = doc(db, "appointments", id);
-      await updateDoc(appointmentDoc, updatedData);
+      await updateDoc(appointmentDoc, dataToUpdate);
     } catch (error) {
       throw new Error(
         `Error updating appointment: ${
@@ -154,16 +181,23 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
 
   // Get appointments by doctor email
   const getAppointmentsByDoctor = (doctorEmail: string) => {
-    return appointments.filter((appointment) => appointment.doctorEmail === doctorEmail);
+    return appointments.filter(
+      (appointment) => appointment.doctorEmail === doctorEmail
+    );
   };
 
   // Get appointments by patient email
   const getAppointmentsByPatient = (patientEmail: string) => {
-    return appointments.filter((appointment) => appointment.patientEmail === patientEmail);
+    return appointments.filter(
+      (appointment) => appointment.patientEmail === patientEmail
+    );
   };
 
   // Forward appointments from one doctor to another
-  const forwardAppointments = async (oldDoctorEmail: string, newDoctorEmail: string) => {
+  const forwardAppointments = async (
+    oldDoctorEmail: string,
+    newDoctorEmail: string
+  ) => {
     try {
       const batch = writeBatch(db);
 
@@ -243,7 +277,9 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
 export const useAppointmentsContext = () => {
   const context = useContext(AppointmentsContext);
   if (!context) {
-    throw new Error("useAppointmentsContext must be used within an AppointmentsProvider");
+    throw new Error(
+      "useAppointmentsContext must be used within an AppointmentsProvider"
+    );
   }
   return context;
 };
