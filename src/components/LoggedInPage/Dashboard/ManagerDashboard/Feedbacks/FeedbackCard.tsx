@@ -4,7 +4,6 @@ import { FaStar } from "react-icons/fa";
 import { BeatLoader } from "react-spinners";
 
 import "./FeedbackViewer.css";
-import { calculateStars } from "../Dashboard/starRating";
 import { Feedback, User } from "../../../../../Types";
 import ErrorPage from "../../../../ErrorPage/ErrorPage";
 import { useUserContext } from "../../../../../hooks/UserContext";
@@ -33,7 +32,7 @@ const FeedbackCard: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
     fetchUser();
   }, [feedback.userEmail]);
 
-  const stars = calculateStars(feedback.rating);
+  const stars =feedback.rating;
 
   const handleUserClick = () => {
     if (user) {

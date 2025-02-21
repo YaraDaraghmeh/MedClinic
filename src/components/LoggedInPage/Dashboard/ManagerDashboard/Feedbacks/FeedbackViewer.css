@@ -1,37 +1,42 @@
 /* General Styles */
 .feedback-dashboard {
-  padding: 20px;
+  padding: 24px;
   min-height: 100%;
+  min-width: 100%;
   margin: 0 auto;
   background: #fafafa;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  width: 100%;
 }
 
 .dashboard-title {
   text-align: left;
-  margin-bottom: 20px;
-  font-size: 32px;
-  color: #333;
+  margin-bottom: 24px;
+  font-size: 36px;
+  color: #2c3e50;
   font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-/* Sort Controls */
+
 .sort-controls {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .sort-controls button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: 2px solid #007bff;
   border-radius: 8px;
   background-color: #fff;
   color: #007bff;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 
@@ -43,31 +48,34 @@
 
 .sort-controls button:hover {
   background-color: #e3f2fd;
+  transform: translateY(-2px);
 }
 
 /* Feedback Card - Post Style */
 .feedback-card {
   border: 1px solid #e0e0e0;
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
-  max-width: 600px;
-  margin: 0 auto 20px;
+  max-width: 800px;
+  width: 90% !important;
+  margin: 0 auto 24px;
 }
 
 .feedback-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 /* User Info Section */
 .user-info {
   display: flex;
+  flex-direction: row !important;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .user-info a {
@@ -78,18 +86,19 @@
 }
 
 .user-image {
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 16px;
   object-fit: cover;
   border: 2px solid #007bff;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .user-image:hover {
   transform: scale(1.1);
+  border-color: #005bb5;
 }
 
 .user-details1 {
@@ -98,13 +107,13 @@
 
 .user-name1 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
 }
 
 .rating {
-  margin: 5px 0;
+  margin: 6px 0;
   font-size: 16px;
   color: #555;
   display: flex;
@@ -114,6 +123,7 @@
 
 .star-icon {
   color: #ffc107;
+  font-size: 18px;
 }
 
 /* Feedback Message */
@@ -121,37 +131,44 @@
   font-size: 16px;
   color: #444;
   line-height: 1.6;
-  margin: 15px 0;
-  padding: 15px;
+  margin: 16px 0;
+  padding: 16px;
   background-color: #f9f9f9;
   border-radius: 8px;
   border-left: 4px solid #007bff;
+  transition: background-color 0.3s ease;
+}
+
+.message:hover {
+  background-color: #f1f1f1;
 }
 
 /* Date Section */
 .date {
-  margin-top: 10px;
+  margin-top: 12px;
   font-size: 14px;
   color: #777;
   text-align: right;
+  font-style: italic;
 }
 
 /* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 16px;
+  margin-top: 24px;
 }
 
 .pagination button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: 2px solid #007bff;
   border-radius: 8px;
   background-color: #fff;
   color: #007bff;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 
@@ -163,6 +180,7 @@
 
 .pagination button:hover {
   background-color: #e3f2fd;
+  transform: translateY(-2px);
 }
 
 /* Loading and Error States */
@@ -171,13 +189,16 @@
   justify-content: center;
   align-items: center;
   min-height: 20vh;
+  font-size: 18px;
+  color: #007bff;
 }
 
 .error {
   text-align: center;
   font-size: 18px;
-  color: #ff0000;
-  margin-top: 20px;
+  color: #ff4d4d;
+  margin-top: 24px;
+  font-weight: 600;
 }
 
 /* Animations */
@@ -194,4 +215,47 @@
 
 .feedback-card {
   animation: fadeIn 0.5s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 28px;
+  }
+
+  .sort-controls {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .sort-controls button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .feedback-card {
+    padding: 16px;
+  }
+
+  .user-image {
+    width: 48px;
+    height: 48px;
+  }
+
+  .user-name1 {
+    font-size: 18px;
+  }
+
+  .message {
+    font-size: 14px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    flex: 1;
+    margin: 4px;
+  }
 }

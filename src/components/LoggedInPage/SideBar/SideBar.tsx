@@ -12,9 +12,9 @@ import {
 } from '@mui/icons-material';
 import LogoutDialog from '../LogoutDialog/LogoutDialog'; 
 import '../LoggedInpage.css';
-import { User } from '../../../Types';
+
 import { useLoggedInUser } from '../../../hooks/LoggedinUserContext';
-import LoggedInPage from '../LoggedInPage';
+
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -197,7 +197,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar }) => {
           textAlign: 'left',
           width: '100%',
           cursor: 'pointer',
-          padding: '10px',
+          
           fontSize: '16px',
         }}
       >

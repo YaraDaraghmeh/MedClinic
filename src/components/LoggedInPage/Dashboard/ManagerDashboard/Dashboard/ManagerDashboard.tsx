@@ -14,47 +14,34 @@ import KeyMetrics from "./KeyMetrics";
 import Charts from "./Charts";
 import { useUserContext } from "../../../../../hooks/UserContext";
 import { useAppointmentsContext } from "../../../../../hooks/AppointmentContext";
-import { Feedback } from "../../../../../Types";
+import { Feedback, User } from "../../../../../Types";
 import { useFeedback } from "../../../../../hooks/FeedbackContext";
 
 const ManagerDashboard: React.FC = () => {
   const {users} = useUserContext();
-  const [doctors, setDoctors] = useState<any[]>([]); 
-  const [patients, setPatients] = useState<any[]>([]); 
+  const [doctors, setDoctors] = useState<User[]>([]); 
+  const [patients, setPatients] = useState<User[]>([]); 
   const {appointments}= useAppointmentsContext();
   const [averageRating, setAverageRating] = useState<string>("0.0");
   const [loading, setLoading] = useState(true);
 const {feedbacks} = useFeedback();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [
-          
-          
-         
-          avgRating,
-        ] = await Promise.all([
-         
-          
-         
-          getAverageRating(feedbacks),
-        ]);
+const avgRating = getAverageRating(feedbacks);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const avgRating = getAverageRating(feedbacks);
+      setDoctors(getDoctors(users));
+      setPatients(getPatients(users));
+      setAverageRating(avgRating);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-       
-        setDoctors(getDoctors(users));
-        setPatients(getPatients(users));
-       
-        
-        setAverageRating(avgRating);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  fetchData();
+}, [users, feedbacks]); // Add dependencies here
 
   const getTodaysAppointments = () => {
     const today = new Date();

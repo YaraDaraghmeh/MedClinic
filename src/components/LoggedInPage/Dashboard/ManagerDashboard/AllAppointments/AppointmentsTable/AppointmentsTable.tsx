@@ -7,10 +7,7 @@ import {
   TableRow,
   TableCell,
   Paper,
-  Avatar,
-  Tooltip,
   Typography,
-  Box,
 } from "@mui/material";
 import UserTooltip from "../UserTooltip/UserTooltip";
 import { Appointment, User } from "../../../../../../Types";
@@ -28,8 +25,22 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   doctors,
   indexOfFirstItem,
 }) => {
- 
-const {users} = useUserContext();
+  const { users } = useUserContext();
+
+  // Function to handle anonymous user data
+  const getAnonymousUser = (email: string,role:"patient"|"doctor"): User => {
+    return {
+      name: "Anonymous",
+      email: email,
+      imageUrl: "https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg", 
+      dateOfBirth:"",
+      password:"",
+      role: role,
+      gender:"male"
+
+    };
+  };
+
   return (
     <TableContainer
       component={Paper}
@@ -58,8 +69,19 @@ const {users} = useUserContext();
             </TableRow>
           ) : (
             currentItems.map((appointment, index) => {
-              const patient = getUserByEmail(users,appointment.patientEmail);
-              const doctor = getUserByEmail(users,appointment.doctorEmail);
+              let patient: User | null = null;
+              let doctor: User | null = null;
+
+              try {
+                // Attempt to fetch patient and doctor data
+                patient = getUserByEmail(users, appointment.patientEmail) || getAnonymousUser(appointment.patientEmail,"patient");
+                doctor = getUserByEmail(users, appointment.doctorEmail) || getAnonymousUser(appointment.doctorEmail,"doctor");
+              } catch (error) {
+                console.error("Error fetching user data:", error);
+                // Fallback to anonymous data if an error occurs
+                patient = getAnonymousUser(appointment.patientEmail,"patient");
+                doctor = getAnonymousUser(appointment.doctorEmail,"doctor");
+              }
 
               return (
                 <TableRow

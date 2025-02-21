@@ -1,5 +1,8 @@
 import React from "react";
 import { TextField, Select, MenuItem, FormControl, InputLabel, Box } from "@mui/material";
+import { User } from "../../../../../../Types";
+import { useUserContext } from "../../../../../../hooks/UserContext";
+import { getDoctors } from "../../../../../../services/userService";
 
 interface AppointmentsFiltersProps {
   searchTerm: string;
@@ -10,7 +13,7 @@ interface AppointmentsFiltersProps {
   setDoctorFilter: (value: string) => void;
   sortOrder: "asc" | "desc";
   setSortOrder: (value: "asc" | "desc") => void;
-  doctors: any[];
+  
 }
 
 const AppointmentsFilters: React.FC<AppointmentsFiltersProps> = ({
@@ -22,8 +25,10 @@ const AppointmentsFilters: React.FC<AppointmentsFiltersProps> = ({
   setDoctorFilter,
   sortOrder,
   setSortOrder,
-  doctors,
+  
 }) => {
+  const {users}= useUserContext();
+  const doctors :User[]=getDoctors(users);
   return (
     <Box sx={{ display: "flex", gap: 2, marginBottom: 3 }}>
       <TextField
@@ -66,8 +71,8 @@ const AppointmentsFilters: React.FC<AppointmentsFiltersProps> = ({
         >
           <MenuItem value="all">All Doctors</MenuItem>
           {doctors.map((doctor,index) => (
-            <MenuItem key={index} value={doctor.email?.stringValue}>
-              {doctor.name?.stringValue}
+            <MenuItem key={index} value={doctor.email}>
+              {doctor.name}
             </MenuItem>
           ))}
         </Select>

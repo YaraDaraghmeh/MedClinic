@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
-import StarRating, { calculateStars } from "./starRating";
+import StarRating from "./starRating";
 import { Feedback } from "../../../../../Types";
 
 interface RecentFeedbackTableProps {
@@ -121,7 +121,7 @@ const RecentFeedbackTable: React.FC<RecentFeedbackTableProps> = ({ feedback }) =
                       borderRadius: "8px",
                     }}
                   >
-                    {calculateStars(feedback[currentIndex]?.rating) || 0} / 5 ⭐
+                    {feedback[currentIndex]?.rating || 0} / 5 ⭐
                   </Typography>
                 </Box>
 
