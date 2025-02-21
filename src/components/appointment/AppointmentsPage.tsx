@@ -1,43 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {  getAppointmentsByPatient } from "../../services/appointmentService";
+import { getAppointmentsByPatient } from "../../services/appointmentService";
 import { getDoctors } from "../../services/userService";
-import { Appointment, AppointmentStatus } from "../../types/appointment.types";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Appointment.css";
 import { useAppointmentsContext } from "../../hooks/AppointmentContext";
 import { useUserContext } from "../../hooks/UserContext";
+import { useLoggedInUser } from "../../hooks/LoggedinUserContext";
+import { Appointment, User } from "../../Types";
+import { AppointmentStatus } from "../../types/appointment.types";
 
-const AppointmentsPage: React.FC = () => {
+const AppointmentsPage1: React.FC = () => {
   const [myAppointments, setMyAppointments] = useState<Appointment[]>([]);
-  const [doctors, setDoctors] = useState<any[]>([]);
+  const [doctors, setDoctors] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const {appointments}= useAppointmentsContext();
-  const {users} = useUserContext();
+  const { appointments } = useAppointmentsContext();
+  const { users } = useUserContext();
   const navigate = useNavigate();
-const {deleteAppointment}=useAppointmentsContext();
-  const user = sessionStorage.getItem("user");
-  const patientEmail = user ? JSON.parse(user).email.stringValue : "";
+  const { deleteAppointment } = useAppointmentsContext();
+  const { loggedInUser } = useLoggedInUser();
 
   useEffect(() => {
-    if (!patientEmail) {
+    if (!loggedInUser) {
       toast.error("No patient email found. Please log in.");
-      navigate("/");
       return;
     }
 
     const fetchData = async () => {
       try {
         const [fetchedAppointments, doctorsData] = await Promise.all([
-          getAppointmentsByPatient(appointments,patientEmail),
+          getAppointmentsByPatient(appointments, loggedInUser.email),
           getDoctors(users),
         ]);
 
         const formattedAppointments: Appointment[] = fetchedAppointments.map((appointment: any) => {
           const dateParts = appointment.appointmentDate?.stringValue?.split("-") || [];
           const timeParts = appointment.appointmentTime?.stringValue?.split(":") || [];
-
           const dateTime =
             dateParts.length === 3 && timeParts.length === 2
               ? new Date(
@@ -69,11 +68,11 @@ const {deleteAppointment}=useAppointmentsContext();
     };
 
     fetchData();
-  }, [patientEmail, navigate]);
+  }, [loggedInUser?.email, navigate, appointments, users]);
 
   const getDoctorName = (doctorId: string) => {
-    const doctor = doctors.find((d) => d.id === doctorId);
-    return doctor ? doctor.name?.stringValue || "Unnamed Doctor" : "Unknown Doctor";
+    const doctor = doctors.find((d) => d.email === doctorId);
+    return doctor ? doctor.name || "Unnamed Doctor" : "Unknown Doctor";
   };
 
   const handleDeleteAppointment = async (appointmentId: string) => {
@@ -102,7 +101,7 @@ const {deleteAppointment}=useAppointmentsContext();
             />
           </div>
           <div className="info">
-            <h1>Hello, {patientEmail}</h1>
+            <h1>Hello, {loggedInUser?.email}</h1>
             <p className="patient-description">
               Lorem ipsum dolor sit amet consectetur adipiscing elit. Fisitis, num metodoctoral
               pariaturis sede ut aliquip ex ea commodo consequat. Aduurendus repsiduntis
@@ -129,19 +128,14 @@ const {deleteAppointment}=useAppointmentsContext();
             {myAppointments.map((appointment) => (
               <div key={appointment.id} className="appointment-card">
                 <div className="appointment-details">
-                  <p className="doc">Doctor: {getDoctorName(appointment.doctorId!)}</p>
+                  <p className="doc">Doctor: {getDoctorName(appointment.doctorEmail)}</p>
                   <p className="date">
-                    Date: {appointment.dateTime?.toLocaleDateString("en-GB") || "N/A"}
+                    Date: {appointment.appointmentDate ? appointment.appointmentDate : "N/A"}
                   </p>
                   <p className="time">
-                    Time:{" "}
-                    {appointment.dateTime?.toLocaleTimeString("en-US", {
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true,
-                    }) || "N/A"}
+                    Time: {appointment.appointmentTime ? appointment.appointmentTime : "N/A"}
                   </p>
-                  <p className="symptoms">Symptoms: {appointment.symptoms}</p>
+                  <p className="symptoms">Symptoms: {appointment.reason}</p>
                   <p className={`status ${appointment.status.toLowerCase()}`}>
                     Status: {appointment.status}
                   </p>
@@ -165,4 +159,4 @@ const {deleteAppointment}=useAppointmentsContext();
   );
 };
 
-export default AppointmentsPage;
+export default AppointmentsPage1;
