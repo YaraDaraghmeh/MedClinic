@@ -18,33 +18,36 @@ import { useAppointmentsContext } from "../../../../hooks/AppointmentContext";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonIcon from "@mui/icons-material/Person";
+import moment from "moment";
 
 const TodaysAppointments: React.FC = () => {
   const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const { appointments } = useAppointmentsContext();
-  const userFromSession = sessionStorage.getItem("user");
-  if (userFromSession) {
-    const parsedUser = JSON.parse(userFromSession);
-    console.log("Parsed User:", parsedUser);
-  }
-  
+
   useEffect(() => {
     const fetchTodaysAppointments = async () => {
       try {
         const userFromSession = sessionStorage.getItem("user");
-        if (userFromSession) {
-          const parsedUser = JSON.parse(userFromSession);
-          setUser(parsedUser);
-          const todaysAppointments = await getAppointmentsForDoctorToday(
-            appointments,
-            parsedUser.email.stringValue
-          );
-          setTodayAppointments(todaysAppointments);
-        } else {
+        if (!userFromSession) {
           console.error("User not found in session storage");
           return <ErrorPage />;
         }
+
+        const parsedUser = JSON.parse(userFromSession);
+        setUser(parsedUser);
+
+        // Debug logs
+        console.log("Current date:", moment().format("DD-MM-YYYY"));
+        console.log("All appointments:", appointments);
+
+        const todaysAppointments = getAppointmentsForDoctorToday(
+          appointments,
+          parsedUser.email // Changed from parsedUser.email.stringValue
+        );
+
+        console.log("Filtered appointments:", todaysAppointments);
+        setTodayAppointments(todaysAppointments);
       } catch (error) {
         console.error("Error fetching today's appointments:", error);
         setTodayAppointments([]);
@@ -53,6 +56,16 @@ const TodaysAppointments: React.FC = () => {
 
     fetchTodaysAppointments();
   }, [appointments]);
+
+  // Date formatting helper
+  const formatDisplayDate = (dateString: string) => {
+    return moment(dateString, "DD-MM-YYYY").format("DD MMMM YYYY");
+  };
+
+  // Time formatting helper
+  const formatDisplayTime = (timeString: string) => {
+    return moment(timeString, "HH:mm").format("hh:mm A");
+  };
 
   return (
     <Container maxWidth="md" sx={{ minHeight: "70vh", display: "flex", flexDirection: "column", justifyContent: "center", paddingBottom: "50px" }}>
@@ -89,7 +102,7 @@ const TodaysAppointments: React.FC = () => {
         ) : (
           <List>
             {todayAppointments.map((appointment, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={appointment.id}>
                 <Card
                   sx={{
                     marginBottom: "15px",
@@ -115,13 +128,13 @@ const TodaysAppointments: React.FC = () => {
                             <Stack direction="row" spacing={1} alignItems="center">
                               <CalendarMonthIcon sx={{ fontSize: 16, color: "#1976d2" }} />
                               <Typography variant="body2" color="textSecondary">
-                                {appointment.appointmentDate || "N/A"}
+                                {formatDisplayDate(appointment.appointmentDate) || "N/A"}
                               </Typography>
                             </Stack>
                             <Stack direction="row" spacing={1} alignItems="center">
                               <AccessTimeIcon sx={{ fontSize: 16, color: "#1976d2" }} />
                               <Typography variant="body2" color="textSecondary">
-                                {appointment.appointmentTime || "N/A"}
+                                {formatDisplayTime(appointment.appointmentTime) || "N/A"}
                               </Typography>
                             </Stack>
                           </>

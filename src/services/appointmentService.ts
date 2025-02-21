@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Appointment } from "../Types";
 
 const formatDate = (date: Date): string => {
@@ -41,25 +42,32 @@ export const getAppointmentsForDoctorToday = (
   appointments: Appointment[],
   doctorEmail: string
 ): Appointment[] => {
-  const today = new Date();
-  const formattedToday = formatDate(today);
+  // Get today's date in DD-MM-YYYY format
+  const today = moment().format('DD-MM-YYYY');
 
+  // Filter appointments
   const appointmentsToday = appointments.filter((appointment) => {
-    const appointmentDate = appointment.appointmentDate;
     return (
       appointment.doctorEmail === doctorEmail &&
-      appointmentDate === formattedToday
+      appointment.appointmentDate === today &&
+      appointment.status !== 'canceled'
     );
   });
 
-  // Sort appointments by time
+  // Sort by time (handling AM/PM properly)
   return appointmentsToday.sort((a, b) => {
-    const timeA = a.appointmentTime || "";
-    const timeB = b.appointmentTime || "";
-    return timeA.localeCompare(timeB);
+    const convertTimeToMinutes = (time: string) => {
+      const [timePart, period] = time.split(' ');
+      const [hours, minutes] = timePart.split(':').map(Number);
+      let totalMinutes = hours * 60 + minutes;
+      if (period === 'PM' && hours !== 12) totalMinutes += 720;
+      if (period === 'AM' && hours === 12) totalMinutes -= 720;
+      return totalMinutes;
+    };
+
+    return convertTimeToMinutes(a.appointmentTime) - convertTimeToMinutes(b.appointmentTime);
   });
 };
-
 // Filter future appointments for a doctor
 export const getFutureAppointmentsForDoctor = (
   appointments: Appointment[],
