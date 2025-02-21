@@ -6,7 +6,15 @@ const formatDate = (date: Date): string => {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 };
-
+export const getCompletedAppointmentsForDoctor = (
+  appointments: Appointment[],
+  doctorEmail: string
+): Appointment[] => {
+  return appointments.filter(
+    (appointment) =>
+      appointment.doctorEmail === doctorEmail && appointment.status === "completed"
+  );
+};
 // Check if a specific time is taken for a doctor
 export const isAppointmentTimeTakenForDoctor = (
   appointments: Appointment[],

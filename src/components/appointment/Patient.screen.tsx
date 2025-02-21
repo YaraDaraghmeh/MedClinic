@@ -14,7 +14,7 @@ const Appointment = () => {
         <AppointmentHeader />
         <div className="appointment-content">
         <EmergencyContact />
-        <AppointmentForm />
+        <AppointmentForm  />
       </div>
       <button 
   onClick={() => navigate("/appointments")} 

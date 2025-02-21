@@ -1,87 +1,190 @@
+/* General Container */
 .doctors-container {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .loading, .no-data {
-    text-align: center;
-    font-size: 1.2rem;
-    margin-top: 2rem;
-  }
-  
-  .doctors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  .doctor-card {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    max-width: 100%;
-    width: 100%;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .doctor-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px #0FBF00;
-  }
-  
-  .doctor-image {
-    width: 100%;
-    aspect-ratio: 4 / 3; 
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .doctor-card:hover .doctor-image {
-    transform: scale(1.03);
-  }
-  
-  .doctor-info {
-    padding: 1rem;
-    text-align: left;
-  }
-  
-  .doctor-info h2 {
-    font-size: 22px;
-    margin: 0;
-    color: black;
-  }
-  
-  .specialization {
-    margin-bottom: 15px;
-    color: #0FBF00;
-    font-weight: 500;
-  }
-  
-  .email {
-    color: #64748b;
-    font-size: 0.9rem;
-  }
-  
-  h1 {
-    font-size: 40px;
-    font-weight: bold;
-  }
-  
- 
-  @media (max-width: 768px) {
-    h1 {
-      font-size: 28px;
-    }
-  }
-  
-  @media (max-width: 500px) {
-    .doctors-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+  font-family: 'Poppins', sans-serif;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #faf3e0;
+}
+
+/* Heading Styles */
+h1 {
+  text-align: center;
+  font-size: 42px;
+  color: #4a4a4a;
+  margin-bottom: 40px;
+  font-weight: 600;
+}
+
+/* Filter and Book Now Button */
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.specialization-filter {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  width: 250px;
+  max-width: 100%;
+  background-color: #ffffff;
+  color: #333;
+}
+
+.book-now-btn {
+  background-color: #ff6f61;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.book-now-btn:hover {
+  background-color: #ff4a3d;
+  transform: translateY(-2px);
+}
+
+/* Doctor Grid */
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.doctor-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.doctor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.doctor-image {
+  width: 100%;
+height:200px;
+  object-fit: cover;
+}
+
+.doctor-info {
+  padding: 20px;
+}
+
+.specialization {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 22px;
+  color: #4a4a4a;
+  margin: 10px 0;
+}
+
+.email {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-container h2 {
+  font-size: 26px;
+  color: #4a4a4a;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-container p {
+  font-size: 16px;
+  color: #555;
+  margin: 12px 0;
+}
+
+.modal-container .book-now-btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 0;
+  background-color: #ff6f61;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.modal-container .book-now-btn:hover {
+  background-color: #ff4a3d;
+}
+
+/* Close Button */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.3s;
+}
+
+.close-modal-btn:hover {
+  color: #4a4a4a;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination-btn.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
