@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { User } from "../../../../../Types";
 import {
   Dialog,
@@ -39,6 +39,8 @@ const specializations = [
   "Urology",
 ];
 
+const genders = ["Male", "Female"];
+
 export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
   showAddDoctorModal,
   setShowAddDoctorModal,
@@ -48,6 +50,15 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
   setAutoGeneratePassword,
   handleAddDoctor,
 }) => {
+  const [imagePreview, setImagePreview] = useState<string>("");
+
+  useEffect(() => {
+    // Update the image preview when the URL changes
+    if (newDoctor.imageUrl) {
+      setImagePreview(newDoctor.imageUrl);
+    }
+  }, [newDoctor.imageUrl]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -57,7 +68,8 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
       !newDoctor.email ||
       !newDoctor.dateOfBirth ||
       (!autoGeneratePassword && !newDoctor.password) ||
-      !newDoctor.specialization
+      !newDoctor.specialization ||
+      !newDoctor.gender
     ) {
       toast.error("Please fill in all required fields.");
       return;
@@ -65,6 +77,9 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
 
     // Call the handleAddDoctor function passed from the parent component
     handleAddDoctor(e);
+
+    // Close the modal after successful submission
+    setShowAddDoctorModal(false);
   };
 
   return (
@@ -159,6 +174,81 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             }}
           />
 
+          {/* Gender Field */}
+          <FormControl fullWidth required sx={{ marginBottom: "1.5rem !important" }}>
+            <InputLabel sx={{ background: "white" }}>Gender</InputLabel>
+            <Select
+              value={newDoctor.gender || ""}
+              onChange={(e) =>
+                setNewDoctor({
+                  ...newDoctor,
+                  gender: e.target.value,
+                })
+              }
+              displayEmpty
+              variant="outlined"
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    maxHeight: 200, // Fixed height
+                    overflowY: "auto", // Scrollbar
+                  },
+                },
+              }}
+              sx={{
+                borderRadius: "12px !important",
+                backgroundColor: "#ffffff !important",
+                "& fieldset": {
+                  borderColor: "#e5e7eb !important",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#3b82f6 !important",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#3b82f6 !important",
+                },
+              }}
+            >
+              {genders.map((gender) => (
+                <MenuItem key={gender} value={gender}>
+                  {gender}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Image URL Field */}
+          <TextField
+            label="Image URL"
+            variant="outlined"
+            fullWidth
+            value={newDoctor.imageUrl || ""}
+            onChange={(e) =>
+              setNewDoctor({
+                ...newDoctor,
+                imageUrl: e.target.value,
+              })
+            }
+            sx={{
+              marginBottom: "1.5rem !important",
+            }}
+          />
+
+          {/* Image Preview */}
+          {imagePreview && (
+            <div style={{ textAlign: "center", marginTop: "1rem" }}>
+              <img
+                src={imagePreview}
+                alt="Doctor Image Preview"
+                style={{
+                  maxWidth: "150px",
+                  maxHeight: "150px",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
+          )}
+
           {/* Auto-generate Password Checkbox */}
           <FormControlLabel
             control={
@@ -196,20 +286,16 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
           )}
 
           {/* Specialization Dropdown */}
-          <FormControl
-            fullWidth
-            required
-            sx={{ marginBottom: "1.5rem !important" }}
-          >
+          <FormControl fullWidth required sx={{ marginBottom: "1.5rem !important" }}>
             <InputLabel sx={{ background: "white" }}>Specialization</InputLabel>
             <Select
-             value={newDoctor.specialization || ""}
-             onChange={(e) =>
-               setNewDoctor({
-                 ...newDoctor,
-                 specialization: e.target.value,
-               })
-             }
+              value={newDoctor.specialization || ""}
+              onChange={(e) =>
+                setNewDoctor({
+                  ...newDoctor,
+                  specialization: e.target.value,
+                })
+              }
               displayEmpty
               variant="outlined"
               MenuProps={{

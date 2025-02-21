@@ -51,15 +51,13 @@ const DoctorDashboard: React.FC = () => {
       setAppointmentData([]);
       setStatusData([]);
     }
-  }, [appointments]); // ✅ Now updates when `appointments` change
+  }, [appointments]);
 
-  // ✅ Fixed processing functions to ensure valid data
 
-  const processAppointmentsPerDay = (
-    appointments: Appointment[]
-  ): ChartData => {
+
+  const processAppointmentsPerDay = (appointments: Appointment[]): ChartData => {
     const groupedData: Record<string, number> = {};
-
+  
     appointments.forEach((appointment) => {
       const rawDate = appointment.appointmentDate;
       if (rawDate) {
@@ -69,13 +67,19 @@ const DoctorDashboard: React.FC = () => {
         console.warn("⚠️ Missing appointmentDate for:", appointment);
       }
     });
-
-    return Object.entries(groupedData).map(([day, count]) => ({
-      day,
-      appointments: count,
-    }));
+  
+    return Object.entries(groupedData)
+      .map(([day, count]) => ({
+        day,
+        appointments: count,
+      }))
+      .sort((a, b) => {
+        const [monthA, dayA] = a.day.split("-").map(Number);
+        const [monthB, dayB] = b.day.split("-").map(Number);
+        return monthA !== monthB ? monthA - monthB : dayA - dayB;
+      });
   };
-
+  
   const processAppointmentStatus = (
     appointments: Appointment[]
   ): StatusData => {
@@ -83,6 +87,7 @@ const DoctorDashboard: React.FC = () => {
       pending: 0,
       confirmed: 0,
       completed: 0,
+      canceled:0,
     };
 
     appointments.forEach((appointment) => {
@@ -115,8 +120,8 @@ const DoctorDashboard: React.FC = () => {
         <Box sx={{ flex: 1 }}>
           <PieChartComponent
             data={statusData}
-            colors={["#52c41a", "#faad14", "#f5222d"]}
-          />
+            colors={["#4A90E2", "#50E3C2", "#2D68C4", "#1B3A87"]} 
+            />
         </Box>
       </Box>
 

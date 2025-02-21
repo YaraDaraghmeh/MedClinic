@@ -22,7 +22,8 @@ const NotesModal = ({
       await updateAppointment(selectedAppointment.id, {
         ...selectedAppointment,
         note: notes,
-        documents: updatedDocs
+        documents: updatedDocs,
+        readNote:false,
       });
       setShowNotesModal(false);
     }
