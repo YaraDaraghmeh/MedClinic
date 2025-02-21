@@ -17,7 +17,7 @@ const useTableColumns = (props: any) => {
       title: 'Date & Time',
       key: 'datetime',
       render: (record: Appointment) => {
-        const appointmentDate = moment(record.appointmentDate, 'YYYY-MM-DD');
+        const appointmentDate = moment(record.appointmentDate, 'DD-MM-YYYY');
         const appointmentTime = moment(record.appointmentTime, 'HH:mm');
         
         return (
@@ -57,7 +57,7 @@ const DateTimeCell = ({ appointmentDate, appointmentTime }: {
   appointmentDate: string; 
   appointmentTime: string 
 }) => {
-  const date = moment(appointmentDate, 'YYYY-MM-DD');
+  const date = moment(appointmentDate, 'DD-MM-YYYY');
   const time = moment(appointmentTime, 'HH:mm:ss');
   const isPast = date.isBefore(moment(), 'day');
 
