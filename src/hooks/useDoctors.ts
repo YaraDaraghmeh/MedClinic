@@ -3,16 +3,13 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { getDoctors } from "../services/userService";
 import { User } from "../Types";
-import {
- 
-  getAppointmentsByDoctor,
-} from "../services/appointmentService";
+import { getAppointmentsByDoctor } from "../services/appointmentService";
 import { useUserContext } from "./UserContext";
 import { useAppointmentsContext } from "./AppointmentContext";
 
 export const useDoctors = () => {
-  const {cancelAllAppointments,forwardAppointments,appointments} = useAppointmentsContext();
-  const {users,deleteUser} = useUserContext();
+  const { cancelAllAppointments, forwardAppointments, appointments } = useAppointmentsContext();
+  const { users, deleteUser } = useUserContext();
   const [doctors, setDoctors] = useState<User[]>([]);
   const [doctorToDelete, setDoctorToDelete] = useState<{
     email: string;
@@ -24,15 +21,17 @@ export const useDoctors = () => {
     email: string;
     name: string;
   } | null>(null);
-  // Fetch doctors on component mount
+
+  // Fetch doctors on component mount and when users change
   useEffect(() => {
     fetchDoctors();
-  }, []);
+  }, [users]); // Add users as a dependency
 
   // Fetch doctors from the API
   const fetchDoctors = async () => {
     try {
       const doctors = await getDoctors(users);
+      console.log("Fetched doctors:", doctors); // Debugging log
       setDoctors(doctors);
     } catch (error) {
       toast.error("Failed to fetch doctors");
@@ -52,7 +51,7 @@ export const useDoctors = () => {
       await deleteUser(doctorToDelete.email);
 
       // Check if the doctor has appointments
-      const appointments1 = await getAppointmentsByDoctor(appointments,doctorToDelete.email);
+      const appointments1 = await getAppointmentsByDoctor(appointments, doctorToDelete.email);
       if (appointments1.length > 0) {
         // Open the forward dialog if there are appointments
         setOpenForwardDialog(true);
@@ -60,18 +59,18 @@ export const useDoctors = () => {
         // Cancel appointments if there are no appointments to forward
         await cancelAllAppointments(doctorToDelete.email);
         emailjs
-  .send(
-    "service_3v825nj", 
-    "template_kf6xmhq", 
-    { email: doctorToDelete.email, name: doctorToDelete.name }, 
-    "t69Tpft32TJC_aYyK"
-  )
-  .then((response) => {
-    toast.success("Goodbye email sent to user " + doctorToDelete.email);
-  })
-  .catch((error) => {
-    toast.error("Error sending email: " + error.text);
-  });
+          .send(
+            "service_3v825nj",
+            "template_kf6xmhq",
+            { email: doctorToDelete.email, name: doctorToDelete.name },
+            "t69Tpft32TJC_aYyK"
+          )
+          .then((response) => {
+            toast.success("Goodbye email sent to user " + doctorToDelete.email);
+          })
+          .catch((error) => {
+            toast.error("Error sending email: " + error.text);
+          });
 
         toast.success("Doctor deleted successfully!");
         setDoctorToDelete(null); // Reset doctorToDelete only after deletion is complete

@@ -51,6 +51,7 @@ return;
           } else if (userData.role === "patient") {
             userAppointments = await getAppointmentsByPatient(appointments,email);
             const userFeedbacks = await getFeedbackByEmail(feedbacks,email);
+           console.log(userFeedbacks);
             setuserFeedbacks(userFeedbacks);
             const avgRating = await getAverageRating(feedbacks);
             setAverageRating(avgRating);
@@ -133,8 +134,8 @@ return;
 
       {user!.role !== "manager" && user!.role !== "doctor" && (
         <div className="feedback-section">
-          <h3>Feedback</h3>
-          {Array.isArray(feedbacks) && feedbacks.length > 0 ? (
+          <h3>Feedbacks</h3>
+          {Array.isArray(userfeedbacks) && userfeedbacks.length > 0 ? (
             <table className="feedback-table">
               <thead>
                 <tr>
@@ -144,7 +145,7 @@ return;
                 </tr>
               </thead>
               <tbody>
-                {feedbacks.map((feedback: Feedback) => (
+                {userfeedbacks.map((feedback: Feedback) => (
                   <tr key={feedback.id}>
                     <td>{feedback.message}</td>
                     <td>{feedback.rating}</td>

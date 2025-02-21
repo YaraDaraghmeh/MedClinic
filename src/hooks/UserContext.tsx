@@ -30,7 +30,7 @@ interface UserContextType {
     }>
   ) => Promise<void>;
   deleteUser: (email: string) => Promise<void>;
-  authenticateUser: (email: string, password: string) => Promise<User>; // Add this line
+  authenticateUser: (email: string, password: string) => Promise<User>;
 }
 
 // Create the context
@@ -44,16 +44,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const usersCollection = collection(db, "users"); // Reference to the "users" collection
 
+    // Set up the real-time listener
     const unsubscribe = onSnapshot(usersCollection, (snapshot) => {
       const fetchedUsers = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
+        id: doc.id,
+        ...doc.data(),
       })) as unknown as User[];
-      setUsers(fetchedUsers);
+      console.log("Users updated:", fetchedUsers); // Debugging log
+      setUsers(fetchedUsers); // Update the users state with the latest data
     });
 
+    // Clean up the listener when the component unmounts
     return () => unsubscribe();
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   // Hash the password
   const hashPassword = async (password: string) => {
@@ -74,7 +77,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }) => {
     try {
       const hashedPassword = await hashPassword(userData.password);
-      const imageUrl = userData.imageUrl || "https://example.com/default-image.jpg";
+      const imageUrl = userData.imageUrl || "https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg";
 
       const userDoc = doc(db, "users", userData.email); // Use email as the document ID
       await setDoc(userDoc, {
@@ -134,6 +137,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       const userDoc = doc(db, "users", email); // Use email as the document ID
       await deleteDoc(userDoc);
+      console.log("User deleted:", email); // Debugging log
     } catch (error) {
       throw new Error(
         `Error deleting user: ${

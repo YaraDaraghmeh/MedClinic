@@ -13,6 +13,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 import { toast } from "react-toastify";
 
@@ -56,6 +57,8 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
     // Update the image preview when the URL changes
     if (newDoctor.imageUrl) {
       setImagePreview(newDoctor.imageUrl);
+    } else {
+      setImagePreview("https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg");
     }
   }, [newDoctor.imageUrl]);
 
@@ -74,6 +77,30 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
       toast.error("Please fill in all required fields.");
       return;
     }
+
+    // Validate age (must be older than 21)
+    const today = new Date();
+    const birthDate = new Date(newDoctor.dateOfBirth);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    const dayDifference = today.getDate() - birthDate.getDate();
+
+    if (
+      age < 21 ||
+      (age === 21 && (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)))
+    ) {
+      toast.error("Doctor must be older than 21 years.");
+      return;
+    }
+
+    // Set default image URL if imageUrl is empty
+    const updatedDoctor = {
+      ...newDoctor,
+      imageUrl: newDoctor.imageUrl || "https://t4.ftcdn.net/jpg/09/64/89/19/360_F_964891988_aeRrD7Ee7IhmKQhYkCrkrfE6UHtILfPp.jpg",
+    };
+
+    // Update the newDoctor state
+    setNewDoctor(updatedDoctor);
 
     // Call the handleAddDoctor function passed from the parent component
     handleAddDoctor(e);
@@ -118,6 +145,37 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
         }}
       >
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Image URL Field and Preview */}
+          <div className="flex flex-col items-center mb-6">
+            <Avatar
+              src={imagePreview}
+              alt="Doctor Image Preview"
+              sx={{
+                width: "120px",
+                height: "120px",
+                marginBottom: "1rem",
+                border: "2px solid #3b82f6",
+              }}
+            >
+              {!imagePreview && "DR"} {/* Default placeholder */}
+            </Avatar>
+            <TextField
+              label="imageUrl"
+              variant="outlined"
+              fullWidth
+              value={newDoctor.imageUrl || ""}
+              onChange={(e) =>
+                setNewDoctor({
+                  ...newDoctor,
+                  imageUrl: e.target.value,
+                })
+              }
+              sx={{
+                marginBottom: "1.5rem !important",
+              }}
+            />
+          </div>
+
           {/* Name Field */}
           <TextField
             label="Name"
@@ -217,38 +275,6 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             </Select>
           </FormControl>
 
-          {/* Image URL Field */}
-          <TextField
-            label="Image URL"
-            variant="outlined"
-            fullWidth
-            value={newDoctor.imageUrl || ""}
-            onChange={(e) =>
-              setNewDoctor({
-                ...newDoctor,
-                imageUrl: e.target.value,
-              })
-            }
-            sx={{
-              marginBottom: "1.5rem !important",
-            }}
-          />
-
-          {/* Image Preview */}
-          {imagePreview && (
-            <div style={{ textAlign: "center", marginTop: "1rem" }}>
-              <img
-                src={imagePreview}
-                alt="Doctor Image Preview"
-                style={{
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  borderRadius: "8px",
-                }}
-              />
-            </div>
-          )}
-
           {/* Auto-generate Password Checkbox */}
           <FormControlLabel
             control={
@@ -347,14 +373,14 @@ export const AddDoctorModal: React.FC<AddDoctorModalProps> = ({
             color: "#374151 !important",
             "&:hover": {
               backgroundColor: "#f3f4f6 !important",
-              borderColor: "red !important",
+              borderColor: "#d1d5db !important",
             },
           }}
         >
           Cancel
         </Button>
         <Button
-          onClick={handleSubmit} // Use handleSubmit instead of handleAddDoctor directly
+          onClick={handleSubmit}
           variant="contained"
           sx={{
             textTransform: "none !important",

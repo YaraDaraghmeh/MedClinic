@@ -11,7 +11,6 @@ import Footer from "../../Footer/Footer";
 import Dashboard from "../Dashboard/Dashboard";
 import AppointmentsPage from "../Dashboard/ManagerDashboard/AllAppointments/AppointmentsPage";
 import AppointmentList from "../../appointment/AppointmentList";
-import DoctorsComponent from "../Dashboard/ManagerDashboard/Doctors/DoctorsComponent";
 import DoctorDashboard from "../Dashboard/DoctorsDashboard/DoctorsDashboard";
 import DoctorAppointmentsTable from "../Dashboard/DoctorsDashboard/DoctorAppointmentsTable";
 import DoctorPationts from "../Dashboard/DoctorsDashboard/DoctorPationts";
@@ -29,6 +28,7 @@ import Reports from "../Dashboard/DoctorsDashboard/Reports";
 import MyAppointments from "../Dashboard/PatientDashboard.tsx/MyAppointments/myAppointments";
 import DoctorsPage from "../Dashboard/PatientDashboard.tsx/DoctorsPage/DoctorsPage";
 import AppointmentForm from "../Dashboard/PatientDashboard.tsx/AppointmentForm/AppointmentForm";
+import DoctorsComponent from "../Dashboard/ManagerDashboard/Doctors/DoctorsComponent";
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -63,7 +63,6 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/all-appointments" element={<AppointmentsPage />} />
         <Route path="/feedbacks" element={<FeedbackViewer />} />
-        <Route path="/doctors" element={<DoctorsComponent />} />
         <Route path="/doctors" element={<DoctorsComponent />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />

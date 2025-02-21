@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { DoctorsTable } from "./DoctorsTable";
-
 import { DeleteDialog } from "./DeleteDialog";
 import { ForwardDialog } from "./ForwardDialog";
 import { useDoctors } from "../../../../../hooks/useDoctors";
 import { useDoctorForm } from "../../../../../hooks/useDoctorForm";
 import { AddDoctorModal } from "./AddDotorModal";
+import { useUserContext } from "../../../../../hooks/UserContext";
+import { User } from "../../../../../Types";
+import { getDoctors } from "../../../../../services/userService";
 
 const DoctorsComponent: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -16,10 +18,8 @@ const DoctorsComponent: React.FC = () => {
 
   // Use the useDoctors hook for managing doctors and related state
   const {
-    doctors,
     doctorToDelete,
     setDoctorToDelete,
-    deleteDoctorObject,
     setDeleteDoctorObject,
     openForwardDialog,
     setOpenForwardDialog,
@@ -38,13 +38,23 @@ const DoctorsComponent: React.FC = () => {
     setAutoGeneratePassword,
     handleAddDoctor,
   } = useDoctorForm(fetchDoctors);
-
+const [doctors,setdoctors]= useState<User[]>([]);
+  // Use the UserContext to access the users array
+  const { users } = useUserContext();
+useEffect(()=>{
+setdoctors(getDoctors(users));
+},[users])
   // Filter doctors based on the search term
-  const filteredDoctors = doctors.filter(
-    (doctor) =>
-      doctor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDoctors = useMemo(() => {
+
+    const filtered = doctors.filter(
+      (doctor) =>
+        doctor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        doctor.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    console.log("Filtered doctors:", filtered); // Debugging log
+    return filtered;
+  }, [doctors, searchTerm]); // Re-calculate when doctors or searchTerm changes
 
   return (
     <div className="p-6 bg-gray-100 min-h-full">
@@ -72,7 +82,7 @@ const DoctorsComponent: React.FC = () => {
       <DoctorsTable
         doctors={filteredDoctors}
         setDoctorToDelete={setDoctorToDelete}
-        setdoctorObject ={setDeleteDoctorObject}
+        setdoctorObject={setDeleteDoctorObject}
       />
 
       {/* Add Doctor Modal */}
@@ -105,5 +115,4 @@ const DoctorsComponent: React.FC = () => {
     </div>
   );
 };
-
 export default DoctorsComponent;
