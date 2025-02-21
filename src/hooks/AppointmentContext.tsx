@@ -9,7 +9,7 @@ interface AppointmentsContextType {
   addAppointment: (appointmentData: {
     doctorEmail: string;
     patientEmail: string;
-    appointmentDate: Date;
+    appointmentDate: string;
     appointmentTime: string;
     reason: string;
     status: "pending" | "confirmed" | "completed" | "canceled";
@@ -19,12 +19,12 @@ interface AppointmentsContextType {
     updatedData: Partial<{
       doctorEmail: string;
       patientEmail: string;
-      appointmentDate: Date;
+      appointmentDate: string;
       appointmentTime: string;
       reason: string;
       status: "pending" | "confirmed" | "completed" | "canceled";
-      note?:string;
-      documents?:string[]
+      note?: string;
+      documents?: string[];
     }>
   ) => Promise<void>;
   deleteAppointment: (id: string) => Promise<void>;
@@ -52,19 +52,20 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
       })) as unknown as Appointment[];
   
       setAppointments(fetchedAppointments);
-  
-      // Get today's date in UTC format without time
+
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
-  
+      const formattedToday = `${today.getDate().toString().padStart(2, '0')}-${(today.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${today.getFullYear()}`;
+
       // Find appointments that have passed their date and are not canceled
       const batch = writeBatch(db);
       let hasUpdates = false;
-  
+
       fetchedAppointments.forEach((appointment) => {
         const appointmentDate = new Date(appointment.appointmentDate);
         if (
-          appointmentDate < today &&
+          appointment.appointmentDate < formattedToday &&
           appointment.status !== "canceled" &&
           appointment.status !== "completed"
         ) {
@@ -73,34 +74,33 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
           hasUpdates = true;
         }
       });
-  
+
       // Commit the batch update if there are changes
       if (hasUpdates) {
         await batch.commit();
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
 
   // Add a new appointment
   const addAppointment = async (appointmentData: {
     doctorEmail: string;
     patientEmail: string;
-    appointmentDate: Date;
+    appointmentDate: string;
     appointmentTime: string;
     reason: string;
     status: "pending" | "confirmed" | "completed" | "canceled";
   }) => {
     try {
-      const appointmentId = `${appointmentData.doctorEmail}-${appointmentData.patientEmail}-${appointmentData.appointmentDate.toISOString()}-${appointmentData.appointmentTime}`;
+      const appointmentId = `${appointmentData.doctorEmail}-${appointmentData.patientEmail}-${appointmentData.appointmentDate}-${appointmentData.appointmentTime}`;
+      const appointmentDoc = doc(db, "appointments", appointmentId);
 
-      const appointmentDoc = doc(db, "appointments", appointmentId); // Use a unique ID for the appointment
       await setDoc(appointmentDoc, {
         doctorEmail: appointmentData.doctorEmail,
         patientEmail: appointmentData.patientEmail,
-        appointmentDate: appointmentData.appointmentDate.toISOString(),
+        appointmentDate: appointmentData.appointmentDate,
         appointmentTime: appointmentData.appointmentTime,
         reason: appointmentData.reason,
         status: appointmentData.status,
@@ -120,14 +120,14 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
     updatedData: Partial<{
       doctorEmail: string;
       patientEmail: string;
-      appointmentDate: Date;
+      appointmentDate: string;
       appointmentTime: string;
       reason: string;
       status: "pending" | "confirmed" | "completed" | "canceled";
     }>
   ) => {
     try {
-      const appointmentDoc = doc(db, "appointments", id); // Use the appointment ID
+      const appointmentDoc = doc(db, "appointments", id);
       await updateDoc(appointmentDoc, updatedData);
     } catch (error) {
       throw new Error(
@@ -141,7 +141,7 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
   // Delete an appointment
   const deleteAppointment = async (id: string) => {
     try {
-      const appointmentDoc = doc(db, "appointments", id); // Use the appointment ID
+      const appointmentDoc = doc(db, "appointments", id);
       await deleteDoc(appointmentDoc);
     } catch (error) {
       throw new Error(
@@ -165,7 +165,7 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
   // Forward appointments from one doctor to another
   const forwardAppointments = async (oldDoctorEmail: string, newDoctorEmail: string) => {
     try {
-      const batch = writeBatch(db); // Create a batch for bulk updates
+      const batch = writeBatch(db);
 
       // Filter appointments for the old doctor
       const appointmentsToForward = appointments.filter(
@@ -195,7 +195,7 @@ export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
   // Cancel all appointments for a specific doctor
   const cancelAllAppointments = async (doctorEmail: string) => {
     try {
-      const batch = writeBatch(db); // Create a batch for bulk updates
+      const batch = writeBatch(db);
 
       // Filter appointments for the doctor
       const appointmentsToCancel = appointments.filter(

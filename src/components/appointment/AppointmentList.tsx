@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getAppointments } from "../../services/appointmentService";
 import AppointmentItem from "./AppointmentItem";
+import { useAppointmentsContext } from "../../hooks/AppointmentContext";
+import { Appointment } from "../../types/appointment.types";
 
 const AppointmentList: React.FC = () => {
-  const [appointments, setAppointments] = useState<any[]>([]);
+ const {appointments}= useAppointmentsContext();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAppointments();
-      setAppointments(data);
-    };
-    fetchData();
-  }, []);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex justify-center">
