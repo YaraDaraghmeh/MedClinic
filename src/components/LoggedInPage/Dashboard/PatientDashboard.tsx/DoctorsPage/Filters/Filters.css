@@ -1,0 +1,32 @@
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .specialization-filter {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    width: 250px;
+    max-width: 100%;
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  .book-now-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .book-now-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }

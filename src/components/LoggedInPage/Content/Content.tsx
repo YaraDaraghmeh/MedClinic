@@ -27,6 +27,8 @@ import { useUserContext } from "../../../hooks/UserContext";
 import { getDoctors } from "../../../services/userService";
 import Reports from "../Dashboard/DoctorsDashboard/Reports";
 import MyAppointments from "../Dashboard/PatientDashboard.tsx/MyAppointments/myAppointments";
+import DoctorsPage from "../Dashboard/PatientDashboard.tsx/DoctorsPage/DoctorsPage";
+import AppointmentForm from "../Dashboard/PatientDashboard.tsx/AppointmentForm/AppointmentForm";
 
 interface ContentProps {
   isCollapsed: boolean;
@@ -66,10 +68,10 @@ const Content: React.FC<ContentProps> = ({ isCollapsed }) => {
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/doctor-dashboard-table" element={<DoctorAppointmentsTable />}/>
-        <Route path="make-appointment" element={<FormAppSection doctors={getDoctors(users)} />} />
+        <Route path="make-appointment" element={ <AppointmentForm doctors={getDoctors(users)}/>} />
         <Route path="/Doctor-Patients" element={<DoctorPationts doctor={loggedInUser!} />}/>
         <Route path="/my-appointmentss" element={<MyAppointments/>} />{" "}
-        <Route path="/show-doctors" element={<ShowDoctors />} />
+        <Route path="/show-doctors" element={<DoctorsPage/>} />
         <Route path="/todays-patients" element={<TodaysAppointments />} />
         <Route path="/DoctorsReports"element={<Reports />} />
         <Route path="*" element={<ErrorPage errorMessage="Page not found!" />}/>

@@ -1,0 +1,31 @@
+.doctors-container {
+    font-family: "Poppins", sans-serif;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height:80%;
+    background-color: #f4f7fb;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 42px;
+    color: #2d2d2d;
+    margin-bottom: 40px;
+    font-weight: 600;
+  }
+  
+  .loading,
+  .no-data {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 20px;
+  }
+  
+  .doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+  }

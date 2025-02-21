@@ -13,7 +13,7 @@ const AppointmentsList: React.FC<AppointmentsListProps> = ({
   handleViewNote,
 }) => {
   return (
-    <ul className="appointments-list">
+    <ul className="appointments-list-patient">
       {currentAppointments.map((appointment) => (
         <li key={appointment.id} className="appointment-item">
           <div className="appointment-details">
