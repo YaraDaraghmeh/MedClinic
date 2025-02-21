@@ -24,7 +24,7 @@ const DoctorAppointmentsTable: React.FC = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState<string | null>(null);
-
+  
   useEffect(() => {
     const loadAppointments = () => {
       if (!loggedInUser?.email) return;
@@ -65,8 +65,8 @@ const DoctorAppointmentsTable: React.FC = () => {
 
     // Date sorting
     data.sort((a, b) => {
-      const dateA = moment(a.appointmentDate);
-      const dateB = moment(b.appointmentDate);
+      const dateA = moment(a.appointmentDate, 'DD-MM-YYYY'); 
+      const dateB = moment(b.appointmentDate, 'DD-MM-YYYY'); 
       return sortOrder === "asc" ? dateA.diff(dateB) : dateB.diff(dateA);
     });
 
