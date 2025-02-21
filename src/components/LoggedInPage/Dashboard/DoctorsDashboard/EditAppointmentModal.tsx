@@ -25,7 +25,7 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
   
       const updatedData: Partial<Appointment> = {
         ...editingAppointment,
-        appointmentDate: values.appointmentDate.format('YYYY-MM-DD'),
+        appointmentDate: values.appointmentDate.format('DD-MM-YYYY'),
         appointmentTime: values.appointmentTime.format('HH:mm'),
         status: values.status
       };
@@ -59,7 +59,7 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
         layout="vertical"
         initialValues={{
           appointmentDate: editingAppointment?.appointmentDate 
-            ? moment(editingAppointment.appointmentDate, 'YYYY-MM-DD')
+            ? moment(editingAppointment.appointmentDate, 'DD-MM-YYYY')
             : null,
           appointmentTime: editingAppointment?.appointmentTime 
             ? moment(editingAppointment.appointmentTime, 'HH:mm')
@@ -73,7 +73,7 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
           rules={[{ required: true, message: 'Please select a date' }]}
         >
           <DatePicker
-            format="YYYY-MM-DD"
+            format="DD-MM-YYYY"
             disabledDate={(current) => current && current < moment().endOf('day')}
             className="w-full"
           />

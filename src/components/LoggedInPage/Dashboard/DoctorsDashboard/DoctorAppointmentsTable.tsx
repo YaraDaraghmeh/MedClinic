@@ -47,7 +47,7 @@ const DoctorAppointmentsTable: React.FC = () => {
     if (searchTerm) {
       const lowerSearch = searchTerm.toLowerCase();
       data = data.filter(appt => {
-        const dateString = moment(appt.appointmentDate).format("DD/MM/YYYY");
+        const dateString = moment(appt.appointmentDate).format("DD-MM-YYYY");
         const timeString = moment(appt.appointmentTime, "HH:mm").format("hh:mm A");
         
         return (
