@@ -23,7 +23,12 @@ const TodaysAppointments: React.FC = () => {
   const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const { appointments } = useAppointmentsContext();
-
+  const userFromSession = sessionStorage.getItem("user");
+  if (userFromSession) {
+    const parsedUser = JSON.parse(userFromSession);
+    console.log("Parsed User:", parsedUser);
+  }
+  
   useEffect(() => {
     const fetchTodaysAppointments = async () => {
       try {

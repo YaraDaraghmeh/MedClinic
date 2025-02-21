@@ -56,8 +56,8 @@ const Reports: React.FC = () => {
                 {patient.patientEmail}
               </Typography.Title>
               <Typography.Text type="secondary">
-                Last Appointment: {moment(patient.appointmentDate).format('MMM D, YYYY')}
-              </Typography.Text>
+  {moment(patient.appointmentDate, "DD-MM-YYYY").format("DD-MM-YYYY")}
+</Typography.Text>
               
               <div className="quick-info">
                 <Typography.Text>

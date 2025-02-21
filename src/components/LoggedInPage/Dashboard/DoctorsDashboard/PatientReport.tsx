@@ -16,7 +16,6 @@ const PatientReports: React.FC<PatientReportsProps> = ({
   documents,
   appointmentDate
 }) => {
-  // Check if a URL is an image
   const isImage = (url: string) => {
     return /\.(jpg|jpeg|png|gif)$/i.test(url);
   };
@@ -27,8 +26,8 @@ const PatientReports: React.FC<PatientReportsProps> = ({
       <div className="patient-header">
         <Typography.Title level={4}>{patientName}</Typography.Title>
         <Typography.Text type="secondary">
-          Appointment Date: {moment(appointmentDate).format('MMM Do YYYY')}
-        </Typography.Text>
+  {moment(appointmentDate, "DD-MM-YYYY").format("DD-MM-YYYY")}
+</Typography.Text>
       </div>
 
       {/* Clinical Notes Section */}
