@@ -1,0 +1,63 @@
+.arrow-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .arrow-icon {
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+  }
+  
+  .arrow-icon:hover {
+    color: #000;
+  }
+  
+  .appointments-container {
+    margin-top: 20px;
+  }
+  
+  .appointment-item {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin: auto;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .status-badge.pending {
+    background-color: #ffeb3b;
+    color: #000;
+  }
+  
+  .status-badge.confirmed {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .no-appointments {
+    text-align: center;
+    color: #666;
+  }
+  
+  .add-appointment-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .add-appointment-button:hover {
+    background-color: #2563eb;
+  }
