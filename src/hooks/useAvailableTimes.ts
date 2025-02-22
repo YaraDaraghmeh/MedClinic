@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { Appointment } from "../Types";
 
-
 interface UseAvailableTimesProps {
   date: string;
   doctorEmail: string;
+  patientEmail: string; // Add patientEmail to props
   appointments: Appointment[];
 }
 
-const useAvailableTimes = ({ date, doctorEmail, appointments }: UseAvailableTimesProps) => {
+const useAvailableTimes = ({ date, doctorEmail, patientEmail, appointments }: UseAvailableTimesProps) => {
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
 
   useEffect(() => {
-    if (date && doctorEmail) {
+    if (date && doctorEmail && patientEmail) {
       const times: string[] = [];
 
       // Add times from 9 AM to 5 PM
@@ -40,18 +40,30 @@ const useAvailableTimes = ({ date, doctorEmail, appointments }: UseAvailableTime
         });
       }
 
-      // Filter out booked times
-      const bookedTimes = appointments
+      // Filter out booked times for the doctor
+      const doctorBookedTimes = appointments
         .filter((app) => {
           if (!app.appointmentDate) return false; // Skip if appointmentDate is undefined
           return app.doctorEmail === doctorEmail && app.appointmentDate === date;
         })
         .map((app) => app.appointmentTime);
 
-      const available = times.filter((time) => !bookedTimes.includes(time));
+      // Filter out times where the patient already has an appointment on that day
+      const patientBookedTimes = appointments
+        .filter((app) => {
+          if (!app.appointmentDate) return false; // Skip if appointmentDate is undefined
+          return app.patientEmail === patientEmail && app.appointmentDate === date;
+        })
+        .map((app) => app.appointmentTime);
+
+      // Combine booked times (doctor and patient)
+      const allBookedTimes = [...doctorBookedTimes, ...patientBookedTimes];
+
+      // Get available times by filtering out booked times
+      const available = times.filter((time) => !allBookedTimes.includes(time));
       setAvailableTimes(available);
     }
-  }, [date, doctorEmail, appointments]);
+  }, [date, doctorEmail, patientEmail, appointments]);
 
   return availableTimes;
 };

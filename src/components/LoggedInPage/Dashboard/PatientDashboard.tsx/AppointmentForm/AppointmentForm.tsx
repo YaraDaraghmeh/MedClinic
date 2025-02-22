@@ -35,11 +35,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ doctors }) => {
   const { appointments = [], addAppointment } = useAppointmentsContext();
   const { loggedInUser } = useLoggedInUser();
   const location = useLocation(); 
-  const [disabled,setDisabled]= useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const availableTimes = useAvailableTimes({
     date: formData.date,
     doctorEmail: formData.doctorEmail,
+    patientEmail: loggedInUser?.email || "", // Pass patientEmail to the hook
     appointments,
   });
 
@@ -51,9 +52,9 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ doctors }) => {
     if (doctorEmailFromUrl) {
       // Set the doctor email from the URL query parameter
       setFormData((prev) => ({ ...prev, doctorEmail: doctorEmailFromUrl }));
-  setDisabled(true);
-    }else{
-        setDisabled(false);
+      setDisabled(true);
+    } else {
+      setDisabled(false);
     }
   }, [doctorEmailFromUrl]);
 
@@ -134,38 +135,39 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ doctors }) => {
 
   return (
     <div className="appointment-form-container">
-    <div className="appointment-card">
-      <h2>Book an Appointment</h2>
-      <form onSubmit={handleSubmit} className="appointment-form">
-        <DoctorSelection
-          doctors={doctors}
-          doctorEmail={formData.doctorEmail}
-          onDoctorChange={handleChange}
-          disabled={disabled} // Disable if doctorEmail is from URL
-        />
-
-        <DatePicker
-          date={getDateInputValue(formData.date)}
-          onDateChange={handleDateChange}
-          disabled={!formData.doctorEmail}
-        />
-
-        {formData.date && (
-          <TimeSlots
-            availableTimes={availableTimes}
-            selectedTime={formData.time}
-            onTimeSelect={(time) => setFormData({ ...formData, time })}
+      <div className="appointment-card">
+        <h2>Book an Appointment</h2>
+        <form onSubmit={handleSubmit} className="appointment-form">
+          <DoctorSelection
+            doctors={doctors}
+            doctorEmail={formData.doctorEmail}
+            onDoctorChange={handleChange}
+            disabled={disabled} // Disable if doctorEmail is from URL
           />
-        )}
 
-        <SymptomsInput symptoms={formData.symptoms} onSymptomsChange={handleChange} />
+          <DatePicker
+            date={getDateInputValue(formData.date)}
+            onDateChange={handleDateChange}
+            disabled={!formData.doctorEmail}
+          />
 
-        <button type="submit" className="submit-btn">
-          Book Appointment
-        </button>
-      </form>
-      <ToastContainer position="bottom-left" />
-    </div></div>
+          {formData.date && (
+            <TimeSlots
+              availableTimes={availableTimes}
+              selectedTime={formData.time}
+              onTimeSelect={(time) => setFormData({ ...formData, time })}
+            />
+          )}
+
+          <SymptomsInput symptoms={formData.symptoms} onSymptomsChange={handleChange} />
+
+          <button type="submit" className="submit-btn">
+            Book Appointment
+          </button>
+        </form>
+        <ToastContainer position="bottom-left" />
+      </div>
+    </div>
   );
 };
 
